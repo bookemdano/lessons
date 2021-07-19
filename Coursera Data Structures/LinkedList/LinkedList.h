@@ -617,7 +617,7 @@ LinkedList<T> LinkedList<T>::insertionSort() const {
 template <typename T>
 std::ostream& LinkedList<T>::print(std::ostream& os) const {
   // List format will be [(1)(2)(3)], etc.
-  os << head_;
+  //os << head_;
   os << "[";
 
   // Note that this works correctly for an empty list.
@@ -629,7 +629,7 @@ std::ostream& LinkedList<T>::print(std::ostream& os) const {
   }
 
   os << "]";
-  os << tail_ << "," << size_;
+  os << size_;
   return os;
 }
 

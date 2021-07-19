@@ -275,6 +275,19 @@ LinkedList<T> LinkedList<T>::merge(const LinkedList<T>& other) const {
   // the function.
   LinkedList<T> merged;
 
+  while(!left.empty() || !right.empty())
+  {
+    if (!left.empty() && (right.empty() || left.front() < right.front()))
+    {
+      merged.pushBack(left.front());
+      left.popFront();
+    } 
+    else
+    {
+      merged.pushBack(right.front());
+      right.popFront();
+    }
+  }
   // -----------------------------------------------------------
   // TODO: Your code here!
   // -----------------------------------------------------------

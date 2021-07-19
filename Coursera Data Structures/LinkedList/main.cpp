@@ -116,7 +116,7 @@ void informalTests() {
     }
   }
 
-  {
+  if (false){
     std::cout << std::endl << "Testing insertOrdered:" << std::endl;
 
     LinkedList<int> expected;
@@ -157,7 +157,7 @@ void informalTests() {
     std::cout << "Checking equivalency:" << std::boolalpha << (l == l2) << std::endl;
   }
 
-  {
+  if (false) {
     std::cout << std::endl << "Testing insertionSort:" << std::endl;
     LinkedList<int> l;
     l.pushBack(10);
