@@ -79,25 +79,6 @@
  ********************************************************************/
 
 template <typename T>
-void LinkedList<T>::check() const {
-  Node* cur = head_;
-  Node* prev = cur->prev;
-  std::cout << "Checking" << std::endl;
-  while (cur) {
-    if (cur->prev != prev){
-      std::cout << "Prev wrong " << cur->prev << ":" << cur->data << ":" << cur->next << std::endl;
-    }
-    prev = cur;
-    if (!cur->next && cur != tail_)
-      std::cout << "tail wrong " << cur->prev << ":" << cur->data << ":" << cur->next << std::endl;
-
-    cur = cur->next;
-    
-  }
-
-}
-
-template <typename T>
 void LinkedList<T>::insertOrdered(const T& newData) {
   // Walk along the original list and insert the items to the result in order.
   Node* newNode = new Node(newData);

@@ -212,7 +212,6 @@ public:
   // item in the list that is greater. (This definition is in a separate
   // file for the homework exercises.)
   void insertOrdered(const T& newData);
-  void check() const;
 
   // Checks whether the list is currently sorted in increasing order.
   // This is true if for all adjacent pairs of items A and B in the list: A <= B.
@@ -617,21 +616,20 @@ LinkedList<T> LinkedList<T>::insertionSort() const {
 template <typename T>
 std::ostream& LinkedList<T>::print(std::ostream& os) const {
   // List format will be [(1)(2)(3)], etc.
-  //os << head_;
   os << "[";
 
   // Note that this works correctly for an empty list.
   Node* cur = head_;
   while (cur) {
-    //os << "(" << cur->prev << ":" << cur->data << ":" << cur->next << ")";
     os << "(" << cur->data << ")";
     cur = cur->next;
   }
 
   os << "]";
-  os << size_;
+
   return os;
 }
+
 
 // Create a list of two lists, where the first list contains the first
 // half of the original list, and the second list contains the second half.

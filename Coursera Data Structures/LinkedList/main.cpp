@@ -26,7 +26,6 @@ void errorReaction(std::string msg);
 // main program: You can do whatever you want to test your code here.
 // See also the test suite that you can build with "make test".
 int main() {
-  std::cout << "StartUp" << std::endl;
   informalTests();
   return 0;
 }
@@ -51,7 +50,7 @@ void informalTests() {
   std::cout << "Remember that when you're ready to submit, you should do: make zip" << std::endl;
   std::cout << "That will package the zip file properly for submission." << std::endl;
 
-  if (false) {
+  {
     std::cout << std::endl << "Testing splitHalves():" << std::endl;
     LinkedList<int> l;
     l.pushBack(5);
@@ -78,7 +77,7 @@ void informalTests() {
     if (expectedBackHalf != halves.back()) errorReaction("back half is wrong");
   }
 
-  if (false) {
+  {
     std::cout << std::endl << "Testing explode() and iterating with pointers:" << std::endl;
     LinkedList<int> l;
     l.pushBack(5);
@@ -116,7 +115,7 @@ void informalTests() {
     }
   }
 
-  if (false){
+  {
     std::cout << std::endl << "Testing insertOrdered:" << std::endl;
 
     LinkedList<int> expected;
@@ -136,16 +135,12 @@ void informalTests() {
     l.pushBack(9);
     std::cout << "List: " << l << std::endl;
     l.insertOrdered(7);
-    std::cout << "List after 7: " << l << std::endl;
     l.insertOrdered(4);
-    std::cout << "List after 4: " << l << std::endl;
     l.insertOrdered(-1);
-    std::cout << "List after -1: " << l << std::endl;
     l.insertOrdered(10);
     std::cout << "Inserting items now." << std::endl;
     std::cout << "List: " << l << std::endl;
     std::cout << "Expected: " << expected << std::endl;
-    l.check();
     if (l != expected) errorReaction("wrong result");
 
     std::cout << "Testing copy constructor:" << std::endl;
@@ -157,7 +152,7 @@ void informalTests() {
     std::cout << "Checking equivalency:" << std::boolalpha << (l == l2) << std::endl;
   }
 
-  if (false) {
+  {
     std::cout << std::endl << "Testing insertionSort:" << std::endl;
     LinkedList<int> l;
     l.pushBack(10);
@@ -172,7 +167,6 @@ void informalTests() {
     std::cout << "(Before) List: " << l << std::endl;
     auto l2 = l.insertionSort();
     std::cout << "(After) List: " << l2 << std::endl;
-    l2.check();
     std::cout << "isSorted: " << std::boolalpha << l2.isSorted() << std::endl;
     
     LinkedList<int> expected;
