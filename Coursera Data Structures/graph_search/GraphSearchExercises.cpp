@@ -458,7 +458,7 @@ std::list<IntPair> graphBFS(const IntPair& start, const IntPair& goal, const Gri
 // =========================================================================
 
 // puzzleBFS:
-// Given start and goal sates as PuzzleState objects, we perform BFS in the
+// Given start and goal states as PuzzleState objects, we perform BFS in the
 // imaginary graph model implied by the start state, where the rest of the
 // reachable vertices (states) and the edges leading to them (puzzle moves)
 // can be figure out based on the tile sliding rules of the puzzle.
@@ -520,7 +520,7 @@ std::list<PuzzleState> puzzleBFS(const PuzzleState& start, const PuzzleState& go
     // We'll need to loop over the neighbors that are the points adjacent to curState.
     // We need a collection of neighbors we're going to loop over.
     
-    auto neighbors = {start}; // Change this! This line is totally wrong.
+    auto neighbors = curState.getAdjacentStates(); // ChangeD this! This line is totally wrong.
 
     // Hint: Look at PuzzleState.h
     // =====================================================================
@@ -530,7 +530,7 @@ std::list<PuzzleState> puzzleBFS(const PuzzleState& start, const PuzzleState& go
       // ==================================================================
       // TODO: Your code here!
       // Check whether the neighbor has already been visited.
-      bool neighborWasAlreadyVisited = false; // Change this...
+      bool neighborWasAlreadyVisited = visitedSet.count(neighbor); // ChangeD this...
       // ==================================================================
 
       if (!neighborWasAlreadyVisited) {
@@ -542,12 +542,14 @@ std::list<PuzzleState> puzzleBFS(const PuzzleState& start, const PuzzleState& go
         // since curState has just led to the discovery of this neighbor for
         // the first time.
         // ...
-
+        pred[neighbor] = curState;
+        
         // Add neighbor to the visited set.
         // ...
-
+        visitedSet.insert(neighbor);
         // Push neighbor into the exploration queue.
         // ...
+        exploreQ.push(neighbor);
 
         // ================================================================
 

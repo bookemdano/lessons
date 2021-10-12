@@ -352,7 +352,7 @@ TEST_CASE("Testing graphBFS when a path can be found:", "[weight=1][ex2]") {
   }
 
 }
-/*
+
 // ========================================================================
 // Test: puzzleBFS when the goal is unreachable (puzzle can't be solved)
 // ========================================================================
@@ -365,9 +365,14 @@ TEST_CASE("Testing puzzleBFS when the goal is unreachable (puzzle can't be solve
   std::cout << std::endl << "Now testing puzzleBFS when the goal is unreachable." << std::endl
     << "This may take several seconds and display a warning (which is OK)." << std::endl
     << "If you want to cancel the test, press this key combination: Ctrl c" << std::endl << std::endl;
-
+  
+  time_t now1 = time(nullptr);
   std::list<PuzzleState> path = puzzleBFS(puzzle_start, puzzle_goal);
 
+  time_t now2 = time(nullptr);
+  std::cout << "t1 " << now1 << std::endl;
+  std::cout << "t2 " << now2 << std::endl;
+ 
   SECTION("Path should be empty") {
     REQUIRE(path.empty());
   }
@@ -596,6 +601,3 @@ TEST_CASE("Testing puzzleBFS on a random puzzle:", "[weight=1][ex3]") {
   }
 
 }
-
-
-*/
