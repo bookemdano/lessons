@@ -1,0 +1,40 @@
+﻿<Window x:Class="Linear_Algebra.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Linear_Algebra"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="25"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0"  Grid.Column="0" Content="v"/>
+        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="center" Name="entV">10 -5</TextBox>
+
+        <Label Grid.Row="1"  Grid.Column="0" Content="b1"/>
+        <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="center" Name="entB1">3 4</TextBox>
+        <Label Grid.Row="2"  Grid.Column="0" Content="b2"/>
+        <TextBox Grid.Row="2" Grid.Column="1" VerticalAlignment="center" Name="entB2">4 -3</TextBox>
+        <Label Grid.Row="3"  Grid.Column="0" Content="b3"/>
+        <TextBox Grid.Row="3" Grid.Column="1" VerticalAlignment="center" Name="entB3"/>
+        <Label Grid.Row="4"  Grid.Column="0" Content="b4"/>
+        <TextBox Grid.Row="4" Grid.Column="1" VerticalAlignment="center" Name="entB4"/>
+
+        <StackPanel Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal">
+            <Button Click="Go_Click" Padding="10">Go</Button>
+        </StackPanel>
+        <ListBox Grid.Row="6" Grid.ColumnSpan="2"  x:Name="lst"/>
+    </Grid>
+</Window>
