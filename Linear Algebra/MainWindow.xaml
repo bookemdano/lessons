@@ -21,19 +21,23 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0"  Grid.Column="0" Content="v"/>
-        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="center" Name="entV">10 -5</TextBox>
+        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="center" Name="entV" TextChanged="ent_TextChanged">10 -5</TextBox>
 
         <Label Grid.Row="1"  Grid.Column="0" Content="b1"/>
-        <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="center" Name="entB1">3 4</TextBox>
+        <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="center" Name="entB1" TextChanged="ent_TextChanged">3 4</TextBox>
         <Label Grid.Row="2"  Grid.Column="0" Content="b2"/>
-        <TextBox Grid.Row="2" Grid.Column="1" VerticalAlignment="center" Name="entB2">4 -3</TextBox>
+        <TextBox Grid.Row="2" Grid.Column="1" VerticalAlignment="center" Name="entB2" TextChanged="ent_TextChanged">4 -3</TextBox>
         <Label Grid.Row="3"  Grid.Column="0" Content="b3"/>
-        <TextBox Grid.Row="3" Grid.Column="1" VerticalAlignment="center" Name="entB3"/>
+        <TextBox Grid.Row="3" Grid.Column="1" VerticalAlignment="center" Name="entB3" TextChanged="ent_TextChanged"/>
         <Label Grid.Row="4"  Grid.Column="0" Content="b4"/>
         <TextBox Grid.Row="4" Grid.Column="1" VerticalAlignment="center" Name="entB4"/>
 
         <StackPanel Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal">
-            <Button Click="Go_Click" Padding="10">Go</Button>
+            <Button Click="Project_Click" Padding="10" IsEnabled="{Binding Path=CanProject}">Project</Button>
+            <Button Click="Basis_Click" Padding="10" IsEnabled="{Binding Path=CanBasis}">Basis</Button>
+            <Button Click="Multiply_Click" Padding="10" IsEnabled="{Binding Path=CanMultiply}">Multiply</Button>
+            <Button Click="Clear_Click" Padding="10">Clear</Button>
+            <Button Click="ClearLog_Click" Padding="10">Clear Log</Button>
         </StackPanel>
         <ListBox Grid.Row="6" Grid.ColumnSpan="2"  x:Name="lst"/>
     </Grid>
