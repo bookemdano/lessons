@@ -27,8 +27,26 @@ namespace Linear_Algebra
         {
             InitializeComponent();
             _ents = new TextBox[] { entB1, entB2, entB3, entB4 };
+            Load(entV);
+            foreach (var ent in _ents)
+                Load(ent);
             DataContext = this;
             ent_TextChanged(null, null);
+        }
+        void Save()
+        {
+            Save(entV);
+            foreach (var ent in _ents)
+                Save(ent);
+        }
+        private void Load(TextBox ent)
+        {
+            if (System.IO.File.Exists($"{ent.Name}.cfg"))
+                ent.Text = System.IO.File.ReadAllText($"{ent.Name}.cfg");
+        }
+        private void Save(TextBox ent)
+        {
+            System.IO.File.WriteAllText($"{ent.Name}.cfg", ent.Text);
         }
 
         public bool CanBasis
@@ -53,17 +71,25 @@ namespace Linear_Algebra
         }
         private void Basis_Click(object sender, RoutedEventArgs e)
         {
+            Save();
             if (Vbar == null)
                 return;
             Log("v=" + Vbar);
             int i = 0;
             foreach(var b in _mats)
-                LogFraction("m" + (++i), new Fraction(Vbar.Dot(b), b.LengthSquared));
+                Log("m" + (++i), new Fraction(Vbar.Dot(b), b.LengthSquared));
 
         }
-        void LogFraction(string name, Fraction fract)
+        void Log(string name, Fraction fract)
         {
             Log($"{name} = {fract} = {fract.Reduce()}");
+        }
+        void Log(string name, Matrix matrix)
+        {
+            var lines = matrix.ToLines();
+            Log($"{name} = ");
+            foreach (var line in lines)
+                Log(line);
         }
 
 
@@ -99,12 +125,13 @@ namespace Linear_Algebra
         }
         private void Project_Click(object sender, RoutedEventArgs e)
         {
+            Save();
             if (Rbar == null || Sbar == null)
                 return;
             var fract = new Fraction(Rbar.Dot(Sbar), Rbar.Dot(Rbar));
             var newR = Rbar.Times(fract);
-            LogFraction("top", newR.Item1);
-            LogFraction("bottom", newR.Item2);
+            Log("top", newR.Item1);
+            Log("bottom", newR.Item2);
         }
 
         public bool CanMultiply
@@ -113,9 +140,7 @@ namespace Linear_Algebra
             {
                 if (Vbar == null || Sbar == null)
                     return false;
-                if (Vbar.Cols != 2)
-                    return false;
-                if (Vbar.Rows != Sbar.Rows)
+                if (Vbar.Cols != Sbar.Rows)
                     return false;
                 return true;
             }
@@ -123,11 +148,12 @@ namespace Linear_Algebra
 
         private void Multiply_Click(object sender, RoutedEventArgs e)
         {
+            Save();
             if (Rbar == null || Sbar == null)
                 return;
-            Log("s=" + Sbar);
-            Log("r=" + Rbar);
-            Log("result=" + Rbar.Multiply(Sbar));
+            Log("s", Sbar);
+            Log("r", Rbar);
+            Log("result", Rbar.Multiply(Sbar));
         }
 
         private void ent_TextChanged(object sender, TextChangedEventArgs e)
@@ -152,6 +178,7 @@ namespace Linear_Algebra
 
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
+            Save();
             entV.Clear();
             foreach (var ent in _ents)
                 ent.Clear();
@@ -159,6 +186,7 @@ namespace Linear_Algebra
 
         private void ClearLog_Click(object sender, RoutedEventArgs e)
         {
+            Save();
             lst.Items.Clear();
         }
     }
@@ -222,6 +250,13 @@ namespace Linear_Algebra
     {
         private readonly decimal[][] _values;
 
+        public Matrix(int rows, int cols)
+        {
+            var values = new List<IEnumerable<decimal>>();
+            for (int i = 0; i < cols; i++)
+                values.Add(Enumerable.Repeat(0M, rows));
+            _values = values.Select(c => c.ToArray()).ToArray();
+        }
         public Matrix(IEnumerable<decimal> values)
         {
             _values = new decimal[][] { values.ToArray() };
@@ -313,18 +348,34 @@ namespace Linear_Algebra
 
         internal Matrix Multiply(Matrix other)
         {
-            System.Diagnostics.Debug.Assert(Rows == other.Rows);
-            var rvCols = new List<decimal[]>();
-            var v00 = (Get(0, 0) * other.Get(0, 0)) + (Get(0, 1) * other.Get(1, 0));
-            var v10 = (Get(1, 0) * other.Get(0, 0)) + (Get(1, 1) * other.Get(1, 0));
-            rvCols.Add(new decimal[] { v00, v10 });
-            if (other.Cols > 1)
+            System.Diagnostics.Debug.Assert(Cols == other.Rows);
+            var rv = new Matrix(Rows, other.Cols);
+            for (int i = 0; i < Rows; i++)
             {
-                var v01 = (Get(0, 0) * other.Get(0, 1)) + (Get(0, 1) * other.Get(1, 1));
-                var v11 = (Get(1, 0) * other.Get(0, 1)) + (Get(1, 1) * other.Get(1, 1));
-                rvCols.Add(new decimal[] { v01, v11 });
+                for (int k = 0; k < other.Cols; k++)
+                {
+                    var v = 0M;
+                    for (int j = 0; j < Cols; j++)
+                    {
+                        v += Get(i, j) * other.Get(j, k);
+                    }
+                    rv.Set(i, k, v);
+                }
             }
-            return new Matrix(rvCols);
+            return rv;
+        }
+
+        internal IEnumerable<string> ToLines()
+        {
+            var rv = new List<string>();
+            for (int i = 0; i < Rows; i++)
+            {
+                var row = new List<decimal>();
+                for (int j = 0; j < Cols; j++)
+                    row.Add(Get(i, j));
+                rv.Add(String.Join(" ", row));
+            }
+            return rv;
         }
     }
 }
