@@ -30,6 +30,8 @@ namespace Linear_Algebra
             Load(entV);
             foreach (var ent in _ents)
                 Load(ent);
+            Load(chkAutoClear);
+            Load(chkRowBased);
             DataContext = this;
             ent_TextChanged(null, null);
         }
@@ -38,15 +40,34 @@ namespace Linear_Algebra
             Save(entV);
             foreach (var ent in _ents)
                 Save(ent);
+            Save(chkAutoClear);
+            Save(chkRowBased);
+        }
+        string? GetConfig(FrameworkElement ctrl)
+        {
+            if (System.IO.File.Exists($"{ctrl.Name}.cfg"))
+                return System.IO.File.ReadAllText($"{ctrl.Name}.cfg");
+            return null;
+        }
+        void SetConfig(FrameworkElement ctrl, string? str)
+        {
+            System.IO.File.WriteAllText($"{ctrl.Name}.cfg", str);
+        }
+        private void Load(CheckBox chk)
+        {
+            chk.IsChecked = bool.Parse(GetConfig(chk)??"false");
+        }
+        private void Save(CheckBox chk)
+        {
+            SetConfig(chk, chk.IsChecked?.ToString());
         }
         private void Load(TextBox ent)
         {
-            if (System.IO.File.Exists($"{ent.Name}.cfg"))
-                ent.Text = System.IO.File.ReadAllText($"{ent.Name}.cfg");
+            ent.Text = GetConfig(ent);
         }
         private void Save(TextBox ent)
         {
-            System.IO.File.WriteAllText($"{ent.Name}.cfg", ent.Text);
+            SetConfig(ent, ent.Text);
         }
 
         public bool CanBasis
@@ -74,6 +95,8 @@ namespace Linear_Algebra
             Save();
             if (Vbar == null)
                 return;
+            if (chkAutoClear.IsChecked == true)
+                lst.Items.Clear();
             Log("v=" + Vbar);
             int i = 0;
             foreach(var b in _mats)
@@ -107,6 +130,19 @@ namespace Linear_Algebra
                 return null;
             }
         }
+        Matrix? V1bar
+        {
+            get
+            {
+                if (_mats?.Count() > 1)
+                    return _mats[1];
+                return null;
+            }
+            set
+            {
+                _ents[1].Text = value?.ToString();
+            }
+        }
         Matrix? Vbar => _v;
         Matrix? Rbar => _v;
 
@@ -128,6 +164,8 @@ namespace Linear_Algebra
             Save();
             if (Rbar == null || Sbar == null)
                 return;
+            if (chkAutoClear.IsChecked == true)
+                lst.Items.Clear();
             var fract = new Fraction(Rbar.Dot(Sbar), Rbar.Dot(Rbar));
             var newR = Rbar.Times(fract);
             Log("top", newR.Item1);
@@ -151,25 +189,30 @@ namespace Linear_Algebra
             Save();
             if (Rbar == null || Sbar == null)
                 return;
+            if (chkAutoClear.IsChecked == true)
+                lst.Items.Clear();
             Log("s", Sbar);
             Log("r", Rbar);
-            Log("result", Rbar.Multiply(Sbar));
+            var rv = Rbar.Multiply(Sbar);
+            Log("result", rv);
+            V1bar = rv;
+
         }
 
         private void ent_TextChanged(object sender, TextChangedEventArgs e)
         {
+            if (_ents == null)
+                return;
+            Matrix.RowBased = chkRowBased.IsChecked ?? false;
             _v = Matrix.Read(entV.Text);
-            if (_ents != null)
+            _mats = new List<Matrix>();
+            foreach (var ent in _ents)
             {
-                _mats = new List<Matrix>();
-                foreach (var ent in _ents)
-                {
 
-                    var b = Matrix.Read(ent.Text);
-                    if (b == null)
-                        break;
-                    _mats.Add(b);
-                }
+                var b = Matrix.Read(ent.Text);
+                if (b == null)
+                    break;
+                _mats.Add(b);
             }
             OnPropertyChanged("CanMultiply");
             OnPropertyChanged("CanProject");
@@ -287,11 +330,35 @@ namespace Linear_Algebra
             try
             {
                 var cols = new List<IEnumerable<decimal>>();
-                var colStrings = str.Split('|');
-                foreach (var colString in colStrings)
+                if (RowBased)
                 {
-                    var parts = colString.Split(' ');
-                    cols.Add(parts.Select(p => decimal.Parse(p)).ToArray());
+                    var rows = new List<decimal[]>();
+                    var rowStrings = str.Split("@|".ToCharArray());
+                    var nCols = 0;
+                    foreach (var rowString in rowStrings)
+                    {
+                        var parts = rowString.Split(' ');
+                        var row = parts.Select(p => decimal.Parse(p)).ToArray();
+                        if (nCols == 0)
+                            nCols = row.Length;
+                        rows.Add(row);
+                    }
+                    for (int iCol = 0; iCol < nCols; iCol++)
+                    {
+                        var col = new List<decimal>();
+                        foreach (var row in rows)
+                            col.Add(row[iCol]);
+                        cols.Add(col);
+                    }
+                }
+                else
+                {
+                    var colStrings = str.Split('|');
+                    foreach (var colString in colStrings)
+                    {
+                        var parts = colString.Split(' ');
+                        cols.Add(parts.Select(p => decimal.Parse(p)).ToArray());
+                    }
                 }
                 return new Matrix(cols);
             }
@@ -324,10 +391,28 @@ namespace Linear_Algebra
         }
         public override string ToString()
         {
-            var parts = new List<string>();
-            foreach (var col in _values)
-                parts.Add(string.Join(" ", col));
-            return String.Join("|", parts);
+            if (RowBased)
+            {
+                var nRows = Rows;
+                var nCols = Cols;
+                var lines = new List<string>();
+                for (int iRow = 0; iRow < nRows; iRow++)
+                {
+                    var parts = new List<string>();
+                    for (int iCol = 0; iCol < nCols; iCol++)
+                        parts.Add(Get(iRow, iCol).ToString());
+                    lines.Add(string.Join(" ", parts));
+                }
+                return String.Join("@", lines);
+
+            }
+            else
+            {
+                var parts = new List<string>();
+                foreach (var col in _values)
+                    parts.Add(string.Join(" ", col));
+                return String.Join("|", parts);
+            }
         }
 
         internal Tuple<Fraction, Fraction> Times(Fraction fract)
@@ -377,5 +462,6 @@ namespace Linear_Algebra
             }
             return rv;
         }
+        static public bool RowBased { get; set; }
     }
 }

@@ -38,6 +38,8 @@
             <Button Click="Multiply_Click" Padding="10" IsEnabled="{Binding Path=CanMultiply}">Multiply</Button>
             <Button Click="Clear_Click" Padding="10">Clear</Button>
             <Button Click="ClearLog_Click" Padding="10">Clear Log</Button>
+            <CheckBox Name="chkAutoClear" VerticalAlignment="Center">Autoclear</CheckBox>
+            <CheckBox Name="chkRowBased" VerticalAlignment="Center">Row Based</CheckBox>
         </StackPanel>
         <ListBox Grid.Row="6" Grid.ColumnSpan="2"  x:Name="lst"/>
     </Grid>
