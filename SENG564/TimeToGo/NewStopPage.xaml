@@ -2,12 +2,82 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TimeToGo.NewStopPage"
-             Title="NewStopPage">
+             Title="New Stop on Your Adventure!">
     <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-        <Button Text="Done" Clicked="Button_Clicked"/>
+        <Label Text="New activity on your adventure!" FontSize="Title"/>
+        <Grid 
+            Padding="10,0,0,30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>    
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label 
+                Grid.Row="0" Grid.Column="0"
+                VerticalTextAlignment="Center"
+                Text="Name:"/>
+            <Entry
+                Grid.Row="0" Grid.Column="1"
+                Placeholder="activity name"
+                x:Name="entName"/>
+            <Label 
+                Grid.Row="1" Grid.Column="0"
+                VerticalTextAlignment="Center"
+                Text="Location:"/>
+            <Entry
+                Grid.Row="1" Grid.Column="1"
+                Placeholder="location"
+                x:Name="entLocation"/>
+            <Label 
+                Grid.Row="2" Grid.Column="0"
+                Padding="0,0,30,0"
+                VerticalTextAlignment="Center"
+                Text="Constraint:"/>
+            <VerticalStackLayout Grid.Row="2" Grid.Column="1">
+                <RadioButton 
+                    Content="Start" 
+                    CheckedChanged="RadioButton_CheckedChanged"
+                    IsChecked="True"
+                    x:Name="radStart"/>
+                <RadioButton 
+                    Content="Duration" 
+                    CheckedChanged="RadioButton_CheckedChanged"
+                    x:Name="radDuration"/>
+                <RadioButton 
+                    Content="End" 
+                    CheckedChanged="RadioButton_CheckedChanged"
+                    x:Name="radEnd"/>
+            </VerticalStackLayout>
+            <Label 
+                Grid.Row="3" Grid.Column="0"
+                VerticalTextAlignment="Center"
+                Text="Start"
+                x:Name="staTime"/>
+            <VerticalStackLayout Grid.Row="3" Grid.Column="1">
+                <DatePicker
+                    x:Name="dat"
+                />
+                <TimePicker
+                    Time="13:00"
+                    x:Name="tim"
+                    Format="HH:mm"
+                />
+            </VerticalStackLayout>
+            <Label
+                Grid.Row="4" Grid.ColumnSpan="2" 
+                IsVisible="False" 
+                TextColor="Red"
+                x:Name="staError"/>
+        </Grid>
+        <Button 
+                 Grid.Row="4" Grid.ColumnSpan="2" 
+                 Text="Done" 
+                 Clicked="Button_Clicked"/>
     </VerticalStackLayout>
 </ContentPage>
