@@ -25,6 +25,10 @@ public partial class NewStopPage : ContentPage
         else if (radEnd.IsChecked)
             act.End = dat.Date.Add(tim.Time);
         await Navigation.PopModalAsync();
+        // TODO Rearrange activities
+        // TODO Show activities in list
+        // TODO Calc travel times
+        // TODO CRUD activities
     }
 
     void Error(string message)
