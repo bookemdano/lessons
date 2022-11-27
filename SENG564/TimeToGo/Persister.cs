@@ -4,9 +4,10 @@ namespace TimeToGo
 {
     static class Persister
     {
-        internal static async Task AddOrUpdate(AdventureActivity act)
+        internal static void AddOrUpdate(AdventureActivity act)
         {
-            var adv = await Read();
+            Logger.Log("Persister.AddOrUpdate " + act);
+            var adv = Read();
             var found = adv.Activities.SingleOrDefault(a => a.Id == act.Id);
             if (found == null)
                 adv.Activities.Add(act);
@@ -18,46 +19,49 @@ namespace TimeToGo
                 found.End = act.End;
                 found.Duration = act.Duration;
             }
-            await Write(adv);
+            Write(adv);
         }
 
-        static public async Task Write(Adventure adv)
+        internal static AdventureActivity ReadActivity(string id)
+        {
+            var adv = Read();
+            return adv.Activities.SingleOrDefault(a => a.Id.Equals(id));
+        }
+
+        static public void Write(Adventure adv)
         {
             var str = JsonSerializer.Serialize(adv);
-            await WriteTextToFile("adventure.json", str);
+            WriteTextToFile("adventure.json", str);
         }
-        static public async Task<Adventure> Read()
+        static public Adventure Read()
         {
-            var str = await ReadTextFile("adventure.json");
+            var str = ReadTextFile("adventure.json");
             if (str == null)
                 return new Adventure();
-            return JsonSerializer.Deserialize<Adventure>(str);
+            try
+            {
+                return JsonSerializer.Deserialize<Adventure>(str);
+
+            }
+            catch (JsonException exc)
+            {
+                Logger.Error("json file unreadable. Trashing it.", exc);
+                return new Adventure();
+            }
         }
-        static async Task WriteTextToFile(string filename, string text)
+        static void WriteTextToFile(string filename, string text)
         {
             // Write the file content to the app data directory
             string targetFile = Path.Combine(FileSystem.Current.AppDataDirectory, filename);
-            using var outputStream = File.OpenWrite(targetFile);
-            {
-                using var streamWriter = new StreamWriter(outputStream);
-                {
-                    await streamWriter.WriteAsync(text);
-                }
-            }
+            File.WriteAllText(targetFile, text);
         }
-        static async Task<string> ReadTextFile(string filename)
+        static string ReadTextFile(string filename)
         {
             string targetFile = Path.Combine(FileSystem.Current.AppDataDirectory, filename);
             if (!File.Exists(targetFile))
                 return null;
 
-            using var InputStream = File.OpenRead(targetFile);
-            {
-                using var reader = new StreamReader(InputStream);
-                {
-                    return await reader.ReadToEndAsync();
-                }
-            }
+            return File.ReadAllText(targetFile);
         }
 
     }

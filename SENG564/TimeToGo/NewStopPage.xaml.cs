@@ -2,8 +2,10 @@ namespace TimeToGo;
 
 public partial class NewStopPage : ContentPage
 {
-    public NewStopPage()
-	{
+    readonly string _id = null;
+    public NewStopPage(string id = null)
+	{   
+        _id = id;
 		InitializeComponent();
     }
     
@@ -15,7 +17,7 @@ public partial class NewStopPage : ContentPage
             return;
         }
 
-        var act = new AdventureActivity();
+        var act = new AdventureActivity(_id);
         act.Name = entName.Text;
         act.Location = entLocation.Text;
         if (radDuration.IsChecked)
@@ -24,7 +26,7 @@ public partial class NewStopPage : ContentPage
             act.Start = dat.Date.Add(tim.Time);
         else if (radEnd.IsChecked)
             act.End = dat.Date.Add(tim.Time);
-        await Persister.AddOrUpdate(act);
+        Persister.AddOrUpdate(act);
         await Navigation.PopModalAsync();
         // TODO Rearrange activities
         // TODO Show activities in list
@@ -50,13 +52,44 @@ public partial class NewStopPage : ContentPage
             dat.IsVisible = !radDuration.IsChecked;
     }
 
-    private async void Fake_Clicked(object sender, EventArgs e)
+    private void Fake_Clicked(object sender, EventArgs e)
     {
-        entName.Text = "Fun Activity #" + ((await Persister.Read()).Activities.Count() + 1).ToString();
+        entName.Text = "Fun Activity #" + (Persister.Read().Activities.Count() + 1).ToString();
         entLocation.Text = "Third star from the left";
         radDuration.IsChecked = true;
         var rnd = new System.Random();
         tim.Time = TimeSpan.FromSeconds(rnd.Next(86400));
         Error(null);
+    }
+
+    private void ContentPage_Loaded(object sender, EventArgs e)
+    {
+        if (_id == null)
+            return;
+
+        var act = Persister.ReadActivity(_id);
+        if (act == null)
+            return;
+        entName.Text = act.Name;
+        entLocation.Text = act.Location;
+        if (act.Duration != null)
+        {
+            radDuration.IsChecked = true;
+            tim.Time = act.Duration.Value;
+        }
+        else if (act.Start != null)
+        {
+            radStart.IsChecked = true;
+            dat.Date = act.Start.Value.Date;
+            tim.Time = act.Start.Value.TimeOfDay;
+        }
+        else if (act.End != null)
+        {
+            radEnd.IsChecked = true;
+            dat.Date = act.End.Value.Date;
+            tim.Time = act.End.Value.TimeOfDay;
+        }
+        if (dat != null)
+            dat.IsVisible = !radDuration.IsChecked;
     }
 }
