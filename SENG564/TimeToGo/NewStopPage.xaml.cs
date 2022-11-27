@@ -49,4 +49,14 @@ public partial class NewStopPage : ContentPage
         if (dat != null)
             dat.IsVisible = !radDuration.IsChecked;
     }
+
+    private async void Fake_Clicked(object sender, EventArgs e)
+    {
+        entName.Text = "Fun Activity #" + ((await Persister.Read()).Activities.Count() + 1).ToString();
+        entLocation.Text = "Third star from the left";
+        radDuration.IsChecked = true;
+        var rnd = new System.Random();
+        tim.Time = TimeSpan.FromSeconds(rnd.Next(86400));
+        Error(null);
+    }
 }

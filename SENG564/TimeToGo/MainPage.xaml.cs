@@ -29,14 +29,15 @@ public partial class MainPage : ContentPage
 		await Navigation.PushModalAsync(pg);
 	}
 
-	private async void ContentPage_Loaded(object sender, EventArgs e)
-	{
-		var adv = await Persister.Read();
-		_items.Clear();
-		foreach (var act in adv.Activities)
-		{
-			_items.Add(act.ToString());
-		}
+    private async void ContentPage_Appearing(object sender, EventArgs e)
+    {
+        var adv = await Persister.Read();
+        _items.Clear();
+        foreach (var act in adv.Activities)
+        {
+            _items.Add(act.ToString());
+        }
+
     }
 }
 
