@@ -7,32 +7,6 @@ namespace TimeToGo;
 
 public partial class MainPage : ContentPage
 {
-    internal class ActivityCell : Cell
-    {
-        private AdventureActivity _act;
-
-        internal ActivityCell(AdventureActivity act)
-        {
-            _act = act;
-        }
-
-        internal string Name
-        {
-            get
-            {
-                return _act.Name;
-            }
-        }
-        internal string Location
-        {
-            get
-            {
-                return _act.Location;
-            }
-        }
-    }
-
-
     internal ObservableCollection<AdventureActivity> Activities = new ObservableCollection<AdventureActivity>();
 
     public MainPage()
@@ -49,18 +23,17 @@ public partial class MainPage : ContentPage
     { 
         var adv = Persister.Read();
         Activities.Clear();
+        var lastEnd = adv.Start();
         foreach (var act in adv.Activities)
+        {
+            if (act.ActivityType() == ActivityTypeEnum.Start)
+            {
+                
+            }    
             Activities.Add(act);
+        }
         lst.SelectedItem = null;
         Error(null);
-    }
-
-    private async void Cell_Tapped(object sender, EventArgs e)
-    {
-        var cell = sender as TextCell;
-        var act = cell.BindingContext as AdventureActivity;
-        var pg = new NewStopPage(act.Id);
-        await Navigation.PushModalAsync(pg);
     }
 
     private async void New_Clicked(object sender, EventArgs e)
@@ -122,5 +95,17 @@ public partial class MainPage : ContentPage
     private void lst_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
         Error(null);
+    }
+
+    private void Fake_Clicked(object sender, EventArgs e)
+    {
+        var adv = new Adventure();
+        adv.Activities.Add(adv.FakeActivity(ActivityTypeEnum.Start));
+        adv.Activities.Add(adv.FakeActivity(ActivityTypeEnum.Duration));
+        adv.Activities.Add(adv.FakeActivity(ActivityTypeEnum.Duration));
+        adv.Activities.Add(adv.FakeActivity(ActivityTypeEnum.Duration));
+        adv.Activities.Add(adv.FakeActivity(ActivityTypeEnum.Start));
+        Persister.Write(adv);
+        Display();
     }
 }

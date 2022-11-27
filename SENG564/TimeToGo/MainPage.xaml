@@ -19,7 +19,7 @@
                     <DataTemplate>
                         <TextCell
                             Text ="{Binding Name}"
-                            Detail ="{Binding Location}" 
+                            Detail ="{Binding Detail}" 
                             />
                     </DataTemplate>
                 </ListView.ItemTemplate>
@@ -35,6 +35,7 @@
                 <Button x:Name="btnMoveUp" Text="Move Up" Clicked="MoveUp_Clicked"/>
                 <Button x:Name="btnMoveDown" Text="Move Down" Clicked="MoveDown_Clicked"/>
                 <Button x:Name="btnDelete" Text="Delete" Clicked="Delete_Clicked"/>
+                <Button x:Name="btnFake" Text="Fake" Clicked="Fake_Clicked"/>
             </HorizontalStackLayout>
         </Grid>
     </ScrollView>
