@@ -1,3 +1,4 @@
+
 # globs
 Makefile.in
 *.userprefs
@@ -268,10 +269,6 @@ csx/
 # Microsoft Azure Emulator
 ecf/
 rcf/
-
-# Dan Added
-.vs/
-obj/
 
 # Windows Store app package directories and files
 AppPackages/

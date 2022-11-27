@@ -15,7 +15,7 @@ public partial class NewStopPage : ContentPage
             return;
         }
 
-        var act = new AdventureAcitivity();
+        var act = new AdventureActivity();
         act.Name = entName.Text;
         act.Location = entLocation.Text;
         if (radDuration.IsChecked)
@@ -24,11 +24,15 @@ public partial class NewStopPage : ContentPage
             act.Start = dat.Date.Add(tim.Time);
         else if (radEnd.IsChecked)
             act.End = dat.Date.Add(tim.Time);
+        await Persister.AddOrUpdate(act);
         await Navigation.PopModalAsync();
         // TODO Rearrange activities
         // TODO Show activities in list
         // TODO Calc travel times
         // TODO CRUD activities
+        // TODO custom timesspan
+        // TODO Run on Android
+        // TODO edit activity
     }
 
     void Error(string message)

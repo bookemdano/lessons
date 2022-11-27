@@ -28,5 +28,15 @@ public partial class MainPage : ContentPage
 		var pg = new NewStopPage();
 		await Navigation.PushModalAsync(pg);
 	}
+
+	private async void ContentPage_Loaded(object sender, EventArgs e)
+	{
+		var adv = await Persister.Read();
+		_items.Clear();
+		foreach (var act in adv.Activities)
+		{
+			_items.Add(act.ToString());
+		}
+    }
 }
 

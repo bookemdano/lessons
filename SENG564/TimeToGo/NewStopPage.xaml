@@ -59,16 +59,17 @@
                 VerticalTextAlignment="Center"
                 Text="Start"
                 x:Name="staTime"/>
-            <VerticalStackLayout Grid.Row="3" Grid.Column="1">
+            <HorizontalStackLayout Grid.Row="3" Grid.Column="1" VerticalOptions="Center">
                 <DatePicker
                     x:Name="dat"
                 />
                 <TimePicker
+                    VerticalOptions="Center"
                     Time="13:00"
                     x:Name="tim"
                     Format="HH:mm"
                 />
-            </VerticalStackLayout>
+            </HorizontalStackLayout>
             <Label
                 Grid.Row="4" Grid.ColumnSpan="2" 
                 IsVisible="False" 
