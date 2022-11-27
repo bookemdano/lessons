@@ -66,7 +66,7 @@ public partial class NewStopPage : ContentPage
     {
         if (_id == null)
             return;
-
+        staTitle.Text = "Edit activity";
         var act = Persister.ReadActivity(_id);
         if (act == null)
             return;

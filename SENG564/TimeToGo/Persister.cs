@@ -64,5 +64,34 @@ namespace TimeToGo
             return File.ReadAllText(targetFile);
         }
 
+        internal static void DeleteActivity(AdventureActivity act)
+        {
+            var adv = Read();
+            var found = adv.Activities.SingleOrDefault(a => a.Id == act.Id);
+            adv.Activities.Remove(found);
+            Write(adv);
+        }
+
+        internal static void Move(AdventureActivity act, int delta)
+        {
+            var adv = Read();
+            var found = adv.Activities.SingleOrDefault(a => a.Id == act.Id);
+            var orig = adv.Activities.IndexOf(found);
+            adv.Activities.Remove(found);
+            adv.Activities.Insert(orig + delta, act);
+            Write(adv);
+        }
+        internal static bool CanMove(AdventureActivity act, int delta)
+        {
+            if (act == null)
+                return false;
+            var adv = Read();
+            var found = adv.Activities.SingleOrDefault(a => a.Id == act.Id);
+            var orig = adv.Activities.IndexOf(found);
+            if (orig + delta < 0 || orig + delta + 1 > adv.Activities.Count())
+                return false;
+
+            return true;
+        }
     }
 }

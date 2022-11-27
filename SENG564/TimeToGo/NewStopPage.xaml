@@ -5,7 +5,7 @@
              Title="New Stop on Your Adventure!"
              Loaded="ContentPage_Loaded">
     <VerticalStackLayout>
-        <Label Text="New activity on your adventure!" FontSize="Title"/>
+        <Label Text="Add activity to your adventure!" FontSize="Title" x:Name="staTitle"/>
         <Grid 
             Padding="10,0,0,30">
             <Grid.RowDefinitions>

@@ -8,20 +8,34 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <ListView 
                 Grid.Row ="0" 
-                x:Name="lst">
+                SelectionMode="Single"
+                x:Name="lst"
+                ItemSelected="lst_ItemSelected">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <TextCell
                             Text ="{Binding Name}"
                             Detail ="{Binding Location}" 
-                            Tapped="Cell_Tapped"/>
+                            />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <Button Grid.Row="1" x:Name="CounterBtn" Text="ClickMe" Clicked="OnCounterClicked"/>
+            <Label 
+                Grid.Row="1"
+                TextColor="Red"
+                x:Name="sta"/>
+            <HorizontalStackLayout 
+                Grid.Row="2">
+                <Button x:Name="btnNew" Text="New" Clicked="New_Clicked"/>
+                <Button x:Name="btnEdit" Text="Edit" Clicked="Edit_Clicked"/>
+                <Button x:Name="btnMoveUp" Text="Move Up" Clicked="MoveUp_Clicked"/>
+                <Button x:Name="btnMoveDown" Text="Move Down" Clicked="MoveDown_Clicked"/>
+                <Button x:Name="btnDelete" Text="Delete" Clicked="Delete_Clicked"/>
+            </HorizontalStackLayout>
         </Grid>
     </ScrollView>
 </ContentPage>
