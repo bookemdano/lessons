@@ -6,13 +6,31 @@
 /Linear Algebra/bin
 Linear Algebra/.vs/Linear Algebra/DesignTimeBuild/.dtbcache.v2
 Linear Algebra/.vs/Linear Algebra/v17/.suo
-/SENG564/TimeToGo/bin/Debug/net7.0-windows10.0.19041.0/win10-x64
-/SENG564/TimeToGo/obj/Debug/net7.0-android/designtime/libraryprojectimports.cache
-/SENG564/TimeToGo/obj/Debug/net7.0-windows10.0.19041.0/win10-x64/embed/Platforms/Windows/App.xbf
-/SENG564/TimeToGo/obj/Debug/net7.0-windows10.0.19041.0/win10-x64/embed/embed.resfiles.intermediate
-/SENG564/TimeToGo/obj/Debug/net7.0-windows10.0.19041.0/win10-x64/embed/embed.resfiles
-/SENG564/TimeToGo/obj/Debug/net7.0-windows10.0.19041.0/win10-x64/XamlTypeInfo.g.cs
-/SENG564/TimeToGo/obj/Debug/net7.0-windows10.0.19041.0/win10-x64/XamlSaveStateFile.xml
-/SENG564/TimeToGo/obj/Debug/net7.0-windows10.0.19041.0/win10-x64/Platforms/Windows/App.g.cs
+/SENG564/TimeToGo/bin
 /SENG564/TimeToGo/.vs/TimeToGo/FileContentIndex/5963e12c-34eb-4bb8-b068-75e039841338.vsidx
 /SENG564/TimeToGo/.vs/TimeToGo/v17/.suo
+/SENG564/TimeToGo/obj
+SENG564/TimeToGo/obj/project.assets.json
+SENG564/TimeToGo/obj/project.nuget.cache
+SENG564/TimeToGo/obj/TimeToGo.csproj.nuget.dgspec.json
+SENG564/TimeToGo/obj/Debug/net7.0-android/TimeToGo.assets.cache
+SENG564/TimeToGo/obj/Debug/net7.0-android/TimeToGo.csproj.AssemblyReference.cache
+SENG564/TimeToGo/obj/Debug/net7.0-android/TimeToGo.GeneratedMSBuildEditorConfig.editorconfig
+SENG564/TimeToGo/obj/Debug/net7.0-ios/iossimulator-x64/TimeToGo.assets.cache
+SENG564/TimeToGo/obj/Debug/net7.0-ios/iossimulator-x64/TimeToGo.csproj.AssemblyReference.cache
+SENG564/TimeToGo/obj/Debug/net7.0-maccatalyst/maccatalyst-x64/TimeToGo.assets.cache
+SENG564/TimeToGo/obj/Debug/net7.0-maccatalyst/maccatalyst-x64/TimeToGo.csproj.AssemblyReference.cache
+SENG564/TimeToGo/obj/Debug/net7.0-windows10.0.19041.0/win10-x64/TimeToGo.assets.cache
+SENG564/TimeToGo/obj/Debug/net7.0-windows10.0.19041.0/win10-x64/TimeToGo.csproj.AssemblyReference.cache
+/SENG564/TimeToGo/obj/Debug/net7.0-android/TimeToGo.GeneratedMSBuildEditorConfig.editorconfig
+/SENG564/TimeToGo/obj/Debug/net7.0-android/TimeToGo.csproj.AssemblyReference.cache
+/SENG564/TimeToGo/obj/Debug/net7.0-android/TimeToGo.assets.cache
+/SENG564/TimeToGo/obj/Debug/net7.0-ios/iossimulator-x64/TimeToGo.csproj.AssemblyReference.cache
+/SENG564/TimeToGo/obj/Debug/net7.0-ios/iossimulator-x64/TimeToGo.assets.cache
+/SENG564/TimeToGo/obj/Debug/net7.0-maccatalyst/maccatalyst-x64/TimeToGo.csproj.AssemblyReference.cache
+/SENG564/TimeToGo/obj/Debug/net7.0-maccatalyst/maccatalyst-x64/TimeToGo.assets.cache
+/SENG564/TimeToGo/obj/Debug/net7.0-windows10.0.19041.0/win10-x64/TimeToGo.csproj.AssemblyReference.cache
+/SENG564/TimeToGo/obj/Debug/net7.0-windows10.0.19041.0/win10-x64/TimeToGo.assets.cache
+/SENG564/TimeToGo/obj/TimeToGo.csproj.nuget.dgspec.json
+/SENG564/TimeToGo/obj/project.nuget.cache
+/SENG564/TimeToGo/obj/project.assets.json
