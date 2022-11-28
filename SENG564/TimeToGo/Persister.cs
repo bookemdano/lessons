@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using Microsoft.Extensions.Options;
+using System.Text.Json;
 
 namespace TimeToGo
 {
@@ -34,18 +35,21 @@ namespace TimeToGo
         static public Adventure Read()
         {
             var str = ReadTextFile("adventure.json");
-            if (str == null)
-                return new Adventure();
-            try
+            Adventure rv = null;
+            if (str != null)
             {
-                return JsonSerializer.Deserialize<Adventure>(str);
-
+                try
+                {
+                    rv = JsonSerializer.Deserialize<Adventure>(str);
+                }
+                catch (JsonException exc)
+                {
+                    Logger.Error("json file unreadable. Trashing it.", exc);
+                }
             }
-            catch (JsonException exc)
-            {
-                Logger.Error("json file unreadable. Trashing it.", exc);
-                return new Adventure();
-            }
+            if (rv?.Validate() != true)
+                rv = new Adventure();
+            return rv;
         }
         static void WriteTextToFile(string filename, string text)
         {

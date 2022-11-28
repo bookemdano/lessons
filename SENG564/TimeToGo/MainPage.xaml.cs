@@ -7,7 +7,7 @@ namespace TimeToGo;
 
 public partial class MainPage : ContentPage
 {
-    internal ObservableCollection<AdventureActivity> Activities = new ObservableCollection<AdventureActivity>();
+    internal ObservableCollection<AdventureActivityModel> Activities = new ObservableCollection<AdventureActivityModel>();
 
     public MainPage()
     {
@@ -22,7 +22,7 @@ public partial class MainPage : ContentPage
     private void Display()
     { 
         var adv = Persister.Read();
-        staTitle.Text = $"Adventure: {adv.Title} Deadline: {adv.Deadline.ToString("g")}";
+        staTitle.Text = $"Adventure: {adv.Title} Deadline: {adv.Deadline.ToString("ddd M/d H:mm")}";
         var haveAdventure = !string.IsNullOrWhiteSpace(adv.Title);
 
         btnNew.IsEnabled = haveAdventure;
@@ -30,11 +30,23 @@ public partial class MainPage : ContentPage
         btnMoveUp.IsEnabled = haveAdventure;
         btnMoveDown.IsEnabled = haveAdventure;
         btnDelete.IsEnabled = haveAdventure;
+        var lastStart = adv.Deadline;
         Activities.Clear();
-        var lastEnd = adv.Start();
+        //var models = new ObservableCollection<AdventureActivityModel>();
         foreach (var act in adv.Activities)
         {
-            Activities.Add(act);
+            var end = lastStart;
+            var start = end - act.Duration;
+            Activities.Add(new AdventureActivityModel(act, start, end));
+            lastStart = start;
+        }
+        var prevLocation = "Home";
+        foreach(var aam in Activities.Reverse())
+        {
+            if (string.IsNullOrWhiteSpace(aam.Location))
+                aam.Location = ">" + prevLocation;
+            else
+                prevLocation = aam.Location;
         }
         lst.SelectedItem = null;
         Error(null);
@@ -48,7 +60,7 @@ public partial class MainPage : ContentPage
 
     private async void Edit_Clicked(object sender, EventArgs e)
     {
-        var act = lst.SelectedItem as AdventureActivity;
+        var act = SelectedActivity();
         if (act == null)
         {
             Error("Select activity before editing!");
@@ -60,7 +72,7 @@ public partial class MainPage : ContentPage
 
     private void MoveUp_Clicked(object sender, EventArgs e)
     {
-        var act = lst.SelectedItem as AdventureActivity;
+        var act = SelectedActivity();
         if (!Persister.CanMove(act, -1))
         {
             Error("Can't move selected activity up!");
@@ -72,7 +84,7 @@ public partial class MainPage : ContentPage
 
     private void MoveDown_Clicked(object sender, EventArgs e)
     {
-        var act = lst.SelectedItem as AdventureActivity;
+        var act = SelectedActivity();
         if (!Persister.CanMove(act, 1))
         {
             Error("Can't move selected activity down!");
@@ -87,7 +99,7 @@ public partial class MainPage : ContentPage
     }
     private void Delete_Clicked(object sender, EventArgs e)
     {
-        var act = lst.SelectedItem as AdventureActivity;
+        var act = SelectedActivity();
         if (act == null)
         { 
             Error("Select activity before deleting!");
@@ -103,12 +115,9 @@ public partial class MainPage : ContentPage
 
     private void Fake_Clicked(object sender, EventArgs e)
     {
-        var adv = new Adventure();
-        adv.Activities.Add(adv.FakeActivity());
-        adv.Activities.Add(adv.FakeActivity());
-        adv.Activities.Add(adv.FakeActivity());
-        adv.Activities.Add(adv.FakeActivity());
-        adv.Activities.Add(adv.FakeActivity());
+        var adv = Adventure.Fake();
+        for(int i = 0; i < 7; i++)
+            adv.Activities.Add(adv.FakeActivity());
         Persister.Write(adv);
         Display();
     }
@@ -117,5 +126,14 @@ public partial class MainPage : ContentPage
     {
         var pg = new NewAdventurePage();
         await Navigation.PushModalAsync(pg);
+    }
+
+    private AdventureActivity SelectedActivity()
+    {
+        var model = lst.SelectedItem as AdventureActivityModel;
+        if (model == null)
+            return null;
+        return model.Activity;
+
     }
 }

@@ -38,7 +38,7 @@
                 Text="Location:"/>
             <Entry
                 Grid.Row="1" Grid.Column="1"
-                Placeholder="location"
+                Placeholder="leave blank to use previous location"
                 x:Name="entLocation"/>
 
             <Label Grid.Row="2" Grid.Column="0" VerticalTextAlignment="Center" Text="Duration:" Padding="0,0,20,0"/>
