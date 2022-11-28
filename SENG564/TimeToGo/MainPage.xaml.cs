@@ -22,7 +22,7 @@ public partial class MainPage : ContentPage
     private async void Display()
     { 
         var adv = Persister.Read();
-        staTitle.Text = $"Adventure: {adv.Title} Deadline: {adv.Deadline.ToString("ddd M/d H:mm")}";
+        staTitle.Text = $"Adventure: {adv.Title} Deadline: {AdventureActivityModel.DateString(adv.Deadline)}";
         var haveAdventure = !string.IsNullOrWhiteSpace(adv.Title);
 
         btnNew.IsEnabled = haveAdventure;
@@ -30,28 +30,34 @@ public partial class MainPage : ContentPage
         btnMoveUp.IsEnabled = haveAdventure;
         btnMoveDown.IsEnabled = haveAdventure;
         btnDelete.IsEnabled = haveAdventure;
-        var lastStart = adv.Deadline;
         Activities.Clear();
-        //var models = new ObservableCollection<AdventureActivityModel>();
-        foreach (var act in adv.Activities)
+        if (adv.Activities.Any())
         {
-            var end = lastStart;
-            var start = end - act.Duration;
-            Activities.Add(new AdventureActivityModel(act, start, end));
-            lastStart = start;
-        }
-        var prevLocation = Activities.Last().Location;
-        foreach(var aam in Activities.Reverse())
-        {
-            if (string.IsNullOrWhiteSpace(aam.Location))
-                aam.Location = ">" + prevLocation;
-            else if (aam.Location != prevLocation)
+            //var models = new ObservableCollection<AdventureActivityModel>();
+            foreach (var act in adv.Activities)
             {
-                var loc = await Calculator.Geocode(aam.Location);
-                var prevLoc = await Calculator.Geocode(prevLocation);
-                aam.TravelTimeTo = TimeSpan.FromMinutes(Math.Abs(loc.Latitude - prevLoc.Latitude));
-                prevLocation = aam.Location;
+                Activities.Add(new AdventureActivityModel(act));
             }
+            var prevLocation = Activities.Last().Location;
+            foreach (var aam in Activities.Reverse())
+            {
+                if (string.IsNullOrWhiteSpace(aam.Location))
+                    aam.Location = ">" + prevLocation;
+                else if (aam.Location != prevLocation)
+                {
+                    var loc = await Calculator.Geocode(aam.Location);
+                    var prevLoc = await Calculator.Geocode(prevLocation);
+                    aam.TravelTimeTo = await Calculator.TravelTime(prevLoc, loc);
+                    prevLocation = aam.Location;
+                }
+            }
+            var lastStart = adv.Deadline;
+            foreach (var aam in Activities)
+            {
+                aam.Depart = lastStart;
+                lastStart = aam.Arrive.Value;
+            }
+            staStart.Text = "This adventure has to start at " + AdventureActivityModel.DateString(lastStart);
         }
         lst.SelectedItem = null;
         Error(null);

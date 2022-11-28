@@ -7,14 +7,36 @@ namespace TimeToGo
     {
         public AdventureActivity Activity { get; }
 
-        private DateTime _arrive;
-        private DateTime _depart;
+        public DateTime? Arrive
+        {
+            get
+            {
+                var waitTime = Activity.Duration;
+                if (TravelTimeTo.HasValue)
+                    waitTime += TravelTimeTo.Value;
+                if (!_depart.HasValue)
+                    return null;
+                return _depart.Value - waitTime;
+            }
+        }
 
-        public AdventureActivityModel(AdventureActivity act, DateTime arrive, DateTime depart)
+        private DateTime? _depart;
+        public DateTime? Depart
+        {
+            get
+            {
+                return _depart;
+            }
+            set
+            {
+                _depart = value;
+                OnPropertyChanged("Detail");
+            }
+        }
+
+        public AdventureActivityModel(AdventureActivity act)
         {
             Activity = act;
-            _arrive = arrive;
-            _depart = depart;
             Location = act.Location;
         }
 
@@ -61,24 +83,32 @@ namespace TimeToGo
                 return Activity.Name;
             }
         }
+
         public string Detail
         {
             get
             {
-                var arrivePart = _arrive.ToString("ddd M/d H:mm");
-                var departPart = _depart.ToString("ddd M/d H:mm");
-                if (_arrive.Date == _depart.Date)
-                    departPart = _depart.ToString("H:mm");
+                var travelTo = "";
                 var durationPart = "";
+                var arrivePart = "";
+                var departPart = "";
+                if (Depart.HasValue)
+                {
+                    arrivePart = DateString(Arrive);
+                    departPart = DateString(Depart);
+                    if (Arrive.Value.Date == Depart.Value.Date)
+                        departPart = Depart.Value.ToString("H:mm");
+
+                    if (TravelTimeTo.HasValue)
+                        travelTo = " travel: " + DurationString(TravelTimeTo.Value);
+                }
+
                 if (Activity.Duration.Hours > 0)
                     durationPart += $"{Activity.Duration.Hours}h";
                 if (Activity.Duration.Minutes > 0)
                     durationPart += $"{Activity.Duration.Minutes}m";
 
-                var rv = $"{Location} {arrivePart}-{departPart} duration: {DurationString(Activity.Duration)}";
-                if (TravelTimeTo.HasValue)
-                    rv += " travel: " + DurationString(TravelTimeTo.Value);
-                return rv;
+                return $"{Location}{travelTo} {arrivePart}-{departPart} duration: {DurationString(Activity.Duration)}";
             }
         }
         static string DurationString(TimeSpan duration)
@@ -89,6 +119,15 @@ namespace TimeToGo
             if (duration.Minutes > 0)
                 rv += $"{duration.Minutes}m";
             return rv;
+        }
+        public static string DateString(DateTime? date)
+        {
+            if (date == null)
+                return "-";
+            if (date.Value.Year != DateTime.Today.Year)
+                return date.Value.ToString("ddd M/d/yy H:mm");
+
+            return date.Value.ToString("ddd M/d H:mm");
         }
     }
 }

@@ -54,8 +54,5 @@
         <Button 
             Text="Cancel"
             Clicked="Cancel_Clicked" />
-        <Button 
-            Text="Fake" 
-            Clicked="Fake_Clicked"/>
     </VerticalStackLayout>
 </ContentPage>

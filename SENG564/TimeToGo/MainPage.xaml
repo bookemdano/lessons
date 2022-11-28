@@ -11,6 +11,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Label Text="-" FontSize="Title" x:Name="staTitle"/>
             <ListView 
@@ -27,20 +28,20 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+            <Label Grid.Row="2" Text="-" FontSize="Title" x:Name="staStart"/>
             <Label 
-                Grid.Row="2"
+                Grid.Row="3"
                 TextColor="Red"
                 x:Name="sta"/>
             <HorizontalStackLayout 
-                Grid.Row="3">
+                Grid.Row="4">
                 <Button x:Name="btnNew" Text="New" Clicked="New_Clicked"/>
                 <Button x:Name="btnEdit" Text="Edit" Clicked="Edit_Clicked"/>
                 <Button x:Name="btnMoveUp" Text="Move Up" Clicked="MoveUp_Clicked"/>
                 <Button x:Name="btnMoveDown" Text="Move Down" Clicked="MoveDown_Clicked"/>
                 <Button x:Name="btnDelete" Text="Delete" Clicked="Delete_Clicked"/>
-                <Button x:Name="btnFake" Text="Fake" Clicked="Fake_Clicked"/>
             </HorizontalStackLayout>
-            <Button Grid.Row="4" Text="New Adventure" Clicked="NewAdventure_Clicked"/>
+            <Button Grid.Row="5" Text="New Adventure" Clicked="NewAdventure_Clicked"/>
         </Grid>
     </ScrollView>
 </ContentPage>
