@@ -41,8 +41,15 @@
                 Placeholder="leave blank to use previous location"
                 x:Name="entLocation"/>
 
-            <Label Grid.Row="2" Grid.Column="0" VerticalTextAlignment="Center" Text="Duration:" Padding="0,0,20,0"/>
-            <TimePicker Grid.Row="2" Grid.Column="1" x:Name="timDuration" Format="HH:mm" />
+            <Label 
+                Grid.Row="2" Grid.Column="0" 
+                VerticalTextAlignment="Center" 
+                Text="Duration:" 
+                Padding="0,0,20,0"/>
+            <Entry
+                Grid.Row="2" Grid.Column="1"
+                Placeholder="XdYhZm"
+                x:Name="entDuration"/>
         </Grid>
         <Label
             IsVisible="False" 

@@ -1,22 +1,30 @@
-﻿using System.Net.Http.Headers;
-
-namespace TimeToGo
+﻿namespace TimeToGo.Models
 {
+    /// <summary>
+    /// Adventure is a high-level event, like going to the airport, 
+    /// and AdventureActivities(just called Activities in the UI) are things to do before the event, like checking-in, returning rental car, etc
+    /// </summary>
     internal class Adventure
     {
+        #region Properties
         public string Title { get; set; }
         public DateTime Deadline { get; set; }
         public List<AdventureActivity> Activities { get; set; } = new List<AdventureActivity>();
+        #endregion //Properties
 
-        internal DateTime Start()
+        #region Helper Methods
+
+        // Is this a valid adventure?
+        internal bool Validate()
         {
-            return Deadline.AddMinutes(0 - Duration().TotalMinutes);
+            if (string.IsNullOrWhiteSpace(Title) || Deadline == DateTime.MinValue)
+                return false;
+            return true;
         }
-        internal TimeSpan Duration()
-        {
-            var minutes = Activities.Sum(a => a.Duration.TotalMinutes);
-            return TimeSpan.FromMinutes(minutes);
-        }
+        #endregion
+
+        #region Fake Helpers
+        // create a fake activity on this adventure for debugging
         internal AdventureActivity FakeActivity()
         {
             var rnd = new Random();
@@ -41,6 +49,7 @@ namespace TimeToGo
             return act;
         }
 
+        // creates a fake adventure for debugging
         internal static Adventure Fake()
         {
             var rv = new Adventure();
@@ -48,12 +57,6 @@ namespace TimeToGo
             rv.Deadline = DateTime.Today.AddDays(3).AddHours(13);
             return rv;
         }
-
-        internal bool Validate()
-        {
-            if (string.IsNullOrWhiteSpace(Title) || Deadline == DateTime.MinValue)
-                return false;
-            return true;
-        }
+        #endregion
     }
 }

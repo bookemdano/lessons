@@ -18,8 +18,9 @@
                 Grid.Row ="1" 
                 SelectionMode="Single"
                 x:Name="lst"
-                ItemSelected="lst_ItemSelected">
-                <ListView.ItemTemplate>
+                ItemSelected="lst_ItemSelected" 
+                Margin="10">
+                <ListView.ItemTemplate >
                     <DataTemplate>
                         <TextCell
                             Text ="{Binding Name}"
@@ -34,7 +35,7 @@
                 TextColor="Red"
                 x:Name="sta"/>
             <HorizontalStackLayout 
-                Grid.Row="4">
+                Grid.Row="4" HorizontalOptions="FillAndExpand">
                 <Button x:Name="btnNew" Text="New" Clicked="New_Clicked"/>
                 <Button x:Name="btnEdit" Text="Edit" Clicked="Edit_Clicked"/>
                 <Button x:Name="btnMoveUp" Text="Move Up" Clicked="MoveUp_Clicked"/>

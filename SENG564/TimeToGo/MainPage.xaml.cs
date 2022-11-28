@@ -1,12 +1,12 @@
-﻿using Microsoft.Extensions.Options;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+using TimeToGo.Helpers;
+using TimeToGo.Models;
 
 namespace TimeToGo;
 
-
-
 public partial class MainPage : ContentPage
 {
+    // adventure activity models bound to on-screen list
     internal ObservableCollection<AdventureActivityModel> Activities = new ObservableCollection<AdventureActivityModel>();
 
     public MainPage()
@@ -19,30 +19,36 @@ public partial class MainPage : ContentPage
     {
         Display();
     }
+    
     private async void Display()
     { 
         var adv = Persister.Read();
-        staTitle.Text = $"Adventure: {adv.Title} Deadline: {AdventureActivityModel.DateString(adv.Deadline)}";
+        staTitle.Text = $"Adventure: {adv.Title} Deadline: {AdventureActivityModel.DateString(adv.Deadline, null)}";
         var haveAdventure = !string.IsNullOrWhiteSpace(adv.Title);
 
+        // Hide buttons if you haven't created an adventure yet
         btnNew.IsEnabled = haveAdventure;
         btnEdit.IsEnabled = haveAdventure;
         btnMoveUp.IsEnabled = haveAdventure;
         btnMoveDown.IsEnabled = haveAdventure;
         btnDelete.IsEnabled = haveAdventure;
+        
+        // convert activities to models and calculate times
         Activities.Clear();
         if (adv.Activities.Any())
         {
-            //var models = new ObservableCollection<AdventureActivityModel>();
             foreach (var act in adv.Activities)
-            {
-                Activities.Add(new AdventureActivityModel(act));
-            }
+                Activities.Add(new AdventureActivityModel(act, adv.Deadline));
+        
+            // go through backwards to calc travel times
             var prevLocation = Activities.Last().Location;
             foreach (var aam in Activities.Reverse())
             {
-                if (string.IsNullOrWhiteSpace(aam.Location))
+                if (string.IsNullOrWhiteSpace(aam.Location) && !string.IsNullOrWhiteSpace(prevLocation))
+                {
+                    // if there is no location, assume whatever it was before
                     aam.Location = ">" + prevLocation;
+                }
                 else if (aam.Location != prevLocation)
                 {
                     var loc = await Calculator.Geocode(aam.Location);
@@ -51,18 +57,22 @@ public partial class MainPage : ContentPage
                     prevLocation = aam.Location;
                 }
             }
+            // go through forward again to calc how long each activity will take
             var lastStart = adv.Deadline;
             foreach (var aam in Activities)
             {
                 aam.Depart = lastStart;
                 lastStart = aam.Arrive.Value;
             }
-            staStart.Text = "This adventure has to start at " + AdventureActivityModel.DateString(lastStart);
+            staStart.Text = "This adventure has to start at " + AdventureActivityModel.DateString(lastStart, null);
         }
+        // clear out everything
         lst.SelectedItem = null;
         Error(null);
     }
 
+    #region Activity Actions
+    
     private async void New_Clicked(object sender, EventArgs e)
     {
         var pg = new NewActivityPage();
@@ -84,29 +94,25 @@ public partial class MainPage : ContentPage
     private void MoveUp_Clicked(object sender, EventArgs e)
     {
         var act = SelectedActivity();
-        if (!Persister.CanMove(act, -1))
+        if (!Persister.CanMoveActivity(act, -1))
         {
             Error("Can't move selected activity up!");
             return;
         }
-        Persister.Move(act, -1);
+        Persister.MoveActivity(act, -1);
         Display();
     }
 
     private void MoveDown_Clicked(object sender, EventArgs e)
     {
         var act = SelectedActivity();
-        if (!Persister.CanMove(act, 1))
+        if (!Persister.CanMoveActivity(act, 1))
         {
             Error("Can't move selected activity down!");
             return;
         }
-        Persister.Move(act, 1);
+        Persister.MoveActivity(act, 1);
         Display();
-    }
-    void Error(string msg)
-    {
-        sta.Text = msg;
     }
     private void Delete_Clicked(object sender, EventArgs e)
     {
@@ -119,11 +125,15 @@ public partial class MainPage : ContentPage
         Persister.DeleteActivity(act);
         Display();
     }
+    #endregion
+
     private void lst_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
+        // clear error when you switch items
         Error(null);
     }
 
+    // create fake adventure- can be wired to button for testing
     private void Fake_Clicked(object sender, EventArgs e)
     {
         var adv = Adventure.Fake();
@@ -133,13 +143,15 @@ public partial class MainPage : ContentPage
         Display();
     }
 
+    // create whole new adventure
     private async void NewAdventure_Clicked(object sender, EventArgs e)
     {
         var pg = new NewAdventurePage();
         await Navigation.PushModalAsync(pg);
     }
 
-    private AdventureActivity SelectedActivity()
+    #region private helpers
+    AdventureActivity SelectedActivity()
     {
         var model = lst.SelectedItem as AdventureActivityModel;
         if (model == null)
@@ -147,4 +159,11 @@ public partial class MainPage : ContentPage
         return model.Activity;
 
     }
+    // show error on screen- these are user errors, not programmatic errors
+    void Error(string msg)
+    {
+        sta.Text = msg;
+        sta.IsVisible = !string.IsNullOrWhiteSpace(msg);
+    }
+    #endregion
 }

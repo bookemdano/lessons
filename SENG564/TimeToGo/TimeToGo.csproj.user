@@ -4,8 +4,8 @@
     <IsFirstTimeProjectOpen>False</IsFirstTimeProjectOpen>
     <ActiveDebugFramework>net7.0-windows10.0.19041.0</ActiveDebugFramework>
     <ActiveDebugProfile>Windows Machine</ActiveDebugProfile>
-    <SelectedPlatformGroup>Simulator</SelectedPlatformGroup>
-    <DefaultDevice>iPhone 14 iOS 16.1</DefaultDevice>
+    <SelectedPlatformGroup>Emulator</SelectedPlatformGroup>
+    <DefaultDevice>pixel_5_-_api_33_1</DefaultDevice>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetPlatformIdentifier)'=='iOS'">
     <RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>
