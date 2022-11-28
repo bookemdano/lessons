@@ -18,7 +18,8 @@
                 }
             }
             catch (Exception ex)
-            {
+            {   
+                // thrown with a very unhelpful "ex=null" on iOS and Android
                 Logger.Error("GetStringAsync", ex);
             }
 
