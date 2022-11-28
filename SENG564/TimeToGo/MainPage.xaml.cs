@@ -19,7 +19,7 @@ public partial class MainPage : ContentPage
     {
         Display();
     }
-    private void Display()
+    private async void Display()
     { 
         var adv = Persister.Read();
         staTitle.Text = $"Adventure: {adv.Title} Deadline: {adv.Deadline.ToString("ddd M/d H:mm")}";
@@ -40,13 +40,18 @@ public partial class MainPage : ContentPage
             Activities.Add(new AdventureActivityModel(act, start, end));
             lastStart = start;
         }
-        var prevLocation = "Home";
+        var prevLocation = Activities.Last().Location;
         foreach(var aam in Activities.Reverse())
         {
             if (string.IsNullOrWhiteSpace(aam.Location))
                 aam.Location = ">" + prevLocation;
-            else
+            else if (aam.Location != prevLocation)
+            {
+                var loc = await Calculator.Geocode(aam.Location);
+                var prevLoc = await Calculator.Geocode(prevLocation);
+                aam.TravelTimeTo = TimeSpan.FromMinutes(Math.Abs(loc.Latitude - prevLoc.Latitude));
                 prevLocation = aam.Location;
+            }
         }
         lst.SelectedItem = null;
         Error(null);
