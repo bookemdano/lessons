@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TimeToGo.NewAdventurePage"
+             Title="NewAdventurePage">
+    <VerticalStackLayout>
+        <Label Text="Add a new adventure!" FontSize="Title"/>
+        <Grid 
+            Padding="10,0,0,30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Label 
+                Grid.Row="0" Grid.Column="0"
+                VerticalTextAlignment="Center"
+                Text="Name:"/>
+            <Entry
+                Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"
+                Placeholder="adventure name"
+                x:Name="entName"/>
+            <Label Grid.Row="1" Grid.Column="0" VerticalTextAlignment="Center" Text="Deadline:"/>
+            <TimePicker Grid.Row="1" Grid.Column="1" x:Name="timDeadline"/>
+            <DatePicker Grid.Row="1" Grid.Column="2" x:Name="datDeadline"/>
+            <Button Grid.Row="2" Grid.ColumnSpan="3" Clicked="Save_Clicked" Text="Save"/>
+            <Button Grid.Row="3" Grid.ColumnSpan="3" Clicked="Cancel_Clicked" Text="Cancel"/>
+        </Grid>
+    </VerticalStackLayout>
+</ContentPage>

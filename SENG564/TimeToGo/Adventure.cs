@@ -3,39 +3,25 @@
     internal class Adventure
     {
         public string Title { get; set; }
+        public DateTime Deadline { get; set; }
         public List<AdventureActivity> Activities { get; set; } = new List<AdventureActivity>();
 
-        internal AdventureActivity Start()
+        internal DateTime Start()
         {
-            return Activities.FirstOrDefault(a => a.Start != null);
+            return Deadline.AddMinutes(0 - Duration().TotalMinutes);
         }
-        internal AdventureActivity FakeActivity(ActivityTypeEnum activityEnum)
+        internal TimeSpan Duration()
+        {
+            var minutes = Activities.Sum(a => a.Duration.TotalMinutes);
+            return TimeSpan.FromMinutes(minutes);
+        }
+        internal AdventureActivity FakeActivity()
         {
             var rnd = new Random();
-            if (activityEnum == ActivityTypeEnum.NA)
-                activityEnum = (ActivityTypeEnum) (rnd.Next(2) + 1);
-            var tripStart = Start()?.Start;
-            if (tripStart == null)
-                activityEnum = ActivityTypeEnum.Start;
-
             var act = new AdventureActivity();
-            act.Name = $"Fun {activityEnum} Activity #" + (Activities.Count() + 1).ToString();
+            act.Name = $"Fun Activity #" + (Activities.Count() + 1).ToString();
             act.Location = "Third star from the left";
-
-            if (activityEnum == ActivityTypeEnum.Duration)
-                act.Duration = TimeSpan.FromSeconds(rnd.Next(86400));
-            else
-            {
-                if (activityEnum == ActivityTypeEnum.Start)
-                {
-                    if (tripStart == null)
-                        act.Start = DateTime.Now.AddDays(3);
-                    else
-                        act.Start = tripStart.Value.AddSeconds(rnd.Next(86400));
-                }
-                else if (activityEnum == ActivityTypeEnum.End)
-                    act.Start = tripStart.Value.AddSeconds(rnd.Next(86400));
-            }
+            act.Duration = TimeSpan.FromSeconds(rnd.Next(43200));
             return act;
         }
     }

@@ -15,6 +15,9 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -31,59 +34,54 @@
             <Label 
                 Grid.Row="1" Grid.Column="0"
                 VerticalTextAlignment="Center"
+                Padding="0,0,20,0"                
                 Text="Location:"/>
             <Entry
                 Grid.Row="1" Grid.Column="1"
                 Placeholder="location"
                 x:Name="entLocation"/>
-            <Label 
-                Grid.Row="2" Grid.Column="0"
-                Padding="0,0,30,0"
-                VerticalTextAlignment="Center"
-                Text="Constraint:"/>
-            <VerticalStackLayout Grid.Row="2" Grid.Column="1">
-                <RadioButton 
-                    Content="Start" 
-                    CheckedChanged="RadioButton_CheckedChanged"
-                    IsChecked="True"
-                    x:Name="radStart"/>
-                <RadioButton 
-                    Content="Duration" 
-                    CheckedChanged="RadioButton_CheckedChanged"
-                    x:Name="radDuration"/>
-                <RadioButton 
-                    Content="End" 
-                    CheckedChanged="RadioButton_CheckedChanged"
-                    x:Name="radEnd"/>
-            </VerticalStackLayout>
-            <Label 
-                Grid.Row="3" Grid.Column="0"
-                VerticalTextAlignment="Center"
-                Text="Start"
-                x:Name="staTime"/>
-            <HorizontalStackLayout Grid.Row="3" Grid.Column="1" VerticalOptions="Center">
-                <DatePicker
-                    x:Name="dat"
-                />
-                <TimePicker
-                    VerticalOptions="Center"
-                    Time="13:00"
-                    x:Name="tim"
-                    Format="HH:mm"
-                />
-            </HorizontalStackLayout>
-            <Label
-                Grid.Row="4" Grid.ColumnSpan="2" 
+            <Grid
+                Grid.Row="2" Grid.ColumnSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <CheckBox Grid.Row="0" Grid.Column="0" CheckedChanged="CheckBox_CheckedChanged" x:Name="chkStart"/>
+                <Label Grid.Row="0" Grid.Column="1" VerticalTextAlignment="Center" Text="Start:"/>
+                <TimePicker Grid.Row="0" Grid.Column="2" x:Name="timStart" />
+                <DatePicker Grid.Row="0" Grid.Column="3" x:Name="datStart" />
+
+                <CheckBox Grid.Row="1" Grid.Column="0" CheckedChanged="CheckBox_CheckedChanged" x:Name="chkDuration"/>
+                <Label Grid.Row="1" Grid.Column="1" VerticalTextAlignment="Center" Text="Duration:" Padding="0,0,20,0"/>
+                <TimePicker Grid.Row="1" Grid.Column="2" x:Name="timDuration" Format="HH:mm" />
+
+                <CheckBox Grid.Row="2" Grid.Column="0" CheckedChanged="CheckBox_CheckedChanged" x:Name="chkEnd"/>
+                <Label Grid.Row="2" Grid.Column="1" VerticalTextAlignment="Center" Text="End:"/>
+                <TimePicker Grid.Row="2" Grid.Column="2" x:Name="timEnd" />
+                <DatePicker Grid.Row="2" Grid.Column="3" x:Name="datEnd" />
+
+            </Grid>
+        </Grid>
+        <Label
                 IsVisible="False" 
                 TextColor="Red"
                 x:Name="staError"/>
-        </Grid>
         <Button 
-            Grid.Row="4" Grid.ColumnSpan="2" 
+            Grid.Row="6" Grid.ColumnSpan="2" 
             Text="Done" 
-            Clicked="Button_Clicked"/>
+            Clicked="Done_Clicked"/>
+        <Button Grid.Row="7" Grid.ColumnSpan="2" Clicked="Cancel_Clicked" Text="Cancel"/>
+
         <Button 
-            Grid.Row="5" Grid.ColumnSpan="2" 
+            Grid.Row="8" Grid.ColumnSpan="2" 
             Text="Fake" 
             Clicked="Fake_Clicked"/>
     </VerticalStackLayout>

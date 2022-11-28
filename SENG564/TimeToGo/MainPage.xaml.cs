@@ -22,14 +22,18 @@ public partial class MainPage : ContentPage
     private void Display()
     { 
         var adv = Persister.Read();
+        staTitle.Text = $"Adventure: {adv.Title} Deadline: {adv.Deadline.ToString("g")}";
+        var haveAdventure = !string.IsNullOrWhiteSpace(adv.Title);
+
+        btnNew.IsEnabled = haveAdventure;
+        btnEdit.IsEnabled = haveAdventure;
+        btnMoveUp.IsEnabled = haveAdventure;
+        btnMoveDown.IsEnabled = haveAdventure;
+        btnDelete.IsEnabled = haveAdventure;
         Activities.Clear();
         var lastEnd = adv.Start();
         foreach (var act in adv.Activities)
         {
-            if (act.ActivityType() == ActivityTypeEnum.Start)
-            {
-                
-            }    
             Activities.Add(act);
         }
         lst.SelectedItem = null;
@@ -38,7 +42,7 @@ public partial class MainPage : ContentPage
 
     private async void New_Clicked(object sender, EventArgs e)
     {
-        var pg = new NewStopPage();
+        var pg = new NewActivityPage();
         await Navigation.PushModalAsync(pg);
     }
 
@@ -50,7 +54,7 @@ public partial class MainPage : ContentPage
             Error("Select activity before editing!");
             return;
         }
-        var pg = new NewStopPage(act.Id);
+        var pg = new NewActivityPage(act.Id);
         await Navigation.PushModalAsync(pg);
     }
 
@@ -100,12 +104,18 @@ public partial class MainPage : ContentPage
     private void Fake_Clicked(object sender, EventArgs e)
     {
         var adv = new Adventure();
-        adv.Activities.Add(adv.FakeActivity(ActivityTypeEnum.Start));
-        adv.Activities.Add(adv.FakeActivity(ActivityTypeEnum.Duration));
-        adv.Activities.Add(adv.FakeActivity(ActivityTypeEnum.Duration));
-        adv.Activities.Add(adv.FakeActivity(ActivityTypeEnum.Duration));
-        adv.Activities.Add(adv.FakeActivity(ActivityTypeEnum.Start));
+        adv.Activities.Add(adv.FakeActivity());
+        adv.Activities.Add(adv.FakeActivity());
+        adv.Activities.Add(adv.FakeActivity());
+        adv.Activities.Add(adv.FakeActivity());
+        adv.Activities.Add(adv.FakeActivity());
         Persister.Write(adv);
         Display();
+    }
+
+    private async void NewAdventure_Clicked(object sender, EventArgs e)
+    {
+        var pg = new NewAdventurePage();
+        await Navigation.PushModalAsync(pg);
     }
 }

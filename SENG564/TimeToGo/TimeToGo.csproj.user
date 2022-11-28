@@ -15,7 +15,10 @@
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
   </PropertyGroup>
   <ItemGroup>
-    <MauiXaml Update="NewStopPage.xaml">
+    <MauiXaml Update="NewActivityPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="NewAdventurePage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
   </ItemGroup>

@@ -15,8 +15,6 @@ namespace TimeToGo
             {
                 found.Name = act.Name;
                 found.Location = act.Location;
-                found.Start = act.Start;
-                found.End = act.End;
                 found.Duration = act.Duration;
             }
             Write(adv);
