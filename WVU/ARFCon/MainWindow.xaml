@@ -1,0 +1,95 @@
+﻿<Window x:Class="ARFCon.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ARFCon"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        >
+    <Window.Resources>
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+        <Style TargetType="{x:Type Image}">
+            <Setter Property="Margin" Value="2" />
+        </Style>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Column="0" Grid.ColumnSpan="2">Camera #1- NORTH</Label>
+        <StackPanel Grid.Column="0" Grid.Row="1">
+            <Label>Outbound</Label>
+            <Image Source="https://th.bing.com/th/id/OIP.4sqo2jnubqrjVHkA7QtJagHaE7"/>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="1">
+            <Label>Inbound</Label>
+            <Image Source="https://media.gettyimages.com/photos/denver-public-works-crews-work-on-repairing-a-pothole-on-speer-at-picture-id161212914"  RenderTransformOrigin="0.5,0.5">
+                <Image.RenderTransform>
+                    <ScaleTransform ScaleX="-1"/>
+                </Image.RenderTransform>
+            </Image>
+        </StackPanel>
+        <Image x:Name="imgArf1Stop" Source="/stop.png" Grid.Column="0" Grid.Row="2" Visibility="Hidden"/>
+        <Image x:Name="imgArf1Slow" Source="/slow.png" Grid.Column="0" Grid.Row="2" Visibility="Hidden"/>
+
+        <Label Grid.Column="2" Grid.ColumnSpan="2">Camera #2- SOUTH</Label>
+        <StackPanel Grid.Column="2" Grid.Row="1">
+            <Label>Inbound</Label>
+            <Image Source="https://media.gettyimages.com/photos/denver-public-works-crews-work-on-repairing-a-pothole-on-speer-at-picture-id161212914"/>
+        </StackPanel>
+        <StackPanel Grid.Column="3" Grid.Row="1">
+            <Label>Outbound</Label>
+            <Image Source="https://i.ytimg.com/vi/NyR_7e7JXAA/hqdefault.jpg"/>
+        </StackPanel>
+        <Image x:Name="imgArf2Stop" Source="/stop.png" Grid.Column="3" Grid.Row="2" Visibility="Hidden"/>
+        <Image x:Name="imgArf2Slow" Source="/slow.png" Grid.Column="3" Grid.Row="2" Visibility="Hidden"/>
+
+        <Grid Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.ColumnSpan="3">Controller</Label>
+            <Button x:Name="btnSwitch" Content="⬅️ Switch ➡️" Grid.Row="1" Grid.Column="1" Click="Switch_Click"/>
+            <Button x:Name="btnSwitch1" Content="⬅️ Stop" Grid.Row="1" Grid.Column="0" Click="Switch1_Click"/>
+            <Button x:Name="btnSwitch2" Content="Slow ➡️" Grid.Row="1" Grid.Column="2"  Click="Switch2_Click"/>
+            <Button x:Name="btnAllStop" Content="ALL STOP"  Grid.Row="3" Grid.Column="2" Click="AllStop_Click" Margin="0,3,0,-3"/>
+            <Button x:Name="btnLogEvent" Content="Log Event" Grid.Row="3" Grid.Column="1"/>
+            <Button x:Name="btnAlarm" Content="Alarm!" Background="Orange" Grid.Row="3" Grid.Column="0"/>
+            <ListView x:Name="lst" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"/>
+            <Border x:Name="pnlChanging"  Height="85"  Grid.Row="2" Grid.Column="1" Background="Bisque" BorderBrush="DarkBlue" CornerRadius="5" BorderThickness="2">
+                <StackPanel VerticalAlignment="Center" >
+
+                    <TextBlock x:Name="staChanging" HorizontalAlignment="Center" Margin="10">Switching- please wait</TextBlock>
+                    <Button x:Name="btnCancel" Content="Cancel Change" Padding="5" Click="Cancel_Click"/>
+                    <TextBlock x:Name="staRemainig">Remaining...</TextBlock>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>
