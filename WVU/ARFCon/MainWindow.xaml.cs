@@ -23,12 +23,16 @@ namespace ARFCon {
         DispatcherTimer _timer;
         ArfState _currentState = ArfState.NA;
         ArfState _nextState;
-        private void Slow(string str, int seconds, bool allowCancel, ArfState state)
-        {
+        private void Slow(string str, int seconds, bool allowCancel, ArfState state) {
             Log(str);
-            
+
             SetArf(ArfState.AllStop);
 
+            if (state == ArfState.Stop1 || state == ArfState.AllStop)
+                staArf2Status.Content = "comm...";
+            if (state == ArfState.Stop2 || state == ArfState.AllStop)
+                staArf1Status.Content = "comm...";
+            
             _nextState = state;
             staChanging.Text = str;
             btnCancel.Visibility = allowCancel?Visibility.Visible:Visibility.Hidden;
@@ -47,6 +51,7 @@ namespace ARFCon {
                 _timer.Stop();
                 pnlChanging.Visibility = Visibility.Hidden;
                 SetArf(_nextState);
+
             }
         }
 
@@ -80,6 +85,8 @@ namespace ARFCon {
                 btnSwitch1.Content = "⬅️ Stop";
                 btnSwitch2.Content = "Slow ➡️";
             }
+            staArf1Status.Content = "Conn: GOOD!";
+            staArf2Status.Content = "Conn: GOOD!";
             if (_currentState != _nextState)
                 Log("STATE: " +  _nextState);
             _currentState = _nextState;

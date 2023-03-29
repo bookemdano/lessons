@@ -33,6 +33,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Label Grid.Column="0" Grid.ColumnSpan="2">Camera #1- NORTH</Label>
         <StackPanel Grid.Column="0" Grid.Row="1">
@@ -49,9 +50,10 @@
         </StackPanel>
         <Image x:Name="imgArf1Stop" Source="/stop.png" Grid.Column="0" Grid.Row="2" Visibility="Hidden"/>
         <Image x:Name="imgArf1Slow" Source="/slow.png" Grid.Column="0" Grid.Row="2" Visibility="Hidden"/>
+        <Label x:Name="staArf1Status" Grid.Column="0" Grid.Row="3">Initializing</Label>
 
         <Label Grid.Column="2" Grid.ColumnSpan="2">Camera #2- SOUTH</Label>
-        <StackPanel Grid.Column="2" Grid.Row="1">
+        <StackPanel Grid.Column="2" Grid.Row="1"> 
             <Label>Inbound</Label>
             <Image Source="https://media.gettyimages.com/photos/denver-public-works-crews-work-on-repairing-a-pothole-on-speer-at-picture-id161212914"/>
         </StackPanel>
@@ -61,8 +63,9 @@
         </StackPanel>
         <Image x:Name="imgArf2Stop" Source="/stop.png" Grid.Column="3" Grid.Row="2" Visibility="Hidden"/>
         <Image x:Name="imgArf2Slow" Source="/slow.png" Grid.Column="3" Grid.Row="2" Visibility="Hidden"/>
+        <Label x:Name="staArf2Status" Grid.Column="3" Grid.Row="3">Initializing</Label>
 
-        <Grid Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2">
+        <Grid Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2" Grid.RowSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
