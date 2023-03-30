@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
 
 namespace ARFCon {
@@ -154,6 +155,11 @@ namespace ARFCon {
                 Slow($"Switching {_camera2} to {_slow}", _shortChange, true, ArfState.Stop1);
             else
                 Slow($"Switching {_camera1} to {_slow}", _shortChange, true, ArfState.Stop2);
+        }
+
+        private void MediaElement_MediaEnded(object sender, RoutedEventArgs e) {
+            (sender as MediaElement).Position = TimeSpan.Zero;
+            (sender as MediaElement).Play();
         }
     }
 }

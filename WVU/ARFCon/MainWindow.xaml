@@ -17,7 +17,11 @@
         </Style>
         <Style TargetType="{x:Type Image}">
             <Setter Property="Margin" Value="5" />
-            
+        </Style>
+        <Style TargetType="{x:Type MediaElement}">
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="Volume" Value="0" />
+            <Setter Property="UnloadedBehavior" Value="Manual" />
         </Style>
         <Style TargetType="{x:Type Button}">
             <Setter Property="Padding" Value="10"/>
@@ -43,31 +47,27 @@
         <Label Grid.Column="0" Grid.ColumnSpan="2" Background="SteelBlue" Foreground="White">Camera #1- NORTH</Label>
         <StackPanel Grid.Column="0" Grid.Row="1">
             <Label>Outbound</Label>
-            <Image Source="https://th.bing.com/th/id/OIP.4sqo2jnubqrjVHkA7QtJagHaE7"/>
+            <MediaElement Source="media\traffic1.mp4" MediaEnded="MediaElement_MediaEnded"/>
         </StackPanel>
         <StackPanel Grid.Column="1" Grid.Row="1">
             <Label>Inbound</Label>
-            <Image Source="https://media.gettyimages.com/photos/denver-public-works-crews-work-on-repairing-a-pothole-on-speer-at-picture-id161212914"  RenderTransformOrigin="0.5,0.5">
-                <Image.RenderTransform>
-                    <ScaleTransform ScaleX="-1"/>
-                </Image.RenderTransform>
-            </Image>
+            <MediaElement Source="media\worker1.mp4" MediaEnded="MediaElement_MediaEnded"/>
         </StackPanel>
-        <Image x:Name="imgArf1Stop" Source="/stop.png" Grid.Column="0" Grid.Row="2" Visibility="Hidden"/>
-        <Image x:Name="imgArf1Slow" Source="/slow.png" Grid.Column="0" Grid.Row="2" Visibility="Hidden"/>
+        <Image x:Name="imgArf1Stop" Source="media/stop.png" Grid.Column="0" Grid.Row="2" Visibility="Hidden"/>
+        <Image x:Name="imgArf1Slow" Source="media/slow.png" Grid.Column="0" Grid.Row="2" Visibility="Hidden"/>
         <TextBlock x:Name="staArf1Status" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Background="LightGray" Padding="3">Initializing</TextBlock>
 
         <Label Grid.Column="2" Grid.ColumnSpan="2">Camera #2- SOUTH</Label>
         <StackPanel Grid.Column="2" Grid.Row="1"> 
             <Label>Inbound</Label>
-            <Image Source="https://media.gettyimages.com/photos/denver-public-works-crews-work-on-repairing-a-pothole-on-speer-at-picture-id161212914"/>
+            <MediaElement Source="media\traffic2.mp4" MediaEnded="MediaElement_MediaEnded"/>
         </StackPanel>
         <StackPanel Grid.Column="3" Grid.Row="1">
             <Label>Outbound</Label>
-            <Image Source="https://i.ytimg.com/vi/NyR_7e7JXAA/hqdefault.jpg"/>
+            <MediaElement Source="media\worker2.mp4" MediaEnded="MediaElement_MediaEnded"/>
         </StackPanel>
-        <Image x:Name="imgArf2Stop" Source="/stop.png" Grid.Column="3" Grid.Row="2" Visibility="Hidden"/>
-        <Image x:Name="imgArf2Slow" Source="/slow.png" Grid.Column="3" Grid.Row="2" Visibility="Hidden"/>
+        <Image x:Name="imgArf2Stop" Source="media/stop.png" Grid.Column="3" Grid.Row="2" Visibility="Hidden"/>
+        <Image x:Name="imgArf2Slow" Source="media/slow.png" Grid.Column="3" Grid.Row="2" Visibility="Hidden"/>
         <TextBlock x:Name="staArf2Status" Grid.Column="3" Grid.Row="3" HorizontalAlignment="Center" Background="LightGray" Padding="3">Initializing</TextBlock>
 
         <Grid Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2" Grid.RowSpan="2" Background="AliceBlue">

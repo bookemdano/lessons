@@ -8,15 +8,37 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="media\slow.png" />
+    <None Remove="media\stop.png" />
+    <None Remove="media\traffic1.mp4" />
+    <None Remove="media\traffic2.mp4" />
+    <None Remove="media\worker1.mp4" />
+    <None Remove="media\worker2.mp4" />
     <None Remove="slow.png" />
     <None Remove="stop.png" />
+    <None Remove="traffic1.mp4" />
+    <None Remove="traffic2.mp4" />
+    <None Remove="worker1.mp4" />
+    <None Remove="worker2.mp4" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="slow.png">
+    <Content Include="media\slow.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Content Include="stop.png">
+    </Content>
+    <Content Include="media\stop.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="media\traffic1.mp4">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="media\traffic2.mp4">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="media\worker1.mp4">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="media\worker2.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
