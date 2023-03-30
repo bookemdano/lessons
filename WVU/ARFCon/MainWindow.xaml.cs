@@ -4,9 +4,6 @@ using System.Windows.Controls;
 using System.Windows.Threading;
 
 namespace ARFCon {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         const int _shortChange = 2;
@@ -111,7 +108,8 @@ namespace ARFCon {
 
         void Log(string str)
         {
-            lst.Items.Insert(0, DateTime.Now.ToString("H:mm:ss.fff") + " " + str);
+            lst.Items.Insert(0, DateTime.Now.ToString("H:mm:ss") + " " + str);
+            System.IO.File.AppendAllText("endless.log", DateTime.Now.ToString("H:mm:ss.fff") + " " + str + Environment.NewLine);
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
