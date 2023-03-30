@@ -5,24 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ARFCon"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="ARF Console" Height="500" Width="900"
         >
     <Window.Resources>
         <Style TargetType="{x:Type Label}">
-            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
             <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Background" Value="SteelBlue" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Margin" Value="2" />
         </Style>
         <Style TargetType="{x:Type Image}">
-            <Setter Property="Margin" Value="2" />
+            <Setter Property="Margin" Value="5" />
+            
         </Style>
         <Style TargetType="{x:Type Button}">
             <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="3"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="FontWeight" Value="Bold" />
         </Style>
     </Window.Resources>
 
-    <Grid>
+    <Grid Background="LightSteelBlue" Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
@@ -35,7 +40,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Label Grid.Column="0" Grid.ColumnSpan="2">Camera #1- NORTH</Label>
+        <Label Grid.Column="0" Grid.ColumnSpan="2" Background="SteelBlue" Foreground="White">Camera #1- NORTH</Label>
         <StackPanel Grid.Column="0" Grid.Row="1">
             <Label>Outbound</Label>
             <Image Source="https://th.bing.com/th/id/OIP.4sqo2jnubqrjVHkA7QtJagHaE7"/>
@@ -50,7 +55,7 @@
         </StackPanel>
         <Image x:Name="imgArf1Stop" Source="/stop.png" Grid.Column="0" Grid.Row="2" Visibility="Hidden"/>
         <Image x:Name="imgArf1Slow" Source="/slow.png" Grid.Column="0" Grid.Row="2" Visibility="Hidden"/>
-        <Label x:Name="staArf1Status" Grid.Column="0" Grid.Row="3">Initializing</Label>
+        <TextBlock x:Name="staArf1Status" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Background="LightGray" Padding="3">Initializing</TextBlock>
 
         <Label Grid.Column="2" Grid.ColumnSpan="2">Camera #2- SOUTH</Label>
         <StackPanel Grid.Column="2" Grid.Row="1"> 
@@ -63,9 +68,9 @@
         </StackPanel>
         <Image x:Name="imgArf2Stop" Source="/stop.png" Grid.Column="3" Grid.Row="2" Visibility="Hidden"/>
         <Image x:Name="imgArf2Slow" Source="/slow.png" Grid.Column="3" Grid.Row="2" Visibility="Hidden"/>
-        <Label x:Name="staArf2Status" Grid.Column="3" Grid.Row="3">Initializing</Label>
+        <TextBlock x:Name="staArf2Status" Grid.Column="3" Grid.Row="3" HorizontalAlignment="Center" Background="LightGray" Padding="3">Initializing</TextBlock>
 
-        <Grid Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2" Grid.RowSpan="2">
+        <Grid Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2" Grid.RowSpan="2" Background="AliceBlue">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -78,19 +83,19 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Label Grid.ColumnSpan="3">Controller</Label>
-            <Button x:Name="btnSwitch" Content="⬅️ Switch ➡️" Grid.Row="1" Grid.Column="1" Click="Switch_Click"/>
-            <Button x:Name="btnSwitch1" Content="⬅️ Stop" Grid.Row="1" Grid.Column="0" Click="Switch1_Click"/>
-            <Button x:Name="btnSwitch2" Content="Slow ➡️" Grid.Row="1" Grid.Column="2"  Click="Switch2_Click"/>
-            <Button x:Name="btnAllStop" Content="ALL STOP"  Grid.Row="3" Grid.Column="2" Click="AllStop_Click" Margin="0,3,0,-3"/>
+            <Button x:Name="btnSwitch" Content="👉 Switch 👈" Grid.Row="1" Grid.Column="1" Click="Switch_Click"/>
+            <Button x:Name="btnSwitch1" Content="👈 Stop" Grid.Row="1" Grid.Column="0" Click="Switch1_Click"/>
+            <Button x:Name="btnSwitch2" Content="Slow 👉" Grid.Row="1" Grid.Column="2"  Click="Switch2_Click"/>
+            <Button x:Name="btnAllStop" Content="ALL STOP"  Grid.Row="3" Grid.Column="2" Click="AllStop_Click"/>
             <Button x:Name="btnLogEvent" Content="Log Event" Grid.Row="3" Grid.Column="1"/>
             <Button x:Name="btnAlarm" Content="Alarm!" Background="Orange" Grid.Row="3" Grid.Column="0"/>
             <ListView x:Name="lst" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"/>
-            <Border x:Name="pnlChanging"  Height="85"  Grid.Row="2" Grid.Column="1" Background="Bisque" BorderBrush="DarkBlue" CornerRadius="5" BorderThickness="2">
+            <Border x:Name="pnlChanging"  Height="100"  Grid.Row="2" Grid.Column="1" Background="Bisque" BorderBrush="DarkBlue" CornerRadius="5" BorderThickness="2">
                 <StackPanel VerticalAlignment="Center" >
-
-                    <TextBlock x:Name="staChanging" HorizontalAlignment="Center" Margin="10">Switching- please wait</TextBlock>
-                    <Button x:Name="btnCancel" Content="Cancel Change" Padding="5" Click="Cancel_Click"/>
-                    <TextBlock x:Name="staRemainig">Remaining...</TextBlock>
+                    <TextBlock x:Name="staChanging" HorizontalAlignment="Center" Margin="5">Switching- please wait</TextBlock>
+                    <Button x:Name="btnCancel" Content="Cancel Change" Padding="5" Margin="0" Click="Cancel_Click"/>
+                    <ProgressBar x:Name="prg" Height="10" Margin="5"/>
+                    <TextBlock x:Name="staRemaining" HorizontalAlignment="Right">Remaining...</TextBlock>
                 </StackPanel>
             </Border>
         </Grid>
