@@ -9,8 +9,8 @@ namespace ARFCon {
     /// </summary>
     public partial class MainWindow : Window
     {
-        const int _shortChange = 3;
-        const int _longChange = 5;
+        const int _shortChange = 2;
+        const int _longChange = 3;
         const string _left = "👈";
         const string _right = "👉";
         public MainWindow()
@@ -65,7 +65,10 @@ namespace ARFCon {
                 pnlChanging.Visibility = Visibility.Hidden;
                 Buttonability(true);
                 SetArf(_nextState);
-
+                meOut1.Play();
+                meInb1.Play();
+                meOut2.Play();
+                meInb2.Play();
             }
         }
 
