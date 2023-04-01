@@ -59,7 +59,7 @@
         <TextBlock x:Name="staArf1Status" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Background="LightGray" Padding="3">Initializing</TextBlock>
 
         <Label Grid.Column="2" Grid.ColumnSpan="2">Camera #2- SOUTH</Label>
-        <StackPanel Grid.Column="2" Grid.Row="1"> 
+        <StackPanel Grid.Column="2" Grid.Row="1">
             <Label>Inbound</Label>
             <MediaElement x:Name="meOut2" Source="media\worker2.mp4" MediaEnded="MediaElement_MediaEnded"/>
         </StackPanel>
@@ -88,7 +88,7 @@
             <Button x:Name="btnSwitch1" Content="👈 Stop" Grid.Row="1" Grid.Column="0" Click="Switch1_Click"/>
             <Button x:Name="btnSwitch2" Content="Slow 👉" Grid.Row="1" Grid.Column="2"  Click="Switch2_Click"/>
             <Button x:Name="btnAllStop" Content="ALL STOP"  Grid.Row="3" Grid.Column="2" Click="AllStop_Click"/>
-            <Button x:Name="btnLogEvent" Content="Log Event" Grid.Row="3" Grid.Column="1"/>
+            <Button x:Name="btnLogEvent" Content="Log Event" Grid.Row="3" Grid.Column="1" Click="LogEvent_Click"/>
             <Button x:Name="btnAlarm" Content="Alarm!" Background="Orange" Grid.Row="3" Grid.Column="0"/>
             <ListView x:Name="lst" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"/>
             <Border x:Name="pnlChanging"  Height="100"  Grid.Row="2" Grid.Column="1" Background="Bisque" BorderBrush="DarkBlue" CornerRadius="5" BorderThickness="2">
@@ -97,6 +97,23 @@
                     <Button x:Name="btnCancel" Content="Cancel Change" Padding="5" Margin="0" Click="Cancel_Click"/>
                     <ProgressBar x:Name="prg" Height="10" Margin="5"/>
                     <TextBlock x:Name="staRemaining" HorizontalAlignment="Right">Remaining...</TextBlock>
+                </StackPanel>
+            </Border>
+            <Border x:Name="pnlLogEvent" Background="Bisque" BorderBrush="DarkBlue" CornerRadius="5" BorderThickness="2" Grid.ColumnSpan="3" Grid.RowSpan="2" Grid.Row="1" Width="400" VerticalAlignment="Center" HorizontalAlignment="Center" Height="200">
+                <StackPanel>
+                    <Label x:Name="staLogEvent" Height="40" Width="375" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                        <Run Text="Log Event"/>
+                    </Label>
+                    <ComboBox x:Name="eventTypeCombo" Height="25" Width="150" HorizontalAlignment="Center" Margin="0,15,15,0">
+                        <ComboBoxItem Content="Near Miss"/>
+                        <ComboBoxItem Content="Workplace Accident"/>
+                        <ComboBoxItem Content="Worker Injured"/>
+                        <ComboBoxItem Content="Pedestrian Injured"/>
+                    </ComboBox>
+                    <Grid Height="113" Width="393" HorizontalAlignment="Right">
+                        <Button x:Name="btnCancelLogEvent" Content="Cancel Log" Padding="5" Click="LogEventCancel_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,96,10"/>
+                        <Button x:Name="btnCreateEvent" Content="Create Log" Padding="5" Click="LogEventCreate_Click" Margin="311,75,0,0" Height="28" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                    </Grid>
                 </StackPanel>
             </Border>
         </Grid>

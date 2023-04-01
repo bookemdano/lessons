@@ -10,6 +10,7 @@ namespace ARFCon {
         const int _longChange = 3;
         const string _left = "👈";
         const string _right = "👉";
+
         public MainWindow()
         {
             InitializeComponent();
@@ -60,6 +61,7 @@ namespace ARFCon {
             {
                 _timer.Stop();
                 pnlChanging.Visibility = Visibility.Hidden;
+                pnlLogEvent.Visibility = Visibility.Hidden;
                 Buttonability(true);
                 SetArf(_nextState);
                 meOut1.Play();
@@ -157,6 +159,23 @@ namespace ARFCon {
             else
                 Slow($"Switching {_camera1} to {_slow}", _shortChange, true, ArfState.Stop2);
         }
+
+        private void LogEvent_Click(object sender, RoutedEventArgs e)
+        {
+            pnlLogEvent.Visibility = Visibility.Visible;
+        }
+
+        private void LogEventCancel_Click(object sender, RoutedEventArgs e)
+        {
+            pnlLogEvent.Visibility = Visibility.Hidden;
+        }
+
+        private void LogEventCreate_Click(object sender, RoutedEventArgs e)
+        {
+            Log("EVENT: " + eventTypeCombo.Text);
+            pnlLogEvent.Visibility = Visibility.Hidden;
+        }
+
 
         private void MediaElement_MediaEnded(object sender, RoutedEventArgs e) {
             (sender as MediaElement).Position = TimeSpan.Zero;
