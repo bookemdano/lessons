@@ -8,10 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="media\hollow.png" />
     <None Remove="media\slow.png" />
     <None Remove="media\stop.png" />
     <None Remove="media\traffic1.mp4" />
     <None Remove="media\traffic2.mp4" />
+    <None Remove="media\white.bmp" />
     <None Remove="media\worker1.mp4" />
     <None Remove="media\worker2.mp4" />
     <None Remove="slow.png" />
@@ -41,6 +43,15 @@
     <Content Include="media\worker2.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="media\hollow.png" />
+    <Resource Include="media\white.bmp" />
   </ItemGroup>
 
 </Project>

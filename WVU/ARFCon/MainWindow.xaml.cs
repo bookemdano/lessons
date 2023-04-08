@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ARFCon {
     public partial class MainWindow : Window
@@ -62,6 +65,7 @@ namespace ARFCon {
                 _timer.Stop();
                 pnlChanging.Visibility = Visibility.Hidden;
                 pnlLogEvent.Visibility = Visibility.Hidden;
+                pnlUpdateSign.Visibility = Visibility.Hidden;
                 Buttonability(true);
                 SetArf(_nextState);
                 meOut1.Play();
@@ -75,8 +79,15 @@ namespace ARFCon {
         {
             imgArf1Slow.Visibility = Visibility.Hidden;
             imgArf1Stop.Visibility = Visibility.Hidden;
+            imgArf1Hollow.Visibility = Visibility.Hidden;
+            imgArf1White.Visibility = Visibility.Hidden;
+            Arf1Text.Text = "";
             imgArf2Slow.Visibility = Visibility.Hidden;
             imgArf2Stop.Visibility = Visibility.Hidden;
+            imgArf2Hollow.Visibility = Visibility.Hidden;
+            imgArf2White.Visibility = Visibility.Hidden;
+            Arf2Text.Text = "";
+
             if (state == ArfState.AllStop)
             {
                 imgArf1Stop.Visibility = Visibility.Visible;
@@ -100,6 +111,15 @@ namespace ARFCon {
                 btnSwitch.Visibility = Visibility.Visible;
                 btnSwitch1.Content = _left + " Stop";
                 btnSwitch2.Content = "Slow " + _right;
+            }
+            else if (state == ArfState.Custom)
+            {
+                imgArf1Hollow.Visibility = Visibility.Visible;
+                imgArf2Hollow.Visibility = Visibility.Visible;
+                Arf1Text.Text = signText.Text;
+                imgArf1White.Visibility = Visibility.Visible;
+                imgArf2White.Visibility = Visibility.Visible;
+                Arf2Text.Text = signText.Text;
             }
             staArf1Status.Text = "Conn: GOOD!";
             staArf2Status.Text = "Conn: GOOD!";
@@ -125,6 +145,7 @@ namespace ARFCon {
             AllStop,
             Stop1,
             Stop2,
+            Custom,
         }
         private void AllStop_Click(object sender, RoutedEventArgs e)
         {
@@ -176,6 +197,23 @@ namespace ARFCon {
             pnlLogEvent.Visibility = Visibility.Hidden;
         }
 
+        private void UpdateSign_Click(object sender, RoutedEventArgs e)
+        {
+            pnlUpdateSign.Visibility = Visibility.Visible;
+        }
+
+        private void UpdateSignCancel_Click(object sender, RoutedEventArgs e)
+        {
+            pnlUpdateSign.Visibility = Visibility.Hidden;
+        }
+
+        private void UpdateSignCreate_Click(object sender, RoutedEventArgs e)
+        {
+
+            Log("SIGN CHANGE: Text=" + signText.Text);
+            pnlUpdateSign.Visibility = Visibility.Hidden;
+            SetArf(ArfState.Custom);
+        }
 
         private void MediaElement_MediaEnded(object sender, RoutedEventArgs e) {
             (sender as MediaElement).Position = TimeSpan.Zero;
