@@ -127,15 +127,27 @@
                     </Grid>
                 </StackPanel>
             </Border>
-            <Border x:Name="pnlUpdateSign" Background="Bisque" BorderBrush="DarkBlue" CornerRadius="5" BorderThickness="2" Grid.ColumnSpan="3" Grid.RowSpan="2" Grid.Row="1" Width="400" VerticalAlignment="Center" HorizontalAlignment="Center" Height="200" Visibility="Hidden">
+            <Border x:Name="pnlUpdateSign" Background="Bisque" BorderBrush="DarkBlue" CornerRadius="5" BorderThickness="2" Grid.ColumnSpan="3" Grid.RowSpan="3" Width="400" VerticalAlignment="Top" HorizontalAlignment="Left" Height="200" Margin="30,29,0,0" Visibility="Hidden">
                 <StackPanel>
                     <Label x:Name="staUpdateSign" Height="40" Width="375" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                         <Run Text="Update Sign"/>
                     </Label>
-                    <TextBox x:Name="signText" Width="100" MaxLength="5" />
-                    <Grid Height="113" Width="393" HorizontalAlignment="Right">
-                        <Button x:Name="btnCancelUpdateSign" Content="Cancel" Padding="5" Click="UpdateSignCancel_Click" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="243,0,0,0"/>
-                        <Button x:Name="btnUpdateSign" Content="Update" Padding="5" Click="UpdateSignCreate_Click" Margin="310,0,0,0" Height="28" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                    <Grid Height="25" HorizontalAlignment="Stretch">
+                        <Image x:Name="imgSmallWhite" Source="media/white.bmp" Visibility="Visible" Height="25" Width="30" Margin="115,0,251,0"/>
+                        <TextBox x:Name="signText" Width="100" MaxLength="5" Margin="148,0,148,0" />
+                    </Grid>
+                    <Grid Height="25" HorizontalAlignment="Stretch">
+                        <Image x:Name="imgSmallStop" Source="media/stop.png" Visibility="Visible" Height="25" Width="30" Margin="115,0,251,0"/>
+                        <TextBox x:Name="signStopText" Width="100" MaxLength="5" Margin="148,0,148,0" Text="STOP"/>
+                    </Grid>
+                    <Grid Height="25" HorizontalAlignment="Stretch">
+                        <Image x:Name="imgSmallSlow" Source="media/slow.png" Visibility="Visible" Height="25" Width="30" Margin="115,0,251,0"/>
+                        <TextBox x:Name="signSlowText" Width="100" MaxLength="5" Margin="148,0,148,0" Text="SLOW"/>
+                    </Grid>
+                    <Grid Height="76" Width="392">
+                        <Button x:Name="btnCancelUpdateSign" Content="Cancel" Padding="5" Click="UpdateSignCancel_Click" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="163,0,0,0"/>
+                        <Button x:Name="btnUpdateSign" Content="Update" Padding="5" Click="UpdateSignCreate_Click" Margin="328,0,0,0" Height="28" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        <Button x:Name="btnShowCustomSign" Content="Show Custom" Padding="5" Click="ShowCustom_Click" Margin="227,0,0,0" Height="28" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                     </Grid>
                 </StackPanel>
             </Border>

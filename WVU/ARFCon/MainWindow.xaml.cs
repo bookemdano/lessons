@@ -79,12 +79,12 @@ namespace ARFCon {
         {
             imgArf1Slow.Visibility = Visibility.Hidden;
             imgArf1Stop.Visibility = Visibility.Hidden;
-            imgArf1Hollow.Visibility = Visibility.Hidden;
+            imgArf1Hollow.Visibility = Visibility.Visible;
             imgArf1White.Visibility = Visibility.Hidden;
             Arf1Text.Text = "";
             imgArf2Slow.Visibility = Visibility.Hidden;
             imgArf2Stop.Visibility = Visibility.Hidden;
-            imgArf2Hollow.Visibility = Visibility.Hidden;
+            imgArf2Hollow.Visibility = Visibility.Visible;
             imgArf2White.Visibility = Visibility.Hidden;
             Arf2Text.Text = "";
 
@@ -93,32 +93,36 @@ namespace ARFCon {
                 imgArf1Stop.Visibility = Visibility.Visible;
                 imgArf2Stop.Visibility = Visibility.Visible;
                 btnSwitch.Visibility = Visibility.Hidden;
-                btnSwitch1.Content = _left + " Slow";
-                btnSwitch2.Content = "Slow " + _right;
+                btnSwitch1.Content = _left + " " + signSlowText.Text;
+                btnSwitch2.Content = signSlowText.Text + " " + _right;
+                Arf1Text.Text = signStopText.Text;
+                Arf2Text.Text = signStopText.Text;
             }
             else if (state == ArfState.Stop1)
             {
                 imgArf1Stop.Visibility = Visibility.Visible;
                 imgArf2Slow.Visibility = Visibility.Visible;
                 btnSwitch.Visibility = Visibility.Visible;
-                btnSwitch1.Content = _left + " Slow";
-                btnSwitch2.Content = "Stop " + _right;
+                btnSwitch1.Content = _left + " " + signSlowText.Text;
+                btnSwitch2.Content = signStopText.Text + " " + _right;
+                Arf1Text.Text = signStopText.Text;
+                Arf2Text.Text = signSlowText.Text;
             }
             else if (state == ArfState.Stop2)
             {
                 imgArf1Slow.Visibility = Visibility.Visible;
                 imgArf2Stop.Visibility = Visibility.Visible;
                 btnSwitch.Visibility = Visibility.Visible;
-                btnSwitch1.Content = _left + " Stop";
-                btnSwitch2.Content = "Slow " + _right;
+                btnSwitch1.Content = _left + " " + signStopText.Text;
+                btnSwitch2.Content = signSlowText.Text + " " + _right;
+                Arf1Text.Text = signSlowText.Text;
+                Arf2Text.Text = signStopText.Text;
             }
             else if (state == ArfState.Custom)
             {
-                imgArf1Hollow.Visibility = Visibility.Visible;
-                imgArf2Hollow.Visibility = Visibility.Visible;
-                Arf1Text.Text = signText.Text;
                 imgArf1White.Visibility = Visibility.Visible;
                 imgArf2White.Visibility = Visibility.Visible;
+                Arf1Text.Text = signText.Text;
                 Arf2Text.Text = signText.Text;
             }
             staArf1Status.Text = "Conn: GOOD!";
@@ -209,8 +213,14 @@ namespace ARFCon {
 
         private void UpdateSignCreate_Click(object sender, RoutedEventArgs e)
         {
+            Log("SIGN CHANGE: StopText=" + signStopText.Text + ", SlowText=" + signSlowText.Text + ", CustomText=" + signText.Text);
+            pnlUpdateSign.Visibility = Visibility.Hidden;
+            SetArf(_currentState);
+        }
 
-            Log("SIGN CHANGE: Text=" + signText.Text);
+        private void ShowCustom_Click(object sender, RoutedEventArgs e)
+        {
+            Log("Show Custom Sign");
             pnlUpdateSign.Visibility = Visibility.Hidden;
             SetArf(ArfState.Custom);
         }
