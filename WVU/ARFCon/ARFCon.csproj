@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="media\alarm.wav" />
     <None Remove="media\hollow.png" />
     <None Remove="media\slow.png" />
     <None Remove="media\stop.png" />
@@ -50,6 +51,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="media\alarm.wav" />
     <Resource Include="media\hollow.png" />
     <Resource Include="media\white.bmp" />
   </ItemGroup>

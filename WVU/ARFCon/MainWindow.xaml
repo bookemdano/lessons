@@ -100,7 +100,7 @@
             <Button x:Name="btnAllStop" Content="ALL STOP"  Grid.Row="3" Grid.Column="2" Click="AllStop_Click"/>
             <Button x:Name="btnLogEvent" Content="Log Event" Grid.Row="3" Grid.Column="1" Click="LogEvent_Click" Margin="-125,3,0,3"/>
             <Button x:Name="btnOpenUpdateSign" Content="Update Sign" Grid.Row="3" Grid.Column="1" Click="UpdateSign_Click" Margin="125,3,0,3"/>
-            <Button x:Name="btnAlarm" Content="Alarm!" Background="Orange" Grid.Row="3" Grid.Column="0"/>
+            <Button x:Name="btnAlarm" Content="Alarm!" Background="Orange" Grid.Row="3" Grid.Column="0" Click="SoundAlarm_Click"/>
             <ListView x:Name="lst" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"/>
             <Border x:Name="pnlChanging"  Height="100"  Grid.Row="2" Grid.Column="1" Background="Bisque" BorderBrush="DarkBlue" CornerRadius="5" BorderThickness="2" Visibility="Hidden">
                 <StackPanel VerticalAlignment="Center" >
@@ -132,13 +132,6 @@
                     <Label x:Name="staUpdateSign" Height="40" Width="375" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                         <Run Text="Update Sign"/>
                     </Label>
-                    <!-- <ComboBox x:Name="signColorCombo" Height="25" Width="100" HorizontalAlignment="Center" Margin="15,15,15,15"> -->
-                    <!--     <ComboBoxItem Content="Green"/> -->
-                    <!--     <ComboBoxItem Content="Yellow"/> -->
-                    <!--     <ComboBoxItem Content="Red"/> -->
-                    <!--     <ComboBoxItem Content="Blue"/> -->
-                    <!--     <ComboBoxItem Content="White"/> -->
-                    <!-- </ComboBox> -->
                     <TextBox x:Name="signText" Width="100" MaxLength="5" />
                     <Grid Height="113" Width="393" HorizontalAlignment="Right">
                         <Button x:Name="btnCancelUpdateSign" Content="Cancel" Padding="5" Click="UpdateSignCancel_Click" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="243,0,0,0"/>

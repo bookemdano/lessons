@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using System.Media;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace ARFCon {
@@ -13,6 +12,8 @@ namespace ARFCon {
         const int _longChange = 3;
         const string _left = "👈";
         const string _right = "👉";
+        private SoundPlayer soundPlayer = new SoundPlayer(AppDomain.CurrentDomain.BaseDirectory + @"media\alarm.wav");
+        bool playingAlarm = false;
 
         public MainWindow()
         {
@@ -21,7 +22,6 @@ namespace ARFCon {
             _timer.Interval = TimeSpan.FromSeconds(.1);
             _timer.Tick += Timer_Tick;
             // not started
-
             Slow("Initializing", _longChange, false, ArfState.AllStop);
         }
 
@@ -213,6 +213,21 @@ namespace ARFCon {
             Log("SIGN CHANGE: Text=" + signText.Text);
             pnlUpdateSign.Visibility = Visibility.Hidden;
             SetArf(ArfState.Custom);
+        }
+
+        private void SoundAlarm_Click(object sender, RoutedEventArgs e)
+        {
+            if (!playingAlarm)
+            {
+                Log("ALARM TRIGGERED");
+                soundPlayer.PlayLooping();
+            }
+            else
+            {
+                Log("ALARM STOPPED");
+                soundPlayer.Stop();
+            }
+            playingAlarm = !playingAlarm;
         }
 
         private void MediaElement_MediaEnded(object sender, RoutedEventArgs e) {
