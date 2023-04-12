@@ -108,35 +108,33 @@
                     <TextBlock x:Name="staRemaining" HorizontalAlignment="Right">Remaining...</TextBlock>
                 </StackPanel>
             </Border>
-            <Border x:Name="pnlUpdateSign" Background="Bisque" BorderBrush="DarkBlue" CornerRadius="5" BorderThickness="2" Grid.ColumnSpan="3" Grid.RowSpan="3" Width="400" VerticalAlignment="Top" HorizontalAlignment="Left" Height="200" Margin="30,29,0,0" Visibility="Hidden">
-                <StackPanel>
-                    <Label x:Name="staUpdateSign" Height="40" Width="375" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
-                        <Run Text="Update Sign"/>
-                    </Label>
-                    <Grid Height="25" HorizontalAlignment="Stretch">
-                        <Image x:Name="imgSmallWhite" Source="media/white.bmp" Visibility="Visible" Height="25" Width="30" Margin="115,0,251,0"/>
-                        <TextBox x:Name="entCustomText" Width="100" MaxLength="5" Margin="148,0,148,0" />
-                    </Grid>
-                    <Grid Height="25" HorizontalAlignment="Stretch">
-                        <Image x:Name="imgSmallStop" Source="media/stop.png" Visibility="Visible" Height="25" Width="30" Margin="115,0,251,0"/>
-                        <TextBox x:Name="entStopText" Width="100" MaxLength="5" Margin="148,0,148,0" Text="STOP"/>
-                    </Grid>
-                    <Grid Height="25" HorizontalAlignment="Stretch">
-                        <Image x:Name="imgSmallSlow" Source="media/slow.png" Visibility="Visible" Height="25" Width="30" Margin="115,0,251,0"/>
-                        <TextBox x:Name="entSlowText" Width="100" MaxLength="5" Margin="148,0,148,0" Text="SLOW"/>
-                    </Grid>
-                    <Grid Height="76" Width="392">
-                        <Button x:Name="btnCancelUpdateSign" Content="Cancel" Padding="5" Click="UpdateSignCancel_Click" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="163,0,0,0"/>
-                        <Button x:Name="btnUpdateSign" Content="Update" Padding="5" Click="UpdateSignCreate_Click" Margin="328,0,0,0" Height="28" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                        <Button x:Name="btnShowCustomSign" Content="Show Custom" Padding="5" Click="ShowCustom_Click" Margin="227,0,0,0" Height="28" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                    </Grid>
-                </StackPanel>
-            </Border>
 
         </Grid>
+        <Border x:Name="pnlUpdateSign" Background="Bisque" BorderBrush="DarkBlue" CornerRadius="5" BorderThickness="2" Grid.ColumnSpan="2" Grid.RowSpan="2" Width="400" VerticalAlignment="Top" HorizontalAlignment="Left" Height="200" Visibility="Hidden" Grid.Column="1" Margin="20,121,0,0" Grid.Row="1" >
+            <StackPanel>
+                <Label Content="Update Sign"/>
+                <StackPanel Orientation="Horizontal"  Margin="3" HorizontalAlignment="Center">
+                    <Image x:Name="imgSmallWhite" Source="media/white.bmp" Height="25" Width="30"/>
+                    <TextBox x:Name="entCustomText" Width="100" MaxLength="5"  VerticalContentAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"  Margin="3" HorizontalAlignment="Center">
+                    <Image x:Name="imgSmallStop" Source="media/stop.png" Height="25" Width="30"/>
+                    <TextBox x:Name="entStopText" Width="100" MaxLength="5" VerticalContentAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"  Margin="3" HorizontalAlignment="Center">
+                    <Image x:Name="imgSmallSlow" Source="media/slow.png" Height="25" Width="30"/>
+                    <TextBox x:Name="entSlowText" Width="100" MaxLength="5" VerticalContentAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"  Margin="3" HorizontalAlignment="Center">
+                    <Button x:Name="btnCancelUpdateSign" Content="Cancel" Padding="5" Click="UpdateSignCancel_Click"/>
+                    <Button x:Name="btnUpdateSign" Content="Update" Padding="5" Click="UpdateSignCreate_Click"/>
+                    <Button x:Name="btnShowCustomSign" Content="Show Custom" Padding="5" Click="ShowCustom_Click"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
         <Border x:Name="pnlLogEvent" Background="Bisque" BorderBrush="DarkBlue" CornerRadius="5" BorderThickness="2" Grid.ColumnSpan="3" Grid.RowSpan="2" Grid.Row="1" Width="400" VerticalAlignment="Center" HorizontalAlignment="Center" Height="200" Visibility="Hidden">
             <StackPanel>
-                <Label x:Name="staLogEvent" Content="Log Event"/>
+                <Label Content="Log Event"/>
                 <ComboBox x:Name="cmbEventType" SelectedIndex="0" Margin="5">
                     <ComboBoxItem Content="-select type-"/>
                     <ComboBoxItem Content="Near Miss"/>

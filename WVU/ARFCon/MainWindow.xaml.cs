@@ -12,8 +12,8 @@ namespace ARFCon {
         const int _longChange = 3;
         const string _left = "👈";
         const string _right = "👉";
-        private SoundPlayer soundPlayer = new SoundPlayer(@"media\alarm.wav");
-        bool playingAlarm = false;
+        
+        SoundPlayer _soundPlayer;
 
         public MainWindow()
         {
@@ -264,17 +264,20 @@ namespace ARFCon {
 
         private void SoundAlarm_Click(object sender, RoutedEventArgs e)
         {
-            if (!playingAlarm)
+            if (_soundPlayer == null)
             {
-                Log("ALARM TRIGGERED");
-                soundPlayer.PlayLooping();
+                Log("Alarm triggered.");
+                btnAlarm.Content = "Silence";
+                _soundPlayer = new SoundPlayer(@"media\alarm.wav");
+                _soundPlayer.PlayLooping();
             }
             else
             {
-                Log("ALARM STOPPED");
-                soundPlayer.Stop();
+                Log("Alarm stopped.");
+                btnAlarm.Content = "Alarm!";
+                _soundPlayer.Stop();
+                _soundPlayer = null;
             }
-            playingAlarm = !playingAlarm;
         }
 
         private void MediaElement_MediaEnded(object sender, RoutedEventArgs e) {
