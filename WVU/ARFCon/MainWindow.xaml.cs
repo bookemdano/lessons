@@ -56,6 +56,8 @@ namespace ARFCon {
             btnSwitch.IsEnabled = enable;
             btnSwitch1.IsEnabled = enable;
             btnSwitch2.IsEnabled = enable;
+            btnLogEvent.IsEnabled = enable;
+            btnOpenUpdateSign.IsEnabled = enable;
         }
         private void Timer_Tick(object? sender, EventArgs e)
         {
@@ -196,12 +198,16 @@ namespace ARFCon {
         private void LogEventCancel_Click(object sender, RoutedEventArgs e)
         {
             pnlLogEvent.Visibility = Visibility.Hidden;
+            cmbEventType.SelectedIndex = 0;
+            entEventNotes.Text = "";
         }
 
         private void LogEventCreate_Click(object sender, RoutedEventArgs e)
         {
-            Log("EVENT: " + eventTypeCombo.Text);
+            Log("EVENT: " + cmbEventType.Text + " notes: " + entEventNotes.Text);
             pnlLogEvent.Visibility = Visibility.Hidden;
+            cmbEventType.SelectedIndex = 0;
+            entEventNotes.Text = "";
         }
 
         private void UpdateSign_Click(object sender, RoutedEventArgs e)

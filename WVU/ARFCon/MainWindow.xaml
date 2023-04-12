@@ -31,7 +31,6 @@
             <Setter Property="FontWeight" Value="Bold" />
         </Style>
     </Window.Resources>
-
     <Grid Background="LightSteelBlue" Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -80,7 +79,6 @@
             <TextBlock x:Name="Arf2Text" FontWeight="Bold" FontSize="48" Height="71" VerticalAlignment="Center" Text="" Margin="0,0,1,0"/>
         </Grid>
         <TextBlock x:Name="staArf2Status" Grid.Column="3" Grid.Row="3" HorizontalAlignment="Center" Background="LightGray" Padding="3">Initializing</TextBlock>
-
         <Grid Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2" Grid.RowSpan="2" Background="AliceBlue">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -110,23 +108,6 @@
                     <TextBlock x:Name="staRemaining" HorizontalAlignment="Right">Remaining...</TextBlock>
                 </StackPanel>
             </Border>
-            <Border x:Name="pnlLogEvent" Background="Bisque" BorderBrush="DarkBlue" CornerRadius="5" BorderThickness="2" Grid.ColumnSpan="3" Grid.RowSpan="2" Grid.Row="1" Width="400" VerticalAlignment="Center" HorizontalAlignment="Center" Height="200" Visibility="Hidden">
-                <StackPanel>
-                    <Label x:Name="staLogEvent" Height="40" Width="375" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
-                        <Run Text="Log Event"/>
-                    </Label>
-                    <ComboBox x:Name="eventTypeCombo" Height="25" Width="150" HorizontalAlignment="Center" Margin="0,15,15,0">
-                        <ComboBoxItem Content="Near Miss"/>
-                        <ComboBoxItem Content="Workplace Accident"/>
-                        <ComboBoxItem Content="Worker Injured"/>
-                        <ComboBoxItem Content="Pedestrian Injured"/>
-                    </ComboBox>
-                    <Grid Height="113" Width="393" HorizontalAlignment="Right">
-                        <Button x:Name="btnCancelLogEvent" Content="Cancel Log" Padding="5" Click="LogEventCancel_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,96,10"/>
-                        <Button x:Name="btnCreateEvent" Content="Create Log" Padding="5" Click="LogEventCreate_Click" Margin="311,75,0,0" Height="28" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-                    </Grid>
-                </StackPanel>
-            </Border>
             <Border x:Name="pnlUpdateSign" Background="Bisque" BorderBrush="DarkBlue" CornerRadius="5" BorderThickness="2" Grid.ColumnSpan="3" Grid.RowSpan="3" Width="400" VerticalAlignment="Top" HorizontalAlignment="Left" Height="200" Margin="30,29,0,0" Visibility="Hidden">
                 <StackPanel>
                     <Label x:Name="staUpdateSign" Height="40" Width="375" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
@@ -151,6 +132,26 @@
                     </Grid>
                 </StackPanel>
             </Border>
+
         </Grid>
+        <Border x:Name="pnlLogEvent" Background="Bisque" BorderBrush="DarkBlue" CornerRadius="5" BorderThickness="2" Grid.ColumnSpan="3" Grid.RowSpan="2" Grid.Row="1" Width="400" VerticalAlignment="Center" HorizontalAlignment="Center" Height="200" Visibility="Hidden">
+            <StackPanel>
+                <Label x:Name="staLogEvent" Content="Log Event"/>
+                <ComboBox x:Name="cmbEventType" SelectedIndex="0" Margin="5">
+                    <ComboBoxItem Content="-select type-"/>
+                    <ComboBoxItem Content="Near Miss"/>
+                    <ComboBoxItem Content="Workplace Accident"/>
+                    <ComboBoxItem Content="Worker Injured"/>
+                    <ComboBoxItem Content="Pedestrian Injured"/>
+                </ComboBox>
+                <TextBlock Padding="3">Notes:</TextBlock>
+
+                <TextBox x:Name="entEventNotes" TextWrapping="Wrap" AcceptsReturn="True" Margin="5" Height="70"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="btnCancelLogEvent" Content="Cancel Log" Padding="5" Click="LogEventCancel_Click"/>
+                    <Button x:Name="btnCreateEvent" Content="Create Log" Padding="5" Click="LogEventCreate_Click" />
+                </StackPanel>
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>
