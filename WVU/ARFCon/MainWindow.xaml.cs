@@ -12,7 +12,7 @@ namespace ARFCon {
         const int _longChange = 3;
         const string _left = "👈";
         const string _right = "👉";
-        private SoundPlayer soundPlayer = new SoundPlayer(AppDomain.CurrentDomain.BaseDirectory + @"media\alarm.wav");
+        private SoundPlayer soundPlayer = new SoundPlayer(@"media\alarm.wav");
         bool playingAlarm = false;
 
         public MainWindow()

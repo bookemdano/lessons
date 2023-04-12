@@ -51,8 +51,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="media\alarm.wav" />
-    <Resource Include="media\hollow.png" />
+    <Content Include="media\alarm.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="media\hollow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Resource Include="media\white.bmp" />
   </ItemGroup>
 
