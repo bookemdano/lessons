@@ -4,6 +4,27 @@
              xmlns:local="clr-namespace:ARFCon"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Background" Value="SteelBlue" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Margin" Value="2" />
+        </Style>
+        <Style TargetType="{x:Type Image}">
+            <Setter Property="Margin" Value="5" />
+        </Style>
+        <Style TargetType="{x:Type MediaElement}">
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="Volume" Value="0" />
+            <Setter Property="LoadedBehavior" Value="Manual" />
+            <Setter Property="Height" Value="125" />
+        </Style>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
     </Application.Resources>
 </Application>

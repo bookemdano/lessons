@@ -21,9 +21,9 @@ namespace ARFCon {
             _timer = new DispatcherTimer();
             _timer.Interval = TimeSpan.FromSeconds(.1);
             _timer.Tick += Timer_Tick;
-            entStopText.Text = StopText;
-            entSlowText.Text = SlowText;
-            entCustomText.Text = CustomText;
+            entStopText.Text = Config.StopText;
+            entSlowText.Text = Config.SlowText;
+            entCustomText.Text = Config.CustomText;
             // not started
             Slow("Initializing", _longChange, false, ArfState.AllStop);
         }
@@ -69,7 +69,6 @@ namespace ARFCon {
             {
                 _timer.Stop();
                 pnlChanging.Visibility = Visibility.Hidden;
-                pnlLogEvent.Visibility = Visibility.Hidden;
                 pnlUpdateSign.Visibility = Visibility.Hidden;
                 Buttonability(true);
                 SetArf(_nextState);
@@ -98,37 +97,37 @@ namespace ARFCon {
                 imgArf1Stop.Visibility = Visibility.Visible;
                 imgArf2Stop.Visibility = Visibility.Visible;
                 btnSwitch.Visibility = Visibility.Hidden;
-                btnSwitch1.Content = _left + " " + SlowText;
-                btnSwitch2.Content = SlowText + " " + _right;
-                Arf1Text.Text = StopText;
-                Arf2Text.Text = StopText;
+                btnSwitch1.Content = _left + " " + Config.SlowText;
+                btnSwitch2.Content = Config.SlowText + " " + _right;
+                Arf1Text.Text = Config.StopText;
+                Arf2Text.Text = Config.StopText;
             }
             else if (state == ArfState.Stop1)
             {
                 imgArf1Stop.Visibility = Visibility.Visible;
                 imgArf2Slow.Visibility = Visibility.Visible;
                 btnSwitch.Visibility = Visibility.Visible;
-                btnSwitch1.Content = _left + " " + SlowText;
-                btnSwitch2.Content = StopText + " " + _right;
-                Arf1Text.Text = StopText;
-                Arf2Text.Text = SlowText;
+                btnSwitch1.Content = _left + " " + Config.SlowText;
+                btnSwitch2.Content = Config.StopText + " " + _right;
+                Arf1Text.Text = Config.StopText;
+                Arf2Text.Text = Config.SlowText;
             }
             else if (state == ArfState.Stop2)
             {
                 imgArf1Slow.Visibility = Visibility.Visible;
                 imgArf2Stop.Visibility = Visibility.Visible;
                 btnSwitch.Visibility = Visibility.Visible;
-                btnSwitch1.Content = _left + " " + StopText;
-                btnSwitch2.Content = SlowText + " " + _right;
-                Arf1Text.Text = SlowText;
-                Arf2Text.Text = StopText;
+                btnSwitch1.Content = _left + " " + Config.StopText;
+                btnSwitch2.Content = Config.SlowText + " " + _right;
+                Arf1Text.Text = Config.SlowText;
+                Arf2Text.Text = Config.StopText;
             }
             else if (state == ArfState.Custom)
             {
                 imgArf1White.Visibility = Visibility.Visible;
                 imgArf2White.Visibility = Visibility.Visible;
-                Arf1Text.Text = CustomText;
-                Arf2Text.Text = CustomText;
+                Arf1Text.Text = Config.CustomText;
+                Arf2Text.Text = Config.CustomText;
             }
             staArf1Status.Text = "Conn: GOOD!";
             staArf2Status.Text = "Conn: GOOD!";
@@ -158,56 +157,41 @@ namespace ARFCon {
         }
         private void AllStop_Click(object sender, RoutedEventArgs e)
         {
-            Slow("All " + StopText, 3, true, ArfState.AllStop);
+            Slow("All " + Config.StopText, 3, true, ArfState.AllStop);
 
         }
 
         private void Switch1_Click(object sender, RoutedEventArgs e)
         {
             if (_currentState == ArfState.Stop1 || _currentState == ArfState.AllStop)
-                Slow($"Switching {_camera2} to {SlowText}", _shortChange, true, ArfState.Stop2);
+                Slow($"Switching {_camera2} to {Config.SlowText}", _shortChange, true, ArfState.Stop2);
             else // 1 is slow, 2 is stop
-                Slow("All " + StopText, _shortChange, true, ArfState.AllStop);     // dont set other to slow because it might not be intended
+                Slow("All " + Config.StopText, _shortChange, true, ArfState.AllStop);     // dont set other to slow because it might not be intended
         }
 
-        static string _slow = "🐌 SLOW";
-        static string _stop = "⛔ STOP";
         static string _camera1 = "Cam#1 North";
         static string _camera2 = "Cam#2 North";
         private void Switch2_Click(object sender, RoutedEventArgs e)
         {
             if (_currentState == ArfState.Stop2 || _currentState == ArfState.AllStop)
-                Slow($"Switching {_camera1} to {SlowText}", _shortChange, true, ArfState.Stop1);
+                Slow($"Switching {_camera1} to {Config.SlowText}", _shortChange, true, ArfState.Stop1);
             else  // 2 is slow, 1 is stop
-                Slow("All " + StopText, 5, true, ArfState.AllStop);    // dont set 1 to slow because it might not be intended
+                Slow("All " + Config.StopText, 5, true, ArfState.AllStop);    // dont set 1 to slow because it might not be intended
         }
 
         private void Switch_Click(object sender, RoutedEventArgs e)
         {
             if (_currentState == ArfState.Stop2)
-                Slow($"Switching {_camera2} to {SlowText}", _shortChange, true, ArfState.Stop1);
+                Slow($"Switching {_camera2} to {Config.SlowText}", _shortChange, true, ArfState.Stop1);
             else
-                Slow($"Switching {_camera1} to {SlowText}", _shortChange, true, ArfState.Stop2);
+                Slow($"Switching {_camera1} to {Config.SlowText}", _shortChange, true, ArfState.Stop2);
         }
 
         private void LogEvent_Click(object sender, RoutedEventArgs e)
         {
-            pnlLogEvent.Visibility = Visibility.Visible;
-        }
-
-        private void LogEventCancel_Click(object sender, RoutedEventArgs e)
-        {
-            pnlLogEvent.Visibility = Visibility.Hidden;
-            cmbEventType.SelectedIndex = 0;
-            entEventNotes.Text = "";
-        }
-
-        private void LogEventCreate_Click(object sender, RoutedEventArgs e)
-        {
-            Log("EVENT: " + cmbEventType.Text + " notes: " + entEventNotes.Text);
-            pnlLogEvent.Visibility = Visibility.Hidden;
-            cmbEventType.SelectedIndex = 0;
-            entEventNotes.Text = "";
+            var wnd = new EventWindow();
+            if (wnd.ShowDialog() == true) 
+                Log("EVENT: " + wnd.EventType + " notes: " + wnd.EventNotes);
         }
 
         private void UpdateSign_Click(object sender, RoutedEventArgs e)
@@ -220,37 +204,12 @@ namespace ARFCon {
             pnlUpdateSign.Visibility = Visibility.Hidden;
         }
 
-        private string StopText {
-            get {
-                return Config.Get("stop_text", "STOP");
-            }
-            set {
-                Config.Set("stop_text", value);
-            }
-        }
-        private string SlowText {
-            get {
-                return Config.Get("slow_text", "SLOW");
-            }
-            set {
-                Config.Set("slow_text", value);
-            }
-        }
-        private string CustomText {
-            get {
-                return Config.Get("custom_text", "");
-            }
-            set {
-                Config.Set("custom_text", value);
-            }
-        }
-
         private void UpdateSignCreate_Click(object sender, RoutedEventArgs e)
         {
-            StopText = entStopText.Text;
-            SlowText = entSlowText.Text;
-            CustomText = entCustomText.Text;
-            Log("SIGN CHANGE: StopText=" + StopText + ", SlowText=" + SlowText + ", CustomText=" + CustomText);
+            Config.StopText = entStopText.Text;
+            Config.SlowText = entSlowText.Text;
+            Config.CustomText = entCustomText.Text;
+            Log("SIGN CHANGE: StopText=" + Config.StopText + ", SlowText=" + Config.SlowText + ", CustomText=" + Config.CustomText);
             pnlUpdateSign.Visibility = Visibility.Hidden;
             SetArf(_currentState);
         }

@@ -1,0 +1,26 @@
+﻿<Window x:Class="ARFCon.EventWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ARFCon"
+        mc:Ignorable="d"
+        Title="Log Event" Height="250" Width="406" ResizeMode="NoResize">
+    <StackPanel>
+        <TextBlock Padding="3">Event Type:</TextBlock>
+        <ComboBox x:Name="cmbEventType" SelectedIndex="0" Margin="5">
+            <ComboBoxItem Content="-select type-"/>
+            <ComboBoxItem Content="Near Miss"/>
+            <ComboBoxItem Content="Workplace Accident"/>
+            <ComboBoxItem Content="Worker Injured"/>
+            <ComboBoxItem Content="Pedestrian Injured"/>
+        </ComboBox>
+        <TextBlock Padding="3">Notes:</TextBlock>
+
+        <TextBox x:Name="entEventNotes" TextWrapping="Wrap" AcceptsReturn="True" Margin="5" Height="70"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="Cancel" Padding="5" Margin="5" Click="Cancel_Click"/>
+            <Button Content="Create" Padding="5" Margin="5" Click="Create_Click" />
+        </StackPanel>
+    </StackPanel>
+</Window>
