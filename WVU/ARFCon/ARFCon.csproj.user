@@ -7,11 +7,17 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="CustomizeWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="EventWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="CustomizeWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="EventWindow.xaml">
       <SubType>Designer</SubType>
     </Page>

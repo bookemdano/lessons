@@ -21,9 +21,6 @@ namespace ARFCon {
             _timer = new DispatcherTimer();
             _timer.Interval = TimeSpan.FromSeconds(.1);
             _timer.Tick += Timer_Tick;
-            entStopText.Text = Config.StopText;
-            entSlowText.Text = Config.SlowText;
-            entCustomText.Text = Config.CustomText;
             // not started
             Slow("Initializing", _longChange, false, ArfState.AllStop);
         }
@@ -69,7 +66,6 @@ namespace ARFCon {
             {
                 _timer.Stop();
                 pnlChanging.Visibility = Visibility.Hidden;
-                pnlUpdateSign.Visibility = Visibility.Hidden;
                 Buttonability(true);
                 SetArf(_nextState);
                 meOut1.Play();
@@ -196,29 +192,14 @@ namespace ARFCon {
 
         private void UpdateSign_Click(object sender, RoutedEventArgs e)
         {
-            pnlUpdateSign.Visibility = Visibility.Visible;
-        }
-
-        private void UpdateSignCancel_Click(object sender, RoutedEventArgs e)
-        {
-            pnlUpdateSign.Visibility = Visibility.Hidden;
-        }
-
-        private void UpdateSignCreate_Click(object sender, RoutedEventArgs e)
-        {
-            Config.StopText = entStopText.Text;
-            Config.SlowText = entSlowText.Text;
-            Config.CustomText = entCustomText.Text;
-            Log("SIGN CHANGE: StopText=" + Config.StopText + ", SlowText=" + Config.SlowText + ", CustomText=" + Config.CustomText);
-            pnlUpdateSign.Visibility = Visibility.Hidden;
-            SetArf(_currentState);
-        }
-
-        private void ShowCustom_Click(object sender, RoutedEventArgs e)
-        {
-            Log("Show Custom Sign");
-            pnlUpdateSign.Visibility = Visibility.Hidden;
-            SetArf(ArfState.Custom);
+            var wnd = new CustomizeWindow();
+            if (wnd.ShowDialog() == true) {
+                Log("SIGN CHANGE: StopText=" + Config.StopText + ", SlowText=" + Config.SlowText + ", CustomText=" + Config.CustomText);
+                if (wnd.ShowCustom)
+                    SetArf(ArfState.Custom);
+                else
+                    SetArf(_currentState);
+            }
         }
 
         private void SoundAlarm_Click(object sender, RoutedEventArgs e)

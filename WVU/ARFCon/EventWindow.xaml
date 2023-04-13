@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:ARFCon"
         mc:Ignorable="d"
         Title="Log Event" Height="250" Width="406" ResizeMode="NoResize">
-    <StackPanel>
-        <TextBlock Padding="3">Event Type:</TextBlock>
+    <StackPanel Background="LightSteelBlue">
+        <Label>Event Type:</Label>
         <ComboBox x:Name="cmbEventType" SelectedIndex="0" Margin="5">
             <ComboBoxItem Content="-select type-"/>
             <ComboBoxItem Content="Near Miss"/>
@@ -15,7 +15,7 @@
             <ComboBoxItem Content="Worker Injured"/>
             <ComboBoxItem Content="Pedestrian Injured"/>
         </ComboBox>
-        <TextBlock Padding="3">Notes:</TextBlock>
+        <Label>Notes:</Label>
 
         <TextBox x:Name="entEventNotes" TextWrapping="Wrap" AcceptsReturn="True" Margin="5" Height="70"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">

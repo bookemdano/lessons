@@ -1,0 +1,29 @@
+﻿<Window x:Class="ARFCon.CustomizeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ARFCon"
+        mc:Ignorable="d"
+        Title="Customize" Height="233" Width="255">
+    <StackPanel  Background="LightSteelBlue">
+        <Label Padding="3">Sign Text</Label>
+        <StackPanel Orientation="Horizontal" Margin="3">
+            <Image x:Name="imgSmallWhite" Source="media/white.bmp" Height="25" Width="30"/>
+            <TextBox x:Name="entCustomText" Width="100" MaxLength="5"  VerticalContentAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal"  Margin="3">
+            <Image x:Name="imgSmallStop" Source="media/stop.png" Height="25" Width="30"/>
+            <TextBox x:Name="entStopText" Width="100" MaxLength="5" VerticalContentAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal"  Margin="3">
+            <Image x:Name="imgSmallSlow" Source="media/slow.png" Height="25" Width="30"/>
+            <TextBox x:Name="entSlowText" Width="100" MaxLength="5" VerticalContentAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal"  Margin="3" HorizontalAlignment="Center">
+            <Button x:Name="btnCancelUpdateSign" Content="Cancel" Padding="5" Margin="5" Click="Cancel_Click"/>
+            <Button x:Name="btnUpdateSign" Content="Update" Padding="5" Margin="5" Click="Update_Click"/>
+            <Button x:Name="btnShowCustomSign" Content="Show Custom" Padding="5" Margin="5" Click="Show_Click"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

@@ -8,7 +8,7 @@
         Title="ARF Console" Height="500" Width="900"
         >
 
-    <Grid Background="LightSteelBlue" Margin="10">
+    <Grid Margin="10" Background="LightSteelBlue">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
@@ -21,7 +21,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Label Grid.Column="0" Grid.ColumnSpan="2" Background="SteelBlue" Foreground="White">Camera #1- NORTH</Label>
+        <Label Grid.Column="0" Grid.ColumnSpan="2">Camera #1- NORTH</Label>
         <StackPanel Grid.Column="0" Grid.Row="1">
             <Label>Outbound</Label>
             <MediaElement x:Name="meOut1" Source="media\traffic1.mp4" MediaEnded="MediaElement_MediaEnded"/>
@@ -85,29 +85,6 @@
                     <TextBlock x:Name="staRemaining" HorizontalAlignment="Right">Remaining...</TextBlock>
                 </StackPanel>
             </Border>
-
         </Grid>
-        <Border x:Name="pnlUpdateSign" Background="Bisque" BorderBrush="DarkBlue" CornerRadius="5" BorderThickness="2" Grid.ColumnSpan="2" Grid.RowSpan="2" Width="400" VerticalAlignment="Top" HorizontalAlignment="Left" Height="200" Visibility="Hidden" Grid.Column="1" Margin="20,121,0,0" Grid.Row="1" >
-            <StackPanel>
-                <Label Content="Update Sign"/>
-                <StackPanel Orientation="Horizontal"  Margin="3" HorizontalAlignment="Center">
-                    <Image x:Name="imgSmallWhite" Source="media/white.bmp" Height="25" Width="30"/>
-                    <TextBox x:Name="entCustomText" Width="100" MaxLength="5"  VerticalContentAlignment="Center"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal"  Margin="3" HorizontalAlignment="Center">
-                    <Image x:Name="imgSmallStop" Source="media/stop.png" Height="25" Width="30"/>
-                    <TextBox x:Name="entStopText" Width="100" MaxLength="5" VerticalContentAlignment="Center"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal"  Margin="3" HorizontalAlignment="Center">
-                    <Image x:Name="imgSmallSlow" Source="media/slow.png" Height="25" Width="30"/>
-                    <TextBox x:Name="entSlowText" Width="100" MaxLength="5" VerticalContentAlignment="Center"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal"  Margin="3" HorizontalAlignment="Center">
-                    <Button x:Name="btnCancelUpdateSign" Content="Cancel" Padding="5" Click="UpdateSignCancel_Click"/>
-                    <Button x:Name="btnUpdateSign" Content="Update" Padding="5" Click="UpdateSignCreate_Click"/>
-                    <Button x:Name="btnShowCustomSign" Content="Show Custom" Padding="5" Click="ShowCustom_Click"/>
-                </StackPanel>
-            </StackPanel>
-        </Border>
     </Grid>
 </Window>
