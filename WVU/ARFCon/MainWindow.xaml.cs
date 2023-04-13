@@ -21,6 +21,8 @@ namespace ARFCon {
             _timer = new DispatcherTimer();
             _timer.Interval = TimeSpan.FromSeconds(.1);
             _timer.Tick += Timer_Tick;
+            staCamera1.Content = "Camera #1- " + Config.Camera1;
+            staCamera2.Content = "Camera #2- " + Config.Camera2;
             // not started
             Slow("Initializing", _longChange, false, ArfState.AllStop);
         }
@@ -54,7 +56,7 @@ namespace ARFCon {
             btnSwitch1.IsEnabled = enable;
             btnSwitch2.IsEnabled = enable;
             btnLogEvent.IsEnabled = enable;
-            btnOpenUpdateSign.IsEnabled = enable;
+            btnCustomize.IsEnabled = enable;
         }
         private void Timer_Tick(object? sender, EventArgs e)
         {
@@ -138,11 +140,6 @@ namespace ARFCon {
             System.IO.File.AppendAllText("endless.log", DateTime.Now.ToString("H:mm:ss.fff") + " " + str + Environment.NewLine);
         }
 
-        private void Cancel_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         public enum ArfState
         {
             NA,
@@ -160,17 +157,15 @@ namespace ARFCon {
         private void Switch1_Click(object sender, RoutedEventArgs e)
         {
             if (_currentState == ArfState.Stop1 || _currentState == ArfState.AllStop)
-                Slow($"Switching {_camera2} to {Config.SlowText}", _shortChange, true, ArfState.Stop2);
+                Slow($"Switching {Config.Camera2} to {Config.SlowText}", _shortChange, true, ArfState.Stop2);
             else // 1 is slow, 2 is stop
                 Slow("All " + Config.StopText, _shortChange, true, ArfState.AllStop);     // dont set other to slow because it might not be intended
         }
 
-        static string _camera1 = "Cam#1 North";
-        static string _camera2 = "Cam#2 North";
         private void Switch2_Click(object sender, RoutedEventArgs e)
         {
             if (_currentState == ArfState.Stop2 || _currentState == ArfState.AllStop)
-                Slow($"Switching {_camera1} to {Config.SlowText}", _shortChange, true, ArfState.Stop1);
+                Slow($"Switching {Config.Camera1} to {Config.SlowText}", _shortChange, true, ArfState.Stop1);
             else  // 2 is slow, 1 is stop
                 Slow("All " + Config.StopText, 5, true, ArfState.AllStop);    // dont set 1 to slow because it might not be intended
         }
@@ -178,9 +173,9 @@ namespace ARFCon {
         private void Switch_Click(object sender, RoutedEventArgs e)
         {
             if (_currentState == ArfState.Stop2)
-                Slow($"Switching {_camera2} to {Config.SlowText}", _shortChange, true, ArfState.Stop1);
+                Slow($"Switching {Config.Camera2} to {Config.SlowText}", _shortChange, true, ArfState.Stop1);
             else
-                Slow($"Switching {_camera1} to {Config.SlowText}", _shortChange, true, ArfState.Stop2);
+                Slow($"Switching {Config.Camera1} to {Config.SlowText}", _shortChange, true, ArfState.Stop2);
         }
 
         private void LogEvent_Click(object sender, RoutedEventArgs e)
@@ -190,7 +185,7 @@ namespace ARFCon {
                 Log("EVENT: " + wnd.EventType + " notes: " + wnd.EventNotes);
         }
 
-        private void UpdateSign_Click(object sender, RoutedEventArgs e)
+        private void Customize_Click(object sender, RoutedEventArgs e)
         {
             var wnd = new CustomizeWindow();
             if (wnd.ShowDialog() == true) {
@@ -199,6 +194,8 @@ namespace ARFCon {
                     SetArf(ArfState.Custom);
                 else
                     SetArf(_currentState);
+                staCamera1.Content = "Camera #1- " + Config.Camera1;
+                staCamera2.Content = "Camera #2- " + Config.Camera2;
             }
         }
 
@@ -223,6 +220,10 @@ namespace ARFCon {
         private void MediaElement_MediaEnded(object sender, RoutedEventArgs e) {
             (sender as MediaElement).Position = TimeSpan.Zero;
             (sender as MediaElement).Play();
+        }
+
+        private void Cancel_Click(object sender, RoutedEventArgs e) {
+
         }
     }
 }

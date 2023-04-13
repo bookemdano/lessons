@@ -1,6 +1,22 @@
 ﻿
 namespace ARFCon {
     static internal class Config {
+        static internal string Camera1 {
+            get {
+                return ConfigCore.Get("camera1", "North");
+            }
+            set {
+                ConfigCore.Set("camera1", value);
+            }
+        }
+        static internal string Camera2 {
+            get {
+                return ConfigCore.Get("camera2", "South");
+            }
+            set {
+                ConfigCore.Set("camera2", value);
+            }
+        }
         static internal string StopText {
             get {
                 return ConfigCore.Get("stop_text", "STOP");
