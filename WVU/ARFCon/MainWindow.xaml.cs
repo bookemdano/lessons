@@ -158,16 +158,16 @@ namespace ARFCon {
         }
         private void AllStop_Click(object sender, RoutedEventArgs e)
         {
-            Slow("All " + _stop, 3, true, ArfState.AllStop);
+            Slow("All " + StopText, 3, true, ArfState.AllStop);
 
         }
 
         private void Switch1_Click(object sender, RoutedEventArgs e)
         {
             if (_currentState == ArfState.Stop1 || _currentState == ArfState.AllStop)
-                Slow($"Switching {_camera2} to {_slow}", _shortChange, true, ArfState.Stop2);
+                Slow($"Switching {_camera2} to {SlowText}", _shortChange, true, ArfState.Stop2);
             else // 1 is slow, 2 is stop
-                Slow("All " + _stop, _shortChange, true, ArfState.AllStop);     // dont set other to slow because it might not be intended
+                Slow("All " + StopText, _shortChange, true, ArfState.AllStop);     // dont set other to slow because it might not be intended
         }
 
         static string _slow = "🐌 SLOW";
@@ -177,17 +177,17 @@ namespace ARFCon {
         private void Switch2_Click(object sender, RoutedEventArgs e)
         {
             if (_currentState == ArfState.Stop2 || _currentState == ArfState.AllStop)
-                Slow($"Switching {_camera1} to {_slow}", _shortChange, true, ArfState.Stop1);
+                Slow($"Switching {_camera1} to {SlowText}", _shortChange, true, ArfState.Stop1);
             else  // 2 is slow, 1 is stop
-                Slow("All " + _stop, 5, true, ArfState.AllStop);    // dont set 1 to slow because it might not be intended
+                Slow("All " + StopText, 5, true, ArfState.AllStop);    // dont set 1 to slow because it might not be intended
         }
 
         private void Switch_Click(object sender, RoutedEventArgs e)
         {
             if (_currentState == ArfState.Stop2)
-                Slow($"Switching {_camera2} to {_slow}", _shortChange, true, ArfState.Stop1);
+                Slow($"Switching {_camera2} to {SlowText}", _shortChange, true, ArfState.Stop1);
             else
-                Slow($"Switching {_camera1} to {_slow}", _shortChange, true, ArfState.Stop2);
+                Slow($"Switching {_camera1} to {SlowText}", _shortChange, true, ArfState.Stop2);
         }
 
         private void LogEvent_Click(object sender, RoutedEventArgs e)
