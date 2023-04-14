@@ -1,11 +1,8 @@
-﻿using System;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
+﻿using ARFCon;
+using ARFLib;
 using System.Threading.Tasks;
 using System.Windows;
-using ARFCon;
-using ARFLib;
+using System.Windows.Media;
 
 namespace ARFSign {
     /// <summary>
@@ -28,6 +25,15 @@ namespace ARFSign {
             Log("Changing to " + signState);
             if (!signState.Same(_signState)) {
                 await Task.Delay(1000);
+                if (signState.State == SignEnum.Stop)
+                    pnl.Background = Brushes.Red;
+                else if (signState.State == SignEnum.Slow)
+                    pnl.Background = Brushes.Yellow;
+                else if (signState.State == SignEnum.Custom)
+                    pnl.Background = Brushes.White;
+                else 
+                    pnl.Background = Brushes.Orange;
+                staArf.Text = signState.Text;
                 _signState = signState;
                 Log("Changed to " + _signState);
             }

@@ -26,6 +26,10 @@ namespace ARFCon {
             _signStates.Add(new SignState(SignEnum.NA, ""));
             _socks.Add(new SockSender(this, Config.CameraAddress1));
             _socks.Add(new SockSender(this, Config.CameraAddress2));
+            meInb1.Play();
+            meInb2.Play();
+            meOut1.Play();
+            meOut2.Play();
             UpdateCameraName();
             // not started
         }
@@ -136,14 +140,12 @@ namespace ARFCon {
             if (index == 0) {
                 imgArf1Slow.Visibility = IsVis(state.State == SignEnum.Slow);
                 imgArf1Stop.Visibility = IsVis(state.State == SignEnum.Stop);
-                imgArf1Hollow.Visibility = IsVis(state.State == SignEnum.Initialize);
                 imgArf1White.Visibility = IsVis(state.State == SignEnum.Custom);
                 Arf1Text.Text = state.Text;
             }
             if (index == 1) {
                 imgArf2Slow.Visibility = IsVis(state.State == SignEnum.Slow);
                 imgArf2Stop.Visibility = IsVis(state.State == SignEnum.Stop);
-                imgArf2Hollow.Visibility = IsVis(state.State == SignEnum.Initialize);
                 imgArf2White.Visibility = IsVis(state.State == SignEnum.Custom);
                 Arf2Text.Text = state.Text;
             }

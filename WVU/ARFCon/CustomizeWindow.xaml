@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ARFCon"
         mc:Ignorable="d"
         Title="Customize" Height="351" Width="256">
-    <Grid Background="LightSteelBlue">
+    <Grid Background="LightSteelBlue" Margin="0,0,0,-26">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50"/>
             <ColumnDefinition Width="*"/>

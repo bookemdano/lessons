@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using System.Reflection.Metadata;
+using System.Security.Cryptography;
 
 namespace ARFCon {
     static public class Config {
@@ -52,7 +54,7 @@ namespace ARFCon {
         }
         static public string CustomText {
             get {
-                return ConfigCore.Get("custom_text", "");
+                return ConfigCore.Get("custom_text", "Info");
             }
             set {
                 ConfigCore.Set("custom_text", value);
@@ -78,14 +80,33 @@ namespace ARFCon {
 
     }
     static internal class ConfigCore {
-           
+        static Dictionary<string, string> _dict = null;
+        static void ReadAll() {
+            _dict = new Dictionary<string, string>();
+            if (!File.Exists("arf.conf"))
+                return;
+            var lines = File.ReadAllLines("arf.conf");
+            foreach(var line in lines) {
+                var parts = line.Split("=");
+                _dict.Add(parts[0].Trim(), parts[1].Trim());
+            }
+        }
+        static void WriteAll() {
+            var lines = _dict.Select(s => $"{s.Key} = {s.Value}");
+            File.WriteAllLines("arf.conf", lines);
+        }
         static internal string Get(string key, string def) {
-            if (!File.Exists(key + ".conf"))
+            if (_dict == null)
+                ReadAll();
+            if (!_dict.ContainsKey(key))
                 return def;
-            return File.ReadAllText(key + ".conf");
+            return _dict[key];
         }
         static internal void Set(string key, string val) {
-            File.WriteAllText(key + ".conf", val);
+            if (_dict.ContainsKey(key) && _dict[key] == val)
+                return;
+            _dict[key] = val;
+            WriteAll();
         }
     }
 }

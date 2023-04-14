@@ -8,6 +8,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="media\hollow.png" />
+    <None Remove="media\slow.png" />
+    <None Remove="media\stop.png" />
+    <None Remove="media\white.bmp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="media\hollow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ARFLib\ARFLib.csproj" />
   </ItemGroup>
 

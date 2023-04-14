@@ -33,7 +33,7 @@
         </StackPanel>
         <Image x:Name="imgArf1Stop" Source="media/stop.png" Grid.Column="0" Grid.Row="2" Visibility="Hidden"/>
         <Image x:Name="imgArf1Slow" Source="media/slow.png" Grid.Column="0" Grid.Row="2" Visibility="Hidden"/>
-        <Image x:Name="imgArf1Hollow" Source="media/hollow.png" Grid.Column="0" Grid.Row="2" Visibility="Hidden"/>
+        <Image x:Name="imgArf1Hollow" Source="media/hollow.png" Grid.Column="0" Grid.Row="2"/>
         <Image x:Name="imgArf1White" Source="media/white.bmp" Grid.Column="0" Grid.Row="2" Visibility="Hidden"/>
         <Grid Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
             <TextBlock x:Name="Arf1Text" FontWeight="Bold" FontSize="48" Height="71" VerticalAlignment="Center" Text="" Margin="0,0,1,0"/>
@@ -51,7 +51,7 @@
         </StackPanel>
         <Image x:Name="imgArf2Stop" Source="media/stop.png" Grid.Column="3" Grid.Row="2" Visibility="Hidden"/>
         <Image x:Name="imgArf2Slow" Source="media/slow.png" Grid.Column="3" Grid.Row="2" Visibility="Hidden"/>
-        <Image x:Name="imgArf2Hollow" Source="media/hollow.png" Grid.Column="3" Grid.Row="2" Visibility="Hidden"/>
+        <Image x:Name="imgArf2Hollow" Source="media/hollow.png" Grid.Column="3" Grid.Row="2"/>
         <Image x:Name="imgArf2White" Source="media/white.bmp" Grid.Column="3" Grid.Row="2" Visibility="Hidden"/>
         <Grid Grid.Column="3" Margin="28,92,27,94" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
             <TextBlock x:Name="Arf2Text" FontWeight="Bold" FontSize="48" Height="71" VerticalAlignment="Center" Text="" Margin="0,0,1,0"/>
