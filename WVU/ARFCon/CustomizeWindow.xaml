@@ -23,6 +23,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Label Padding="3" Grid.Row="0" Grid.ColumnSpan="2">Camera Labels</Label>
         <TextBlock Text="#1" Grid.Row="1"/>
@@ -41,7 +42,8 @@
         <TextBox x:Name="entStopText" Width="100" MaxLength="5" VerticalAlignment="Center"  Grid.Column="1" Grid.Row="8" HorizontalAlignment="Left"/>
         <Image x:Name="imgSmallSlow" Source="media/slow.png" Height="30" Grid.Row="9"/>
         <TextBox x:Name="entSlowText" Width="100" MaxLength="5" VerticalAlignment="Center" Grid.Column="1" Grid.Row="9" HorizontalAlignment="Left"/>
-        <StackPanel Orientation="Horizontal"  Margin="3" HorizontalAlignment="Center" Grid.Row="10" Grid.ColumnSpan="2">
+        <CheckBox x:Name="chkTesting" Grid.Row="10" Grid.ColumnSpan="2">Local Testing Only</CheckBox>
+        <StackPanel Orientation="Horizontal"  Margin="3" HorizontalAlignment="Center" Grid.Row="11" Grid.ColumnSpan="2">
             <Button x:Name="btnCancelUpdateSign" Content="Cancel" Padding="5" Margin="5" Click="Cancel_Click"/>
             <Button x:Name="btnUpdateSign" Content="Update" Padding="5" Margin="5" Click="Update_Click"/>
             <Button x:Name="btnShowCustomSign" Content="Show Custom" Padding="5" Margin="5" Click="Show_Click"/>

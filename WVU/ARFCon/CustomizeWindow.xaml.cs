@@ -28,6 +28,7 @@ namespace ARFCon {
             entStopText.Text = Config.StopText;
             entSlowText.Text = Config.SlowText;
             entCustomText.Text = Config.CustomText;
+            chkTesting.IsChecked = Config.LocalTesting;
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e) {
@@ -35,7 +36,7 @@ namespace ARFCon {
             Close();
         }
 
-        private void Update_Click(object sender, RoutedEventArgs e) {
+        void SaveAll() {
             Config.CameraName1 = entCameraName1.Text;
             Config.CameraName2 = entCameraName2.Text;
             Config.CameraAddress1 = entCameraAddress1.Text;
@@ -43,14 +44,16 @@ namespace ARFCon {
             Config.StopText = entStopText.Text;
             Config.SlowText = entSlowText.Text;
             Config.CustomText = entCustomText.Text;
+            Config.LocalTesting = chkTesting.IsChecked == true;
+        }
+        private void Update_Click(object sender, RoutedEventArgs e) {
+            SaveAll();
             DialogResult = true;
             Close();
         }
 
         private void Show_Click(object sender, RoutedEventArgs e) {
-            Config.StopText = entStopText.Text;
-            Config.SlowText = entSlowText.Text;
-            Config.CustomText = entCustomText.Text;
+            SaveAll();
             ShowCustom = true;
             DialogResult = true;
             Close();

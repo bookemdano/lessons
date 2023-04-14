@@ -6,7 +6,8 @@ namespace ARFLib {
         Initialize,
         Stop,
         Slow,
-        Custom
+        Custom,
+        Error
     }
     public class SignState {
         public SignState()

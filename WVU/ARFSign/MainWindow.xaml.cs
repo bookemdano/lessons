@@ -18,7 +18,7 @@ namespace ARFSign {
         public MainWindow() {
             InitializeComponent();
             _sock = new SockListener(this);
-            entAddress.Text = Config.LocalSignAddress.ToString();
+            entAddress.Text = Config.LocalSignAddress;
         }
 
         public void Log(object response) {
@@ -35,12 +35,19 @@ namespace ARFSign {
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e) {
-            await _sock.Listen(Config.LocalSignAddress);
+            await ListenForever();
         }
 
         private async void Reset_Click(object sender, RoutedEventArgs e) {
-            Config.LocalSignAddress = int.Parse(entAddress.Text);
-            await _sock.Listen(Config.LocalSignAddress);
+            Config.LocalSignAddress = entAddress.Text;
+            _sock.Kill();
         }
+        private async Task ListenForever() {
+            while (true) {
+                if (!await _sock.ListenOnce(entAddress.Text))   // don't use LocalSignAddress because it is shared across instances
+                    await Task.Delay(1000);
+            }
+        }
+            
     }
 }

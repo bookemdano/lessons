@@ -58,12 +58,21 @@ namespace ARFCon {
                 ConfigCore.Set("custom_text", value);
             }
         }
-        static public int LocalSignAddress {
+        static public string LocalSignAddress {
             get {
-                return int.Parse(ConfigCore.Get("LocalSignAddress", "0"));
+                return ConfigCore.Get("LocalSignAddress", "0");
             }
             set {
-                ConfigCore.Set("LocalSignAddress", value.ToString());
+                ConfigCore.Set("LocalSignAddress", value);
+            }
+        }
+
+        static public bool LocalTesting {
+            get {
+                return bool.Parse(ConfigCore.Get("LocalTesting", "false"));
+            }
+            set {
+                ConfigCore.Set("LocalTesting", value.ToString());
             }
         }
 
