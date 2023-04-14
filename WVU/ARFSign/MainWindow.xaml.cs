@@ -10,7 +10,7 @@ namespace ARFSign {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window, ISignListener {
-        SignState _signState = null;
+        SignState _signState = new SignState(SignEnum.Initialize, "", "-");
         private SockListener _sock;
 
         public MainWindow() {
@@ -23,6 +23,11 @@ namespace ARFSign {
             lst.Items.Insert(0, response);
         }
         public async Task<SignState> StateChange(SignState signState) {
+            if (signState.State == SignEnum.Heartbeat) {
+                Log("HB " + signState);
+                return _signState;
+            }
+
             Log("Changing to " + signState);
             if (!signState.Same(_signState)) {
                 await Task.Delay(1000);

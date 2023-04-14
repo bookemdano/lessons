@@ -3,9 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Drawing;
 namespace ARFCon {
-    /// <summary>
-    /// Interaction logic for CustomizeWindow.xaml
-    /// </summary>
+
     public partial class CustomizeWindow : Window {
         public bool ShowCustom { get; internal set; }
 

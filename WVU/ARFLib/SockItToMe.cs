@@ -32,7 +32,7 @@ namespace ARFLib {
                 _listener.Listen(100);
                 _ui.Log("Listening on " + address);
                 var handler = await _listener.AcceptAsync();
-                var buffer = new byte[1024];
+                var buffer = new byte[256];
                 var received = await handler.ReceiveAsync(buffer, SocketFlags.None);
                 var response = Encoding.UTF8.GetString(buffer, 0, received);
                 _ui.Log(response);
@@ -75,7 +75,7 @@ namespace ARFLib {
                 _ = await client.SendAsync(bytes, SocketFlags.None);
                 _ui.Log("Wrote " + msg);
 
-                var buffer = new byte[26];
+                var buffer = new byte[256];
                 var received = await client.ReceiveAsync(buffer, SocketFlags.None);
                 var response = Encoding.UTF8.GetString(buffer, 0, received);
                 var result = SignState.Parse(response);

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace ARFCon {
     public partial class MainWindow : Window, IUi
@@ -33,8 +34,54 @@ namespace ARFCon {
             meOut1.Play();
             meOut2.Play();
             UpdateCameraName();
+            var timer = new DispatcherTimer();
+            timer.Tick += Timer_Tick;
+            timer.Interval = TimeSpan.FromSeconds(10);
+            timer.Start();
             // not started
         }
+
+        private async void Timer_Tick(object? sender, EventArgs e) {
+            if (_switching > 0) {
+                Log("Delay ping because busy.");
+                return;
+            }
+            var reqSignStates = new List<SignState>();
+            reqSignStates.Add(new SignState(SignEnum.Heartbeat, "", DateTime.Now.Ticks.ToString("X")));
+            reqSignStates.Add(new SignState(SignEnum.Heartbeat, "", DateTime.Now.Ticks.ToString("X")));
+
+            var tasks = new Dictionary<Tuple<int, DateTime>, Task<SignState>>();
+            for (int i = 0; i < 2; i++)
+                tasks.Add(Tuple.Create(i, DateTime.Now), Send(reqSignStates[i], i)); ;
+
+            var staArfs = new List<TextBlock>() { staArf1Status, staArf2Status };
+
+            while (tasks.Any()) {
+                var kvp = tasks.FirstOrDefault(t => t.Value.IsCompleted);
+                if (kvp.Value == null) {
+                    await Task.Delay(10);
+                    continue;
+                }
+                var index = kvp.Key.Item1;
+                var dt = kvp.Key.Item2;
+                var resultState = kvp.Value.Result;
+                var delta = DateTime.Now - dt;
+                if (resultState.State == SignEnum.Error) {
+                    staArfs[index].Text = $"Conn: FAILED!({delta.TotalMilliseconds.ToString("0")}ms)";
+                    Log($"Camera #{index + 1} {resultState}");
+                }
+                else {
+                    staArfs[index].Text = $"Conn: good!({delta.TotalMilliseconds.ToString("0")}ms)";
+                }
+                if (!_signStates[index].Same(resultState))
+                    UpdateLocalSignState(resultState, index);
+
+                tasks.Remove(kvp.Key);
+            }
+            UpdateButtons();
+
+        }
+
         void UpdateCameraName() {
             var address1 = $"localhost:{Config.CameraAddress1}";
             var address2 = $"localhost:{Config.CameraAddress2}";
@@ -52,10 +99,15 @@ namespace ARFCon {
             }
             else
                 return await _socks[index].Send(signState);
+
         }
 
+        int _switching = 0;
         private async Task Switch(ArfState state) {
             Log("Switch to " + state);
+            _switching++;
+            if (_switching > 1)
+                Log("Overlapping");
 
             Buttonability(false);
 
@@ -86,13 +138,13 @@ namespace ARFCon {
                     staArfs[index].Text = "Conn: FAILED!";
                     Log($"Camera #{index + 1} {resultState}");
                 }
-                _signStates[index] = resultState;
                 UpdateLocalSignState(resultState, index);
                 tasks.Remove(index);
             }
             UpdateButtons();
             Buttonability(true);
             _currentState = state;
+            _switching--;
             return;
         }
         private void Buttonability(bool enable) {
@@ -158,6 +210,7 @@ namespace ARFCon {
                 staArf2.Text = text;
                 staArf2.FontSize = fontSize;
             }
+            _signStates[index] = state;
         }
 
 

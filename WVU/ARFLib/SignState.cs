@@ -9,7 +9,8 @@ namespace ARFLib {
         Stop,
         Slow,
         Custom,
-        Error
+        Error,
+        Heartbeat
     }
     public class SignState {
         public SignState()
