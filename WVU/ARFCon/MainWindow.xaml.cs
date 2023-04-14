@@ -3,9 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Media;
+using System.Net.Security;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace ARFCon {
     public partial class MainWindow : Window, IUi
@@ -22,8 +24,8 @@ namespace ARFCon {
         public MainWindow()
         {
             InitializeComponent();
-            _signStates.Add(new SignState(SignEnum.NA, ""));
-            _signStates.Add(new SignState(SignEnum.NA, ""));
+            _signStates.Add(new SignState(SignEnum.NA));
+            _signStates.Add(new SignState(SignEnum.NA));
             _socks.Add(new SockSender(this, Config.CameraAddress1));
             _socks.Add(new SockSender(this, Config.CameraAddress2));
             meInb1.Play();
@@ -118,15 +120,18 @@ namespace ARFCon {
                 (state == ArfState.Stop2 && camera == 1)) {
                 rv.State = SignEnum.Stop;
                 rv.Text = Config.StopText;
+                rv.ColorName = Config.StopColor;
             }
             else if ((state == ArfState.Stop1 && camera == 1) ||
                 (state == ArfState.Stop2 && camera == 0)) {
                 rv.State = SignEnum.Slow;
                 rv.Text = Config.SlowText;
+                rv.ColorName = Config.SlowColor;
             }
             else if (state == ArfState.Custom) {
                 rv.State = SignEnum.Custom;
                 rv.Text = Config.CustomText;
+                rv.ColorName = Config.CustomColor;
             }
             return rv;
         }
@@ -137,19 +142,25 @@ namespace ARFCon {
                 return Visibility.Hidden;
         }
         void UpdateLocalSignState(SignState state, int index) {
+            var fontSize = 48;
+            var text = state.Text;
+            if (text.Length > 5) {
+                fontSize = 18;
+                text = text.Substring(0, 15);
+            }
             if (index == 0) {
-                imgArf1Slow.Visibility = IsVis(state.State == SignEnum.Slow);
-                imgArf1Stop.Visibility = IsVis(state.State == SignEnum.Stop);
-                imgArf1White.Visibility = IsVis(state.State == SignEnum.Custom);
-                Arf1Text.Text = state.Text;
+                pnlArf1.Background = UILib.GetBrush(state.CalcColor());
+                staArf1.Text = text;
+                staArf1.FontSize = fontSize;
             }
             if (index == 1) {
-                imgArf2Slow.Visibility = IsVis(state.State == SignEnum.Slow);
-                imgArf2Stop.Visibility = IsVis(state.State == SignEnum.Stop);
-                imgArf2White.Visibility = IsVis(state.State == SignEnum.Custom);
-                Arf2Text.Text = state.Text;
+                pnlArf2.Background = UILib.GetBrush(state.CalcColor());
+                staArf2.Text = text;
+                staArf2.FontSize = fontSize;
             }
         }
+
+
         void UpdateButtons() {
             var state1 = _signStates[0];
             var state2 = _signStates[1];

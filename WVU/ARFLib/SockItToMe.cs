@@ -6,6 +6,7 @@ using System.Net;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using ARFCon;
 
 namespace ARFLib {
     public class SockListener {
@@ -81,7 +82,7 @@ namespace ARFLib {
                 return result;
             }
             catch (Exception ex) {
-                return new SignState(SignEnum.Error, ex.Message);
+                return new SignState(SignEnum.Error, Config.ErrorColor, ex.Message);
             }
             finally {
                 client?.Close();

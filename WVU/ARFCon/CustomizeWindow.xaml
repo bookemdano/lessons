@@ -22,8 +22,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Label Padding="3" Grid.Row="0" Grid.ColumnSpan="2">Camera Labels</Label>
         <TextBlock Text="#1" Grid.Row="1"/>
@@ -36,14 +34,44 @@
         <TextBlock Text="#2" Grid.Row="5"/>
         <TextBox x:Name="entCameraAddress2" Width="150" MaxLength="20"  VerticalAlignment="Center"  Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left"/>
         <Label Padding="3" Grid.Row="6" Grid.ColumnSpan="2">Sign Text</Label>
-        <Image x:Name="imgSmallWhite" Source="media/white.bmp" Width="25" Grid.Row="7"/>
-        <TextBox x:Name="entCustomText" Width="100" MaxLength="5" VerticalAlignment="Center"  Grid.Column="1" Grid.Row="7" HorizontalAlignment="Left"/>
-        <Image x:Name="imgSmallStop" Source="media/stop.png" Height="30" Grid.Row="8"/>
-        <TextBox x:Name="entStopText" Width="100" MaxLength="5" VerticalAlignment="Center"  Grid.Column="1" Grid.Row="8" HorizontalAlignment="Left"/>
-        <Image x:Name="imgSmallSlow" Source="media/slow.png" Height="30" Grid.Row="9"/>
-        <TextBox x:Name="entSlowText" Width="100" MaxLength="5" VerticalAlignment="Center" Grid.Column="1" Grid.Row="9" HorizontalAlignment="Left"/>
-        <CheckBox x:Name="chkTesting" Grid.Row="10" Grid.ColumnSpan="2">Local Testing Only</CheckBox>
-        <StackPanel Orientation="Horizontal"  Margin="3" HorizontalAlignment="Center" Grid.Row="11" Grid.ColumnSpan="2">
+        <Grid  Grid.Row="7" Grid.ColumnSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel x:Name="pnlStop" Grid.Row="0">
+                <Image Source="media/hollow.png" Width="30" Margin="0"/>
+            </StackPanel>
+            <TextBox x:Name="entStopText" Margin="10,0,0,0" MaxLength="15" VerticalAlignment="Center"  Grid.Column="1" Grid.Row="0" />
+            <TextBox x:Name="entStopColor" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Column="2" Grid.Row="0" TextChanged="entStopColor_TextChanged"/>
+
+            <StackPanel x:Name="pnlSlow" Grid.Row="1">
+                <Image Source="media/hollow.png" Width="30" Margin="0"/>
+            </StackPanel>
+            <TextBox x:Name="entSlowText" Margin="10,0,0,0" MaxLength="15" VerticalAlignment="Center"  Grid.Column="1" Grid.Row="1" />
+            <TextBox x:Name="entSlowColor" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Column="2" Grid.Row="1" TextChanged="entSlowColor_TextChanged"/>
+
+            <StackPanel x:Name="pnlCustom" Grid.Row="2">
+                <Image Source="media/hollow.png" Width="30" Margin="0"/>
+            </StackPanel>
+            <TextBox x:Name="entCustomText" Margin="10,0,0,0" MaxLength="15" VerticalAlignment="Center"  Grid.Column="1" Grid.Row="2" />
+            <TextBox x:Name="entCustomColor" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Column="2" Grid.Row="2" TextChanged="entCustomColor_TextChanged"/>
+
+            <StackPanel x:Name="pnlError" Grid.Row="3" >
+                <Image Source="media/hollow.png" Width="30" Margin="0"/>
+            </StackPanel>
+            <TextBox Margin="10,0,0,0" MaxLength="15" VerticalAlignment="Center"  Grid.Column="1" Grid.Row="3" IsEnabled="False" Text="Error" />
+            <TextBox x:Name="entErrorColor" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Column="2" Grid.Row="3" TextChanged="entErrorColor_TextChanged"/>
+        </Grid>
+        <CheckBox x:Name="chkTesting" Grid.Row="8" Grid.ColumnSpan="2" Margin="5">Local Testing Only</CheckBox>
+        <StackPanel Orientation="Horizontal"  Margin="3" HorizontalAlignment="Center" Grid.Row="9" Grid.ColumnSpan="2">
             <Button x:Name="btnCancelUpdateSign" Content="Cancel" Padding="5" Margin="5" Click="Cancel_Click"/>
             <Button x:Name="btnUpdateSign" Content="Update" Padding="5" Margin="5" Click="Update_Click"/>
             <Button x:Name="btnShowCustomSign" Content="Show Custom" Padding="5" Margin="5" Click="Show_Click"/>

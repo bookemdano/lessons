@@ -1,5 +1,6 @@
 ﻿using ARFCon;
 using ARFLib;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -9,7 +10,7 @@ namespace ARFSign {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window, ISignListener {
-        SignState _signState = new SignState();
+        SignState _signState = null;
         private SockListener _sock;
 
         public MainWindow() {
@@ -25,19 +26,18 @@ namespace ARFSign {
             Log("Changing to " + signState);
             if (!signState.Same(_signState)) {
                 await Task.Delay(1000);
-                if (signState.State == SignEnum.Stop)
-                    pnl.Background = Brushes.Red;
-                else if (signState.State == SignEnum.Slow)
-                    pnl.Background = Brushes.Yellow;
-                else if (signState.State == SignEnum.Custom)
-                    pnl.Background = Brushes.White;
-                else 
-                    pnl.Background = Brushes.Orange;
+                pnl.Background = GetBrush(System.Drawing.Color.FromName(signState.ColorName));
                 staArf.Text = signState.Text;
                 _signState = signState;
                 Log("Changed to " + _signState);
             }
             return _signState;
+        }
+        Dictionary<System.Drawing.Color, Brush> _brushes = new Dictionary<System.Drawing.Color, Brush>();
+        Brush GetBrush(System.Drawing.Color color) {
+            if (!_brushes.ContainsKey(color)) 
+                _brushes[color] = new SolidColorBrush(Color.FromArgb(color.A, color.R, color.G, color.B));
+            return _brushes[color];
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e) {

@@ -78,14 +78,51 @@ namespace ARFCon {
             }
         }
 
+        static public string StopColor {
+            get {
+                return ConfigCore.Get("StopColor", "Red");
+            }
+            set {
+                ConfigCore.Set("StopColor", value);
+            }
+        }
+        static public string SlowColor {
+            get {
+                return ConfigCore.Get("SlowColor", "Goldenrod");
+            }
+            set {
+                ConfigCore.Set("SlowColor", value);
+            }
+        }
+        static public string CustomColor {
+            get {
+                return ConfigCore.Get("CustomColor", "White");
+            }
+            set {
+                ConfigCore.Set("CustomColor", value);
+            }
+        }
+        static public string ErrorColor {
+            get {
+                return ConfigCore.Get("ErrorColor", "Orchid");
+            }
+            set {
+                ConfigCore.Set("ErrorColor", value);
+            }
+        }
     }
     static internal class ConfigCore {
         static Dictionary<string, string> _dict = null;
+        static string Filename {
+            get {
+                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "arf.cfg");
+            }
+        }
         static void ReadAll() {
             _dict = new Dictionary<string, string>();
-            if (!File.Exists("arf.conf"))
+            if (!File.Exists(Filename))
                 return;
-            var lines = File.ReadAllLines("arf.conf");
+            var lines = File.ReadAllLines(Filename);
             foreach(var line in lines) {
                 var parts = line.Split("=");
                 _dict.Add(parts[0].Trim(), parts[1].Trim());
@@ -93,7 +130,7 @@ namespace ARFCon {
         }
         static void WriteAll() {
             var lines = _dict.Select(s => $"{s.Key} = {s.Value}");
-            File.WriteAllLines("arf.conf", lines);
+            File.WriteAllLines(Filename, lines);
         }
         static internal string Get(string key, string def) {
             if (_dict == null)
@@ -105,6 +142,7 @@ namespace ARFCon {
         static internal void Set(string key, string val) {
             if (_dict.ContainsKey(key) && _dict[key] == val)
                 return;
+            ReadAll();
             _dict[key] = val;
             WriteAll();
         }
