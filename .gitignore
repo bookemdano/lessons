@@ -41,3 +41,7 @@ SENG564/TimeToGo/obj/Debug/net7.0-windows10.0.19041.0/win10-x64/TimeToGo.csproj.
 /WVU/ARFCon/.vs/ProjectEvaluation/arfcon.projects.v5.2
 /WVU/ARFCon/.vs/ProjectEvaluation/arfcon.metadata.v6.1
 /WVU/ARFCon/.vs/ProjectEvaluation/arfcon.metadata.v5.2
+/WVU/ARFSign/obj
+/WVU/ARFSign/bin/Debug/net7.0-windows
+/WVU/ARFLib/bin/Debug/net7.0
+/WVU/ARFLib/obj
