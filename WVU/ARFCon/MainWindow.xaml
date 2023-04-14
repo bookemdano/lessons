@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ARFCon"
         mc:Ignorable="d"
+        Loaded="Window_Loaded"
         Title="ARF Console" Height="500" Width="900"
         >
 

@@ -21,8 +21,10 @@ namespace ARFCon {
 
         public CustomizeWindow() {
             InitializeComponent();
-            entCamera1.Text = Config.Camera1;
-            entCamera2.Text = Config.Camera2;
+            entCameraName1.Text = Config.CameraName1;
+            entCameraName2.Text = Config.CameraName2;
+            entCameraAddress1.Text = Config.CameraAddress1;
+            entCameraAddress2.Text = Config.CameraAddress2;
             entStopText.Text = Config.StopText;
             entSlowText.Text = Config.SlowText;
             entCustomText.Text = Config.CustomText;
@@ -34,8 +36,10 @@ namespace ARFCon {
         }
 
         private void Update_Click(object sender, RoutedEventArgs e) {
-            Config.Camera1 = entCamera1.Text;
-            Config.Camera2 = entCamera2.Text;
+            Config.CameraName1 = entCameraName1.Text;
+            Config.CameraName2 = entCameraName2.Text;
+            Config.CameraAddress1 = entCameraAddress1.Text;
+            Config.CameraAddress2 = entCameraAddress2.Text;
             Config.StopText = entStopText.Text;
             Config.SlowText = entSlowText.Text;
             Config.CustomText = entCustomText.Text;

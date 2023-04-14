@@ -57,6 +57,7 @@
     <Content Include="media\hollow.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <ProjectReference Include="..\ARFLib\ARFLib.csproj" />
     <Resource Include="media\white.bmp" />
   </ItemGroup>
 
