@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Reflection.Metadata;
 using System.Security.Cryptography;
 
@@ -110,6 +111,14 @@ namespace ARFCon {
                 ConfigCore.Set("ErrorColor", value);
             }
         }
+        static public TimeSpan HeartbeatTimeout {
+            get {
+                return TimeSpan.Parse(ConfigCore.Get("Heartbeat(s)", "0:0:10"));
+            }
+            set {
+                ConfigCore.Set("Heartbeat(s)", value.ToString());
+            }
+        }
     }
     static internal class ConfigCore {
         static Dictionary<string, string> _dict = null;
@@ -142,7 +151,7 @@ namespace ARFCon {
         static internal void Set(string key, string val) {
             if (_dict.ContainsKey(key) && _dict[key] == val)
                 return;
-            ReadAll();
+            ReadAll();  // read first to sync in-memory with on-disk
             _dict[key] = val;
             WriteAll();
         }

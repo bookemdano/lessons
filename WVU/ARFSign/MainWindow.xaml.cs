@@ -1,9 +1,11 @@
 ﻿using ARFCon;
 using ARFLib;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace ARFSign {
     /// <summary>
@@ -12,11 +14,25 @@ namespace ARFSign {
     public partial class MainWindow : Window, ISignListener {
         SignState _signState = new SignState(SignEnum.Initialize, "", "-");
         private SockListener _sock;
+        DateTime _lastHeartbeat = DateTime.Now;
 
         public MainWindow() {
             InitializeComponent();
             _sock = new SockListener(this);
             entAddress.Text = Config.LocalSignAddress;
+
+            var timer = new DispatcherTimer();
+            timer.Tick += Timer_Tick;
+            timer.Interval = Config.HeartbeatTimeout;
+            timer.Start();
+
+        }
+
+        private void Timer_Tick(object? sender, EventArgs e) {
+            var delta = DateTime.Now - _lastHeartbeat;
+            if (delta > Config.HeartbeatTimeout * 1.5) {
+                SetSignState(new SignState(SignEnum.Error, null, "Console Disconnected"));
+            }
         }
 
         public void Log(object response) {
@@ -25,19 +41,36 @@ namespace ARFSign {
         public async Task<SignState> StateChange(SignState signState) {
             if (signState.State == SignEnum.Heartbeat) {
                 Log("HB " + signState);
+                _lastHeartbeat = DateTime.Now;
                 return _signState;
             }
 
             Log("Changing to " + signState);
             if (!signState.Same(_signState)) {
                 await Task.Delay(1000);
-                pnl.Background = GetBrush(System.Drawing.Color.FromName(signState.ColorName));
-                staArf.Text = signState.Text;
-                _signState = signState;
+                SetSignState(signState);
                 Log("Changed to " + _signState);
             }
             return _signState;
         }
+        void SetSignState(SignState signState) {
+            var fontSize = 48;
+            var text = signState.Text;
+            if (text.Length > 5) {
+                fontSize = 18;
+                text = text.Substring(0, 20);
+            }
+
+            pnl.Background = GetBrush(System.Drawing.Color.FromName(signState.ColorName));
+            staArf.FontSize = fontSize;
+            staArf.Text = text;
+            _signState = signState;
+        }
+        // TODO heartbeat to sign
+        // TODO manual mode on sign
+        // TODO alarm on sign
+        // TODO stand on sign
+        // TODO sound icon on sign
         Dictionary<System.Drawing.Color, Brush> _brushes = new Dictionary<System.Drawing.Color, Brush>();
         Brush GetBrush(System.Drawing.Color color) {
             if (!_brushes.ContainsKey(color)) 

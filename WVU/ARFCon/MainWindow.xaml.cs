@@ -3,11 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Media;
-using System.Net.Security;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace ARFCon {
@@ -36,7 +34,7 @@ namespace ARFCon {
             UpdateCameraName();
             var timer = new DispatcherTimer();
             timer.Tick += Timer_Tick;
-            timer.Interval = TimeSpan.FromSeconds(10);
+            timer.Interval = Config.HeartbeatTimeout * 1.5;
             timer.Start();
             // not started
         }

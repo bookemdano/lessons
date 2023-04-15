@@ -38,10 +38,13 @@ namespace ARFLib {
                 return null;
         }
 
-        public SignState(SignEnum state, string colorName = "", string text = "")
+        public SignState(SignEnum state, string colorName = null, string text = null)
         {
             State = state;
-            ColorName = colorName;
+            if (colorName == null)
+                ColorName = CalcColor(state).Name;
+            else
+                ColorName = colorName;
             Text = text;
         }
         public SignEnum State { get; set; }
