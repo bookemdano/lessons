@@ -18,15 +18,18 @@ namespace ARFCon {
         List<SockSender> _socks = new List<SockSender>();
 
         List<SignState> _signStates = new List<SignState>();
+        List<TextBlock> _staComms = new List<TextBlock>();
         ArfState _currentState = ArfState.NA;
 
         public MainWindow()
         {
             InitializeComponent();
-            _signStates.Add(new SignState(SignEnum.NA));
-            _signStates.Add(new SignState(SignEnum.NA));
+            _signStates.Add(new SignState());
+            _signStates.Add(new SignState());
             _socks.Add(new SockSender(this, Config.CameraAddress1));
             _socks.Add(new SockSender(this, Config.CameraAddress2));
+            _staComms.Add(staComm1);
+            _staComms.Add(staComm2);
             meInb1.Play();
             meInb2.Play();
             meOut1.Play();
@@ -34,7 +37,7 @@ namespace ARFCon {
             UpdateCameraName();
             var timer = new DispatcherTimer();
             timer.Tick += Timer_Tick;
-            timer.Interval = Config.HeartbeatTimeout * 1.5;
+            timer.Interval = Config.HeartbeatTimeout;
             timer.Start();
             // not started
         }
@@ -49,6 +52,7 @@ namespace ARFCon {
             reqSignStates.Add(new SignState(SignEnum.Heartbeat, "", DateTime.Now.Ticks.ToString("X")));
 
             var tasks = new Dictionary<Tuple<int, DateTime>, Task<SignState>>();
+            
             for (int i = 0; i < 2; i++)
                 tasks.Add(Tuple.Create(i, DateTime.Now), Send(reqSignStates[i], i)); ;
 
@@ -73,6 +77,7 @@ namespace ARFCon {
                 }
                 if (!_signStates[index].Same(resultState))
                     UpdateLocalSignState(resultState, index);
+                _staComms[index].Visibility = Visibility.Hidden;
 
                 tasks.Remove(kvp.Key);
             }
@@ -91,6 +96,7 @@ namespace ARFCon {
             staCamera2.Content = $"Camera #2- {Config.CameraName2} ({address2})";
         }
         public async Task<SignState> Send(SignState signState, int index) {
+            _staComms[index].Visibility = Visibility.Visible;
             if (Config.LocalTesting) {
                 await Task.Delay(1000);
                 return signState;
@@ -137,6 +143,7 @@ namespace ARFCon {
                     Log($"Camera #{index + 1} {resultState}");
                 }
                 UpdateLocalSignState(resultState, index);
+                _staComms[index].Visibility = Visibility.Hidden;
                 tasks.Remove(index);
             }
             UpdateButtons();

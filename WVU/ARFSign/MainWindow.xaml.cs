@@ -14,7 +14,7 @@ namespace ARFSign {
     public partial class MainWindow : Window, ISignListener {
         SignState _signState = new SignState(SignEnum.Initialize, "", "-");
         private SockListener _sock;
-        DateTime _lastHeartbeat = DateTime.Now;
+        DateTime _lastConnection = DateTime.Now;
 
         public MainWindow() {
             InitializeComponent();
@@ -23,13 +23,14 @@ namespace ARFSign {
 
             var timer = new DispatcherTimer();
             timer.Tick += Timer_Tick;
-            timer.Interval = Config.HeartbeatTimeout;
+            timer.Interval = TimeSpan.FromSeconds(1);
             timer.Start();
-
         }
 
         private void Timer_Tick(object? sender, EventArgs e) {
-            var delta = DateTime.Now - _lastHeartbeat;
+            var delta = DateTime.Now - _lastConnection;
+            staComm.Visibility = Visibility.Hidden;
+            sta.Text = $"Last conn. {delta.TotalSeconds.ToString("0")} secs ago";
             if (delta > Config.HeartbeatTimeout * 1.5) {
                 SetSignState(new SignState(SignEnum.Error, null, "Console Disconnected"));
             }
@@ -39,9 +40,10 @@ namespace ARFSign {
             lst.Items.Insert(0, response);
         }
         public async Task<SignState> StateChange(SignState signState) {
+            staComm.Visibility = Visibility.Visible;
+            _lastConnection = DateTime.Now;
             if (signState.State == SignEnum.Heartbeat) {
                 Log("HB " + signState);
-                _lastHeartbeat = DateTime.Now;
                 return _signState;
             }
 
@@ -66,11 +68,11 @@ namespace ARFSign {
             staArf.Text = text;
             _signState = signState;
         }
-        // TODO heartbeat to sign
+        // TODONE heartbeat to sign
         // TODO manual mode on sign
         // TODO alarm on sign
         // TODO stand on sign
-        // TODO sound icon on sign
+        // TODO sound icon on console
         Dictionary<System.Drawing.Color, Brush> _brushes = new Dictionary<System.Drawing.Color, Brush>();
         Brush GetBrush(System.Drawing.Color color) {
             if (!_brushes.ContainsKey(color)) 

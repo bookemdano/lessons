@@ -5,15 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ARFSign"
         mc:Ignorable="d"
-        Title="MainWindow" Height="518" Width="694" Loaded="Window_Loaded">
+        Title="MainWindow" Height="518" Width="396" Loaded="Window_Loaded">
     <StackPanel>
         <StackPanel Orientation="Horizontal">
             <Label>Address:</Label>
             <TextBox x:Name="entAddress" Width="100"/>
             <Button Click="Reset_Click">Reset</Button>
+            <TextBlock x:Name="sta" Margin="5"/>
         </StackPanel>
         <Grid x:Name="pnl" MaxWidth="300">
             <Image Source="media/hollow.png"/>
+
+            <TextBlock x:Name="staSound" VerticalAlignment="Bottom" HorizontalAlignment="Left" FontWeight="Bold" FontSize="36" Visibility="Hidden">🔊</TextBlock>
+            <TextBlock x:Name="staComm" VerticalAlignment="Top" HorizontalAlignment="Right" FontWeight="Bold" FontSize="36" Visibility="Hidden">📡</TextBlock>
             <TextBlock x:Name="staArf" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="72"/>
         </Grid>
         <ListView x:Name="lst"/>
