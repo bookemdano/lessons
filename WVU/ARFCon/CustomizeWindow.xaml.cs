@@ -54,7 +54,7 @@ namespace ARFCon {
             SaveAll();
             DialogResult = true;
             Close();
-        }
+       }
 
         private void Show_Click(object sender, RoutedEventArgs e) {
             SaveAll();
@@ -82,6 +82,10 @@ namespace ARFCon {
 
         private void entErrorColor_TextChanged(object sender, TextChangedEventArgs e) {
             UpdateColorMaybe(entErrorColor, pnlError);
+        }
+
+        private void Window_Activated(object sender, System.EventArgs e) {
+
         }
     }
 }

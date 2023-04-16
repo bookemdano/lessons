@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ARFCon"
         mc:Ignorable="d"
-        Title="Log Event" Height="250" Width="406" ResizeMode="NoResize">
+        Title="Log Event" Height="250" Width="400" ResizeMode="NoResize">
     <StackPanel Background="LightSteelBlue">
         <Label>Event Type:</Label>
         <ComboBox x:Name="cmbEventType" SelectedIndex="0" Margin="5">
@@ -16,7 +16,6 @@
             <ComboBoxItem Content="Pedestrian Injured"/>
         </ComboBox>
         <Label>Notes:</Label>
-
         <TextBox x:Name="entEventNotes" TextWrapping="Wrap" AcceptsReturn="True" Margin="5" Height="70"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Content="Cancel" Padding="5" Margin="5" Click="Cancel_Click"/>
