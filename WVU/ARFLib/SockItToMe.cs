@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
+﻿using ARFCon;
 using System.Net;
-using System.Reflection.Metadata;
+using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
-using ARFCon;
+using System.Text.Json;
 
 namespace ARFLib {
     public class SockListener {
@@ -35,9 +31,11 @@ namespace ARFLib {
                 var buffer = new byte[256];
                 var received = await handler.ReceiveAsync(buffer, SocketFlags.None);
                 var response = Encoding.UTF8.GetString(buffer, 0, received);
-                _ui.Log(response);
-                var newState = await _ui.StateChange(SignState.Parse(response));
-                var ackBytes = Encoding.UTF8.GetBytes(newState.Serialize());
+                //_ui.Log(response);
+
+                var newState = await _ui.StateChange(JsonSerializer.Deserialize<SignState>(response));
+
+                var ackBytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(newState));
                 await handler.SendAsync(ackBytes, SocketFlags.None);
                 rv = true;
             }
@@ -70,15 +68,18 @@ namespace ARFLib {
                 client = new Socket(endpoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                 await client.ConnectAsync(endpoint);
 
-                var msg = signState.Serialize();
+                
+                var msg = JsonSerializer.Serialize(signState);
                 var bytes = Encoding.UTF8.GetBytes(msg);
                 _ = await client.SendAsync(bytes, SocketFlags.None);
-                _ui.Log("Wrote " + msg);
+                //_ui.Log("Wrote " + msg);
 
                 var buffer = new byte[256];
                 var received = await client.ReceiveAsync(buffer, SocketFlags.None);
                 var response = Encoding.UTF8.GetString(buffer, 0, received);
-                var result = SignState.Parse(response);
+
+                var result =
+                    JsonSerializer.Deserialize<SignState>(response);
                 return result;
             }
             catch (Exception ex) {
