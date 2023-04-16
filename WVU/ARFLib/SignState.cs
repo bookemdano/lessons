@@ -28,7 +28,7 @@ namespace ARFLib {
             return CalcColor(State);
         }
         static public Color CalcColor(SignEnum signEnum) {
-            if (signEnum == SignEnum.Stop)
+            if (signEnum == SignEnum.Stop || signEnum == SignEnum.Alarm)
                 return Color.FromName(Config.StopColor);
             else if (signEnum == SignEnum.Slow)
                 return Color.FromName(Config.SlowColor);

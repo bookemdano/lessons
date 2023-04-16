@@ -19,17 +19,20 @@ namespace ARFCon {
 
         List<SignState> _signStates = new List<SignState>();
         List<TextBlock> _staComms = new List<TextBlock>();
+        List<TextBlock> _staSounds = new List<TextBlock>();
         ArfState _currentState = ArfState.NA;
 
         public MainWindow()
         {
             InitializeComponent();
-            _signStates.Add(new SignState());
-            _signStates.Add(new SignState());
-            _socks.Add(new SockSender(this, Config.CameraAddress1));
-            _socks.Add(new SockSender(this, Config.CameraAddress2));
-            _staComms.Add(staComm1);
+            for (var i = 0; i < 2; i++) {
+                _signStates.Add(new SignState());
+                _socks.Add(new SockSender(this, Config.GetCameraAddress(i)));
+            }
+             _staComms.Add(staComm1);
             _staComms.Add(staComm2);
+            _staSounds.Add(staSound1);
+            _staSounds.Add(staSound2);
             meInb1.Play();
             meInb2.Play();
             meOut1.Play();
@@ -68,7 +71,7 @@ namespace ARFCon {
                 var dt = kvp.Key.Item2;
                 var resultState = kvp.Value.Result;
                 var delta = DateTime.Now - dt;
-                if (resultState.State == SignEnum.Error) {
+                if (resultState.State == SignEnum.Error && _signStates[index].State != SignEnum.Error) {
                     staArfs[index].Text = $"Conn: FAILED!({delta.TotalMilliseconds.ToString("0")}ms)";
                     Log($"Camera #{index + 1} {resultState}");
                 }
@@ -86,14 +89,8 @@ namespace ARFCon {
         }
 
         void UpdateCameraName() {
-            var address1 = $"localhost:{Config.CameraAddress1}";
-            var address2 = $"localhost:{Config.CameraAddress2}";
-            if (Config.LocalTesting) {
-                address1 = "testing";
-                address2 = "testing";
-            }
-            staCamera1.Content = $"Camera #1- {Config.CameraName1} ({address1})";
-            staCamera2.Content = $"Camera #2- {Config.CameraName2} ({address2})";
+            staCamera1.Content = Config.FullCameraName(0);
+            staCamera2.Content = Config.FullCameraName(1);
         }
         public async Task<SignState> Send(SignState signState, int index) {
             _staComms[index].Visibility = Visibility.Visible;
@@ -172,7 +169,7 @@ namespace ARFCon {
 
         private SignState ArfStateToSignState(ArfState state, int camera) {
             var rv = new SignState();
-            if (state == ArfState.AllStop ||
+            if (state == ArfState.AllStop || state == ArfState.Alarm ||
                 (state == ArfState.Stop1 && camera == 0) ||
                 (state == ArfState.Stop2 && camera == 1)) {
                 rv.State = SignEnum.Stop;
@@ -190,6 +187,8 @@ namespace ARFCon {
                 rv.Text = Config.CustomText;
                 rv.ColorName = Config.CustomColor;
             }
+            if (state == ArfState.Alarm)
+                rv.State = SignEnum.Alarm;
             return rv;
         }
         Visibility IsVis(bool b) {
@@ -209,12 +208,15 @@ namespace ARFCon {
                 pnlArf1.Background = UILib.GetBrush(state.CalcColor());
                 staArf1.Text = text;
                 staArf1.FontSize = fontSize;
+                staSound1.Visibility = IsVis(state.State == SignEnum.Alarm);
             }
             if (index == 1) {
                 pnlArf2.Background = UILib.GetBrush(state.CalcColor());
                 staArf2.Text = text;
                 staArf2.FontSize = fontSize;
+                staSound2.Visibility = IsVis(state.State == SignEnum.Alarm);
             }
+            PlaySound(state.State == SignEnum.Alarm, index);
             _signStates[index] = state;
         }
 
@@ -246,7 +248,7 @@ namespace ARFCon {
         public void Log(object str)
         {
             lst.Items.Insert(0, DateTime.Now.ToString("H:mm:ss") + " " + str);
-            System.IO.File.AppendAllText("endless.log", DateTime.Now.ToString("H:mm:ss.fff") + " " + str + Environment.NewLine);
+            Logger.Log(str);
         }
 
         public enum ArfState
@@ -256,11 +258,11 @@ namespace ARFCon {
             Stop1,
             Stop2,
             Custom,
+            Alarm
         }
         private async void AllStop_Click(object sender, RoutedEventArgs e)
         {
             await Switch(ArfState.AllStop);
-
         }
 
         private async void Switch1_Click(object sender, RoutedEventArgs e)
@@ -304,27 +306,36 @@ namespace ARFCon {
                 else
                     await Switch(_currentState);
                 UpdateCameraName();
-
-                _socks[0] = new SockSender(this, Config.CameraAddress1);
-                _socks[1] = new SockSender(this, Config.CameraAddress2);
             }
         }
 
-        private void SoundAlarm_Click(object sender, RoutedEventArgs e)
+        void PlaySound(bool b, int index) {
+            _staSounds[index].Visibility = b ? Visibility.Visible : Visibility.Collapsed;
+            if (b) {
+                if (_soundPlayer != null)
+                    return;
+                //_soundPlayer = new SoundPlayer(@"media\alarm.wav");
+                //_soundPlayer.PlayLooping();
+            }
+            else {
+                if (_soundPlayer == null)
+                    return;
+                _soundPlayer.Stop();
+                _soundPlayer = null;
+            }
+        }
+
+        private async void SoundAlarm_Click(object sender, RoutedEventArgs e)
         {
             if (_soundPlayer == null)
             {
                 Log("Alarm triggered.");
-                btnAlarm.Content = "Silence";
-                _soundPlayer = new SoundPlayer(@"media\alarm.wav");
-                _soundPlayer.PlayLooping();
+                await Switch(ArfState.Alarm);
             }
             else
             {
                 Log("Alarm stopped.");
-                btnAlarm.Content = "Alarm!";
-                _soundPlayer.Stop();
-                _soundPlayer = null;
+                await Switch(ArfState.AllStop);
             }
         }
 

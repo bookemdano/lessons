@@ -8,7 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="media\alarm.wav" />
+    <None Remove="media\base.png" />
     <None Remove="media\comm.png" />
+    <None Remove="media\ears.png" />
     <None Remove="media\hollow.png" />
     <None Remove="media\slow.png" />
     <None Remove="media\stop.png" />
@@ -16,7 +19,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="media\alarm.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="media\base.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="media\comm.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="media\ears.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="media\hollow.png">

@@ -2,9 +2,12 @@
 using ARFLib;
 using System;
 using System.Collections.Generic;
+using System.Media;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Media.Media3D;
 using System.Windows.Threading;
 
 namespace ARFSign {
@@ -13,18 +16,15 @@ namespace ARFSign {
     /// </summary>
     public partial class MainWindow : Window, ISignListener {
         SignState _signState = new SignState(SignEnum.Initialize, "", "-");
-        private SockListener _sock;
+        SockListener _sock;
         DateTime _lastConnection = DateTime.Now;
+        Dictionary<System.Drawing.Color, Brush> _brushes = new Dictionary<System.Drawing.Color, Brush>();
+        SoundPlayer _soundPlayer;
+        private int _iCam;
 
         public MainWindow() {
             InitializeComponent();
             _sock = new SockListener(this);
-            entAddress.Text = Config.LocalSignAddress;
-
-            var timer = new DispatcherTimer();
-            timer.Tick += Timer_Tick;
-            timer.Interval = TimeSpan.FromSeconds(1);
-            timer.Start();
         }
 
         private void Timer_Tick(object? sender, EventArgs e) {
@@ -36,8 +36,9 @@ namespace ARFSign {
             }
         }
 
-        public void Log(object response) {
-            lst.Items.Insert(0, response);
+        public void Log(object o) {
+            lst.Items.Insert(0, DateTime.Now.ToString("H:mm:ss") + " " + o);
+            Logger.Log(o);
         }
         public async Task<SignState> StateChange(SignState signState) {
             staComm.Visibility = Visibility.Visible;
@@ -55,6 +56,22 @@ namespace ARFSign {
             }
             return _signState;
         }
+        void PlaySound(bool b) {
+            staSound.Visibility = b ? Visibility.Visible : Visibility.Collapsed;
+            if (b) {
+                if (_soundPlayer != null)
+                    return;
+                _soundPlayer = new SoundPlayer(@"media\alarm.wav");
+                _soundPlayer.PlayLooping();
+            }
+            else {
+                if (_soundPlayer == null)
+                    return;
+                _soundPlayer.Stop();
+                _soundPlayer = null;
+            }
+        }
+
         void SetSignState(SignState signState) {
             var fontSize = 48;
             var text = signState.Text;
@@ -66,14 +83,15 @@ namespace ARFSign {
             pnl.Background = GetBrush(System.Drawing.Color.FromName(signState.ColorName));
             staArf.FontSize = fontSize;
             staArf.Text = text;
+            PlaySound(signState.State == SignEnum.Alarm);
             _signState = signState;
         }
         // TODONE heartbeat to sign
+        // TODONE alarm on sign
+        // TODONE sound icon on console
         // TODO manual mode on sign
-        // TODO alarm on sign
         // TODO stand on sign
-        // TODO sound icon on console
-        Dictionary<System.Drawing.Color, Brush> _brushes = new Dictionary<System.Drawing.Color, Brush>();
+
         Brush GetBrush(System.Drawing.Color color) {
             if (!_brushes.ContainsKey(color)) 
                 _brushes[color] = new SolidColorBrush(Color.FromArgb(color.A, color.R, color.G, color.B));
@@ -85,10 +103,23 @@ namespace ARFSign {
         }
 
         private async void Reset_Click(object sender, RoutedEventArgs e) {
-            Config.LocalSignAddress = entAddress.Text;
+            Config.SetCameraAddress(_iCam, entAddress.Text);
             _sock.Kill();
         }
         private async Task ListenForever() {
+
+            _iCam = 0;
+            if (!await _sock.ListenOnce(Config.GetCameraAddress(0)))
+                _iCam = 1;
+
+            entAddress.Text = Config.GetCameraAddress(_iCam);
+            Title = Config.FullCameraName(_iCam);
+
+            var timer = new DispatcherTimer();
+            timer.Tick += Timer_Tick;
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Start();
+
             while (true) {
                 if (!await _sock.ListenOnce(entAddress.Text))   // don't use LocalSignAddress because it is shared across instances
                     await Task.Delay(1000);

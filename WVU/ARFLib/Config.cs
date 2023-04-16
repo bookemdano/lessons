@@ -1,44 +1,40 @@
 ﻿using ARFLib;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Net.Http.Headers;
 using System.Reflection.Metadata;
 using System.Security.Cryptography;
 using System.Text.Json;
 
 namespace ARFCon {
     static public class Config {
-        static public string CameraName1 {
-            get {
-                return ConfigCore.Get("CameraName1", "North");
-            }
-            set {
-                ConfigCore.Set("CameraName1", value);
-            }
+        static public string FullCameraName(int index) {
+            var address = $"localhost:{Config.GetCameraAddress(index)}";
+            if (Config.LocalTesting)
+                address = "testing";
+            return $"Camera #{index + 1}- {Config.GetCameraName(index)} ({address})";
         }
-        static public string CameraName2 {
-            get {
-                return ConfigCore.Get("CameraName2", "South");
-            }
-            set {
-                ConfigCore.Set("CameraName2", value);
-            }
+
+        static public string GetCameraName(int index) {
+            var def = "North";
+            if (index == 1)
+                def = "South";
+            return ConfigCore.Get("CameraName" + index, def);
         }
-        static public string CameraAddress1 {
-            get {
-                return ConfigCore.Get("CameraAddress1", "0");
-            }
-            set {
-                ConfigCore.Set("CameraAddress1", value);
-            }
+        static public void SetCameraName(int index, string name) {
+            ConfigCore.Set("CameraName" + index, name);
         }
-        static public string CameraAddress2 {
-            get {
-                return ConfigCore.Get("CameraAddress2", "1");
-            }
-            set {
-                ConfigCore.Set("CameraAddress2", value);
-            }
+
+        static public string GetCameraAddress(int index) {
+            var def = "11160";
+            if (index == 1)
+                def = "11161";
+            return ConfigCore.Get("CameraAddress" + index, def);
         }
+        static public void SetCameraAddress(int index, string name) {
+            ConfigCore.Set("CameraAddress" + index, name);
+        }
+
         static public string StopText {
             get {
                 return ConfigCore.Get("stop_text", "STOP");
@@ -61,14 +57,6 @@ namespace ARFCon {
             }
             set {
                 ConfigCore.Set("custom_text", value);
-            }
-        }
-        static public string LocalSignAddress {
-            get {
-                return ConfigCore.Get("LocalSignAddress", "0");
-            }
-            set {
-                ConfigCore.Set("LocalSignAddress", value);
             }
         }
 
