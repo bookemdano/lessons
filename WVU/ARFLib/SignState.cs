@@ -37,7 +37,9 @@ namespace ARFLib {
             else
                 return Color.FromName(Config.ErrorColor);
         }
-
+        static public bool IsStopState(SignEnum signEnum) {
+            return signEnum == SignEnum.Stop || signEnum == SignEnum.Alarm;
+        }
         public SignEnum State { get; set; }
         public string Text { get; set; }
         public string ColorName { get; set; }

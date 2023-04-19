@@ -62,7 +62,7 @@ namespace ARFCon {
 
         static public bool LocalTesting {
             get {
-                return bool.Parse(ConfigCore.Get("LocalTesting", "false"));
+                return bool.Parse(ConfigCore.Get("LocalTesting", "true"));
             }
             set {
                 ConfigCore.Set("LocalTesting", value.ToString());

@@ -32,6 +32,7 @@
             <MediaElement x:Name="meInb1" Source="media\worker1.mp4" MediaEnded="MediaElement_MediaEnded"/>
         </StackPanel>
         <Grid x:Name="pnlArf1" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Image x:Name="imgMask1" Source="media/mask.png" Margin="0" Visibility="Hidden"/>
             <Image Source="media/hollow.png" Margin="0"/>
             <TextBlock x:Name="staSound1" VerticalAlignment="Bottom" HorizontalAlignment="Left" FontWeight="Bold" FontSize="28" Visibility="Hidden">🔊</TextBlock>
             <TextBlock x:Name="staComm1" VerticalAlignment="Top" HorizontalAlignment="Right" FontWeight="Bold" FontSize="28" Visibility="Hidden">📡</TextBlock>
@@ -50,6 +51,7 @@
         </StackPanel>
         <Grid x:Name="pnlArf2" Grid.Column="3" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Image Source="media/hollow.png" Margin="0"/>
+            <Image x:Name="imgMask2" Source="media/mask.png" Margin="0" Visibility="Hidden"/>
             <TextBlock x:Name="staSound2" VerticalAlignment="Bottom" HorizontalAlignment="Left" FontWeight="Bold" FontSize="28" Visibility="Hidden">🔊</TextBlock>
             <TextBlock x:Name="staComm2" VerticalAlignment="Top" HorizontalAlignment="Right" FontWeight="Bold" FontSize="28" Visibility="Hidden">📡</TextBlock>
             <TextBlock x:Name="staArf2" FontWeight="Bold" FontSize="48" HorizontalAlignment="Center" VerticalAlignment="Center"/>

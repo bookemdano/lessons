@@ -6,8 +6,6 @@ using System.Media;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Media3D;
 using System.Windows.Threading;
 
 namespace ARFSign {
@@ -79,13 +77,20 @@ namespace ARFSign {
                 fontSize = 18;
                 text = text.Substring(0, 20);
             }
-
+            imgMask.Visibility = IsVis(!SignState.IsStopState(signState.State));
             pnl.Background = GetBrush(System.Drawing.Color.FromName(signState.ColorName));
             staArf.FontSize = fontSize;
             staArf.Text = text;
             PlaySound(signState.State == SignEnum.Alarm);
             _signState = signState;
         }
+        Visibility IsVis(bool b) {
+            if (b)
+                return Visibility.Visible;
+            else
+                return Visibility.Hidden;
+        }
+
         // TODONE heartbeat to sign
         // TODONE alarm on sign
         // TODONE sound icon on console

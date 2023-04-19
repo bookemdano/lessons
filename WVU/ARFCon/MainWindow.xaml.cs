@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ARFCon {
     public partial class MainWindow : Window, IUi
@@ -15,24 +16,33 @@ namespace ARFCon {
         const string _right = "👉";
         
         SoundPlayer? _soundPlayer;
-        List<SockSender> _socks = new List<SockSender>();
+        List<SockSender> _socks;
 
-        List<SignState> _signStates = new List<SignState>();
-        List<TextBlock> _staComms = new List<TextBlock>();
-        List<TextBlock> _staSounds = new List<TextBlock>();
+        List<SignState> _signStates;
+        List<TextBlock> _lstCommStatus;
+        List<TextBlock> _lstArfSoundIcon;
+        List<Panel> _lstArfPanel;
+        List<TextBlock> _lstArfText;
+        List<TextBlock> _lstArfStatus;
+        List<System.Windows.Controls.Image> _lstArfMask;
         ArfState _currentState = ArfState.NA;
 
         public MainWindow()
         {
             InitializeComponent();
+            _signStates = new();
+            _socks = new();
             for (var i = 0; i < 2; i++) {
                 _signStates.Add(new SignState());
                 _socks.Add(new SockSender(this, Config.GetCameraAddress(i)));
             }
-             _staComms.Add(staComm1);
-            _staComms.Add(staComm2);
-            _staSounds.Add(staSound1);
-            _staSounds.Add(staSound2);
+            _lstCommStatus = new() { staComm1, staComm2 };
+            _lstArfPanel = new() { pnlArf1, pnlArf2 };
+            _lstArfSoundIcon = new() { staSound1, staSound2 };
+            _lstArfText = new() { staArf1, staArf2 };
+            _lstArfStatus = new() { staArf1Status, staArf2Status };
+            _lstArfMask = new() { imgMask1, imgMask2 };
+
             meInb1.Play();
             meInb2.Play();
             meOut1.Play();
@@ -59,8 +69,6 @@ namespace ARFCon {
             for (int i = 0; i < 2; i++)
                 tasks.Add(Tuple.Create(i, DateTime.Now), Send(reqSignStates[i], i)); ;
 
-            var staArfs = new List<TextBlock>() { staArf1Status, staArf2Status };
-
             while (tasks.Any()) {
                 var kvp = tasks.FirstOrDefault(t => t.Value.IsCompleted);
                 if (kvp.Value == null) {
@@ -72,15 +80,15 @@ namespace ARFCon {
                 var resultState = kvp.Value.Result;
                 var delta = DateTime.Now - dt;
                 if (resultState.State == SignEnum.Error && _signStates[index].State != SignEnum.Error) {
-                    staArfs[index].Text = $"Conn: FAILED!({delta.TotalMilliseconds.ToString("0")}ms)";
+                    _lstArfStatus[index].Text = $"Conn: FAILED!({delta.TotalMilliseconds.ToString("0")}ms)";
                     Log($"Camera #{index + 1} {resultState}");
                 }
                 else {
-                    staArfs[index].Text = $"Conn: good!({delta.TotalMilliseconds.ToString("0")}ms)";
+                    _lstArfStatus[index].Text = $"Conn: good!({delta.TotalMilliseconds.ToString("0")}ms)";
                 }
                 if (!_signStates[index].Same(resultState))
                     UpdateLocalSignState(resultState, index);
-                _staComms[index].Visibility = Visibility.Hidden;
+                _lstCommStatus[index].Visibility = Visibility.Hidden;
 
                 tasks.Remove(kvp.Key);
             }
@@ -93,10 +101,13 @@ namespace ARFCon {
             staCamera2.Content = Config.FullCameraName(1);
         }
         public async Task<SignState> Send(SignState signState, int index) {
-            _staComms[index].Visibility = Visibility.Visible;
+            _lstCommStatus[index].Visibility = Visibility.Visible;
             if (Config.LocalTesting) {
                 await Task.Delay(1000);
-                return signState;
+                if (signState.State == SignEnum.Heartbeat)
+                    return _signStates[index];
+                else
+                    return signState;
             }
             else
                 return await _socks[index].Send(signState);
@@ -118,7 +129,6 @@ namespace ARFCon {
             reqSignStates.Add(ArfStateToSignState(state, 0));
             reqSignStates.Add(ArfStateToSignState(state, 1));
 
-            var staArfs = new List<TextBlock>() {staArf1Status, staArf2Status};
             var tasks = new Dictionary<int, Task<SignState>>();
             int i = 0;
             foreach (var signState in reqSignStates) {
@@ -134,13 +144,13 @@ namespace ARFCon {
                 var index = kvp.Key;
                 var resultState = kvp.Value.Result;
                 if (resultState?.Same(reqSignStates[index]) == true)
-                    staArfs[index].Text = "Conn: good!";
+                    _lstArfStatus[index].Text = "Conn: good!";
                 else {
-                    staArfs[index].Text = "Conn: FAILED!";
+                    _lstArfStatus[index].Text = "Conn: FAILED!";
                     Log($"Camera #{index + 1} {resultState}");
                 }
                 UpdateLocalSignState(resultState, index);
-                _staComms[index].Visibility = Visibility.Hidden;
+                _lstCommStatus[index].Visibility = Visibility.Hidden;
                 tasks.Remove(index);
             }
             UpdateButtons();
@@ -204,18 +214,12 @@ namespace ARFCon {
                 fontSize = 18;
                 text = text.Substring(0, 15);
             }
-            if (index == 0) {
-                pnlArf1.Background = UILib.GetBrush(state.CalcColor());
-                staArf1.Text = text;
-                staArf1.FontSize = fontSize;
-                staSound1.Visibility = IsVis(state.State == SignEnum.Alarm);
-            }
-            if (index == 1) {
-                pnlArf2.Background = UILib.GetBrush(state.CalcColor());
-                staArf2.Text = text;
-                staArf2.FontSize = fontSize;
-                staSound2.Visibility = IsVis(state.State == SignEnum.Alarm);
-            }
+            _lstArfText[index].Text = text;
+            _lstArfText[index].FontSize = fontSize;
+            _lstArfMask[index].Visibility = IsVis(!SignState.IsStopState(state.State));
+            _lstArfPanel[index].Background = UILib.GetBrush(state.CalcColor());
+            _lstArfSoundIcon[index].Visibility = IsVis(state.State == SignEnum.Alarm);
+
             PlaySound(state.State == SignEnum.Alarm, index);
             _signStates[index] = state;
         }
@@ -310,7 +314,7 @@ namespace ARFCon {
         }
 
         void PlaySound(bool b, int index) {
-            _staSounds[index].Visibility = b ? Visibility.Visible : Visibility.Collapsed;
+            _lstArfSoundIcon[index].Visibility = b ? Visibility.Visible : Visibility.Collapsed;
             if (b) {
                 if (_soundPlayer != null)
                     return;

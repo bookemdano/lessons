@@ -13,9 +13,16 @@
     <None Remove="media\comm.png" />
     <None Remove="media\ears.png" />
     <None Remove="media\hollow.png" />
+    <None Remove="media\mask.png" />
     <None Remove="media\slow.png" />
     <None Remove="media\stop.png" />
     <None Remove="media\white.bmp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="media\mask.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
