@@ -18,7 +18,12 @@ namespace ARFSign {
         }
 
         private void Timer_Tick(object? sender, EventArgs e) {
+            if (chkManual.IsChecked == true)
+                return;
+
             _sign.DoneHeartbeat(_lastConnection);
+
+            SetManual(_sign.MySignState.State == SignEnum.Error);
         }
 
         public void Log(object o) {
@@ -45,8 +50,8 @@ namespace ARFSign {
         // TODONE heartbeat to sign
         // TODONE alarm on sign
         // TODONE sound icon on console
-        // TODO manual mode on sign
-        // TODO stand on sign
+        // TODONE manual mode on sign
+        // TODONE stand on sign
         private async void Window_Loaded(object sender, RoutedEventArgs e) {
             await ListenForever();
         }
@@ -76,6 +81,21 @@ namespace ARFSign {
                     await Task.Delay(1000);
             }
         }
-            
+        void SetManual(bool b) {
+            chkManual.IsChecked = b;
+            btnStop.IsEnabled = b;
+            btnSlow.IsEnabled = b;
+        }
+        private void Stop_Click(object sender, RoutedEventArgs e) {
+            _sign.SetSignState(new SignState(SignEnum.Stop, Config.StopColor, Config.StopText));
+        }
+
+        private void Slow_Click(object sender, RoutedEventArgs e) {
+            _sign.SetSignState(new SignState(SignEnum.Slow, Config.SlowColor, Config.SlowText));
+        }
+
+        private void chkManual_Click(object sender, RoutedEventArgs e) {
+            SetManual(chkManual.IsChecked == true);
+        }
     }
 }

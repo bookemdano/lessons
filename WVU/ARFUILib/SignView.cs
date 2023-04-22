@@ -84,13 +84,15 @@ namespace ARFUILib {
         }
 
 
-        public void DoneHeartbeat(DateTime lastConnection) {
+        public bool DoneHeartbeat(DateTime lastConnection) {
             var delta = DateTime.Now - lastConnection;
             _staStatus.Text = $"Last conn. {delta.TotalSeconds.ToString("0")} secs ago";
             _staComm.Visibility = Visibility.Hidden;
             if (delta > Config.HeartbeatTimeout * 1.5) {
                 SetSignState(new SignState(SignEnum.Error, null, "Console Disconnected"));
+                return false;
             }
+            return true;
         }
 
         public void UpdateAfterHeartbeat(DateTime dt, SignState resultState) {
