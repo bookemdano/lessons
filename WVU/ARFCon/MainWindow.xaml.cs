@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Threading;
 
 namespace ARFCon {
@@ -36,7 +37,7 @@ namespace ARFCon {
         }
 
         private async void Timer_Tick(object? sender, EventArgs e) {
-            if (_switching > 0) {
+            if (_changing > 0) {
                 Log("Delay ping because busy.");
                 return;
             }
@@ -70,11 +71,11 @@ namespace ARFCon {
             staCamera2.Content = Config.FullCameraName(1);
         }
 
-        int _switching = 0;
-        private async Task Switch(ArfState state) {
-            Log("Switch to " + state);
-            _switching++;
-            if (_switching > 1)
+        int _changing = 0;
+        private async Task Change(ArfState state) {
+            Log("Set " + state);
+            _changing++;
+            if (_changing > 1)
                 Log("Overlapping");
 
             Buttonability(false);
@@ -99,24 +100,26 @@ namespace ARFCon {
             UpdateButtons();
             Buttonability(true);
             _currentState = state;
-            _switching--;
+            _changing--;
             return;
         }
 
         private void Buttonability(bool enable) {
+            if (enable && _slowChange)
+                return;
             btnLogEvent.IsEnabled = enable;
             btnCustomize.IsEnabled = enable;
-            btnSwitch.IsEnabled = enable;
-            btnSwitch1.IsEnabled = enable;
-            btnSwitch2.IsEnabled = enable;
+            btnSwap.IsEnabled = enable;
+            btnSetArf1.IsEnabled = enable;
+            btnSetArf2.IsEnabled = enable;
             if (enable) {
                 if (_signs[0].MySignState.State == SignEnum.Error) {
-                    btnSwitch.IsEnabled = false;
-                    btnSwitch1.IsEnabled = false;
+                    btnSwap.IsEnabled = false;
+                    btnSetArf1.IsEnabled = false;
                 }
                 if (_signs[1].MySignState.State == SignEnum.Error) {
-                    btnSwitch.IsEnabled = false;
-                    btnSwitch2.IsEnabled = false;
+                    btnSwap.IsEnabled = false;
+                    btnSetArf2.IsEnabled = false;
                 }
             }
         }
@@ -147,27 +150,29 @@ namespace ARFCon {
         }
 
         void UpdateButtons() {
+            if (_slowChange)
+                return;
             var state1 = _signs[0].MySignState;
             var state2 = _signs[1].MySignState;
             if (state1.State == SignEnum.Slow && state2.State == SignEnum.Stop) {
-                btnSwitch.Visibility = UIUtils.IsVis(true);
-                btnSwitch1.Content = _left + " " + Config.StopText;
-                btnSwitch2.Content = Config.SlowText + " " + _right;
+                btnSwap.Visibility = UIUtils.IsVis(true);
+                btnSetArf1.Content = _left + " " + Config.StopText;
+                btnSetArf2.Content = Config.SlowText + " " + _right;
             }
             else if (state1.State == SignEnum.Stop && state2.State == SignEnum.Slow) {
-                btnSwitch.Visibility = UIUtils.IsVis(true);
-                btnSwitch1.Content = _left + " " + Config.SlowText;
-                btnSwitch2.Content = Config.StopText + " " + _right;
+                btnSwap.Visibility = UIUtils.IsVis(true);
+                btnSetArf1.Content = _left + " " + Config.SlowText;
+                btnSetArf2.Content = Config.StopText + " " + _right;
             }
             else { 
-                btnSwitch.Visibility = UIUtils.IsVis(false);
-                btnSwitch1.Content = _left + " " + Config.SlowText;
-                btnSwitch2.Content = Config.SlowText + " " + _right;
+                btnSwap.Visibility = UIUtils.IsVis(false);
+                btnSetArf1.Content = _left + " " + Config.SlowText;
+                btnSetArf2.Content = Config.SlowText + " " + _right;
             }
             if (state1.State == SignEnum.Error)
-                btnSwitch1.Content = _left + " " + Config.StopText;
+                btnSetArf1.Content = _left + " " + Config.StopText;
             if (state2.State == SignEnum.Error)
-                btnSwitch2.Content = Config.StopText + " " + _right;
+                btnSetArf2.Content = Config.StopText + " " + _right;
         }
 
         public void Log(object str)
@@ -187,31 +192,49 @@ namespace ARFCon {
         }
         private async void AllStop_Click(object sender, RoutedEventArgs e)
         {
-            await Switch(ArfState.AllStop);
+            Log("USER All stop");
+            await Change(ArfState.AllStop);
         }
 
-        private async void Switch1_Click(object sender, RoutedEventArgs e)
+        private async void SetArf1_Click(object sender, RoutedEventArgs e)
         {
-            if (_currentState == ArfState.Stop1 || _currentState == ArfState.AllStop)
-                await Switch(ArfState.Stop2);
-            else // 1 is slow, 2 is stop
-                await Switch(ArfState.AllStop);     // dont set other to slow because it might not be intended
+            if (_currentState == ArfState.Stop1 || _currentState == ArfState.AllStop) {
+                Log("USER Set " + Config.FullCameraName(0) + " " + Config.SlowText);
+                await Change(ArfState.Stop2);
+            }
+            else { // 1 is slow, 2 is stop
+                await Change(ArfState.AllStop);     // dont set other to slow because it might not be intended
+                Log("USER Set " + Config.FullCameraName(0) + " " + Config.StopText);
+            }
         }
 
-        private async void Switch2_Click(object sender, RoutedEventArgs e)
+        private async void SetArf2_Click(object sender, RoutedEventArgs e)
         {
-            if (_currentState == ArfState.Stop2 || _currentState == ArfState.AllStop)
-                await Switch(ArfState.Stop1);
-            else  // 2 is slow, 1 is stop
-                await Switch(ArfState.AllStop);    // dont set 1 to slow because it might not be intended
+            if (_currentState == ArfState.Stop2 || _currentState == ArfState.AllStop) {
+                Log("USER Set " + Config.FullCameraName(1) + " " + Config.SlowText);
+                await Change(ArfState.Stop1);
+            }
+            else { // 1 is slow, 2 is stop
+                await Change(ArfState.AllStop);     // dont set other to slow because it might not be intended
+                Log("USER Set " + Config.FullCameraName(1) + " " + Config.StopText);
+            }
         }
-
-        private async void Switch_Click(object sender, RoutedEventArgs e)
+        bool _slowChange = false;
+        private async void Swap_Click(object sender, RoutedEventArgs e)
         {
-            if (_currentState == ArfState.Stop2)
-                await Switch(ArfState.Stop1);
+            Log("USER Swapping signs");
+            _slowChange = true;
+            var oldState = _currentState;
+
+            await Change(ArfState.AllStop);
+            
+            await Task.Delay(Config.SwapDelay);
+
+            _slowChange = false;
+            if (oldState == ArfState.Stop2)
+                await Change(ArfState.Stop1);
             else
-                await Switch(ArfState.Stop2);
+                await Change(ArfState.Stop2);
         }
 
         private void LogEvent_Click(object sender, RoutedEventArgs e)
@@ -227,9 +250,9 @@ namespace ARFCon {
             if (wnd.ShowDialog() == true) {
                 Log("SIGN CHANGE: StopText=" + Config.StopText + ", SlowText=" + Config.SlowText + ", CustomText=" + Config.CustomText);
                 if (wnd.ShowCustom)
-                    await Switch(ArfState.Custom);
+                    await Change(ArfState.Custom);
                 else
-                    await Switch(_currentState);
+                    await Change(_currentState);
                 UpdateCameraName();
             }
         }
@@ -240,12 +263,12 @@ namespace ARFCon {
             if (!_alarming)
             {
                 Log("Alarm triggered.");
-                await Switch(ArfState.Alarm);
+                await Change(ArfState.Alarm);
             }
             else
             {
                 Log("Alarm stopped.");
-                await Switch(ArfState.AllStop);
+                await Change(ArfState.AllStop);
             }
             _alarming = !_alarming;
         }
@@ -258,12 +281,8 @@ namespace ARFCon {
             me.Play();
         }
 
-        private void Cancel_Click(object sender, RoutedEventArgs e) {
-
-        }
-
         private async void Window_Loaded(object sender, RoutedEventArgs e) {
-            await Switch(ArfState.AllStop);
+            await Change(ArfState.AllStop);
         }
 
         public Task<SignState> StateChange(SignState signState) {

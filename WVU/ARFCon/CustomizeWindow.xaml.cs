@@ -2,6 +2,8 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Drawing;
+using System;
+
 namespace ARFCon {
 
     public partial class CustomizeWindow : Window {
@@ -9,6 +11,10 @@ namespace ARFCon {
 
         public CustomizeWindow() {
             InitializeComponent();
+            ReadFromConfig();
+        }
+
+        private void ReadFromConfig() {
             entCameraName1.Text = Config.GetCameraName(0);
             entCameraName2.Text = Config.GetCameraName(1);
             entCameraAddress1.Text = Config.GetCameraAddress(0);
@@ -25,6 +31,7 @@ namespace ARFCon {
             pnlSlow.Background = UIUtils.GetBrush(SignState.CalcColor(SignEnum.Slow));
             pnlCustom.Background = UIUtils.GetBrush(SignState.CalcColor(SignEnum.Custom));
             pnlError.Background = UIUtils.GetBrush(SignState.CalcColor(SignEnum.Error));
+            entSwitchDelay.Text = Config.SwapDelay.TotalSeconds.ToString();
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e) {
@@ -49,6 +56,7 @@ namespace ARFCon {
             if (Color.FromName(entErrorColor.Text).IsKnownColor)
                 Config.ErrorColor = entErrorColor.Text;
             Config.LocalTesting = chkTesting.IsChecked == true;
+            Config.SwapDelay = TimeSpan.FromSeconds(int.Parse(entSwitchDelay.Text));
         }
         private void Update_Click(object sender, RoutedEventArgs e) {
             SaveAll();
@@ -84,8 +92,9 @@ namespace ARFCon {
             UpdateColorMaybe(entErrorColor, pnlError);
         }
 
-        private void Window_Activated(object sender, System.EventArgs e) {
-
+        private void Default_Click(object sender, RoutedEventArgs e) {
+            Config.Reset();
+            ReadFromConfig();            
         }
     }
 }

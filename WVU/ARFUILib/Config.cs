@@ -97,11 +97,22 @@ namespace ARFUILib {
         }
         static public TimeSpan HeartbeatTimeout {
             get {
-                return TimeSpan.FromSeconds(5);// TimeSpan.Parse(ConfigCore.Get("Heartbeat(s)", "0:0:10"));
+                return TimeSpan.FromSeconds(5);// TimeSpan.Parse(ConfigCore.Get("Heartbeat", "0:0:10"));
             }
             set {
-                ConfigCore.Set("Heartbeat(s)", value.ToString());
+                ConfigCore.Set("Heartbeat", value.ToString());
             }
+        }
+        static public TimeSpan SwapDelay {
+            get {
+                return TimeSpan.Parse(ConfigCore.Get("SwitchDelay", "0:0:3"));
+            }
+            set {
+                ConfigCore.Set("SwitchDelay", value.ToString());
+            }
+        }
+        static public void Reset() {
+            ConfigCore.Reset();
         }
     }
     static internal class ConfigCore {
@@ -138,6 +149,10 @@ namespace ARFUILib {
             ReadAll();  // read first to sync in-memory with on-disk
             _dict[key] = val;
             WriteAll();
+        }
+        static internal void Reset() {
+            File.Delete(Filename);
+            ReadAll();
         }
     }
 }

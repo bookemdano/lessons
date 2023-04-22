@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ARFCon"
         mc:Ignorable="d"
-        Title="Customize" Height="400" Width="300">
+        Title="Customize" Height="443" Width="354">
     <Window.Resources>
         <Style TargetType="{x:Type Button}">
             <Setter Property="Padding" Value="10"/>
@@ -25,15 +25,7 @@
             <Setter Property="Width" Value="30"/>
         </Style>
     </Window.Resources>
-    <Grid x:Name="grd" Background="LightSteelBlue">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <StackPanel Background="LightSteelBlue">
         <Label Padding="3" Grid.Row="0">Camera Labels</Label>
         <Grid  Grid.Row="1">
             <Grid.RowDefinitions>
@@ -97,10 +89,16 @@
             <TextBox x:Name="entErrorColor" Grid.Column="2" Grid.Row="4" TextChanged="entErrorColor_TextChanged"/>
         </Grid>
         <CheckBox x:Name="chkTesting" Margin="5,10,0,10" Grid.Row="4" Grid.ColumnSpan="2" >Local Testing Only</CheckBox>
+        <StackPanel Orientation="Horizontal">
+            <Label>Switch Delay</Label>
+            <TextBox x:Name="entSwitchDelay" Width="30" HorizontalContentAlignment="Right"/>
+            <TextBlock>seconds</TextBlock>
+        </StackPanel>
         <StackPanel x:Name="pnlButton" Orientation="Horizontal"  Margin="3"  Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Center">
             <Button Content="Cancel" Click="Cancel_Click"/>
+            <Button Content="Defaults" Click="Default_Click"/>
             <Button Content="Update" Click="Update_Click"/>
             <Button Content="Show Custom" Click="Show_Click"/>
         </StackPanel>
-    </Grid>
+    </StackPanel>
 </Window>
