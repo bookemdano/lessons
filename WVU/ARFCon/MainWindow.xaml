@@ -74,7 +74,7 @@
             <Button x:Name="btnSetArf1" Content="👈 Stop" Grid.Row="1" Grid.Column="0" Click="SetArf1_Click"/>
             <Button x:Name="btnSetArf2" Content="Slow 👉" Grid.Row="1" Grid.Column="2"  Click="SetArf2_Click"/>
             <Button x:Name="btnAllStop" Content="ALL STOP"  Grid.Row="3" Grid.Column="2" Click="AllStop_Click"/>
-            <Button x:Name="btnLogEvent" Content="Log Event" Grid.Row="3" Grid.Column="1" Click="LogEvent_Click" Margin="-125,3,0,3"/>
+            <Button x:Name="btnLogEvent" Content="Events" Grid.Row="3" Grid.Column="1" Click="LogEvent_Click" Margin="-125,3,0,3"/>
             <Button x:Name="btnCustomize" Content="Customize" Grid.Row="3" Grid.Column="1" Click="Customize_Click" Margin="125,3,0,3"/>
             <Button x:Name="btnAlarm" Content="Alarm!" Background="Orange" Grid.Row="3" Grid.Column="0" Click="SoundAlarm_Click"/>
             <ListView x:Name="lst" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"/>

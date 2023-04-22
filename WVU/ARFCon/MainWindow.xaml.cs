@@ -193,6 +193,7 @@ namespace ARFCon {
         private async void AllStop_Click(object sender, RoutedEventArgs e)
         {
             Log("USER All stop");
+            _slowChange = false;
             await Change(ArfState.AllStop);
         }
 
@@ -229,7 +230,8 @@ namespace ARFCon {
             await Change(ArfState.AllStop);
             
             await Task.Delay(Config.SwapDelay);
-
+            if (_slowChange == false)
+                return;
             _slowChange = false;
             if (oldState == ArfState.Stop2)
                 await Change(ArfState.Stop1);
@@ -240,8 +242,10 @@ namespace ARFCon {
         private void LogEvent_Click(object sender, RoutedEventArgs e)
         {
             var wnd = new EventWindow();
-            if (wnd.ShowDialog() == true) 
+            if (wnd.ShowDialog() == true) {
+                ArfEvent.Add(wnd.EventType, wnd.EventNotes);
                 Log("EVENT: " + wnd.EventType + " notes: " + wnd.EventNotes);
+            }
         }
 
         private async void Customize_Click(object sender, RoutedEventArgs e)
@@ -260,14 +264,15 @@ namespace ARFCon {
         bool _alarming = false;
         private async void SoundAlarm_Click(object sender, RoutedEventArgs e)
         {
+            _slowChange = false;
             if (!_alarming)
             {
-                Log("Alarm triggered.");
+                Log("USER Alarm triggered.");
                 await Change(ArfState.Alarm);
             }
             else
             {
-                Log("Alarm stopped.");
+                Log("USER Alarm stopped.");
                 await Change(ArfState.AllStop);
             }
             _alarming = !_alarming;

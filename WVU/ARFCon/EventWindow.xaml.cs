@@ -1,12 +1,21 @@
-﻿using System.Windows;
+﻿using ARFUILib;
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace ARFCon {
     /// <summary>
     /// Interaction logic for EventWindow.xaml
     /// </summary>
     public partial class EventWindow : Window {
+        public List<ArfEvent> ArfEvents { get; }
         public EventWindow() {
+            ArfEvents = ArfEvent.GetArfEvents();
             InitializeComponent();
+            foreach(var e in ArfEvents) {
+                lst.Items.Add(e);
+            }
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e) {

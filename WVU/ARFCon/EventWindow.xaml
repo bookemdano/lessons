@@ -5,9 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ARFCon"
         mc:Ignorable="d"
-        Title="Log Event" Height="250" Width="400" ResizeMode="NoResize">
+        Title="Log Event" Width="400" Height="500">
     <StackPanel Background="LightSteelBlue">
-        <Label>Event Type:</Label>
+        <Label>Events</Label>
+        <ScrollViewer>
+            <DataGrid x:Name="lst" MaxHeight="200" ItemsSource="{Binding ArfEvents}"  AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Timespan" Binding="{Binding Timestamp}"/>
+                    <DataGridTextColumn Header="Type" Binding="{Binding EventType}"/>
+                    <DataGridTextColumn Header="Notes" Binding="{Binding Notes}"/>
+                    <DataGridHyperlinkColumn Header="Video Link" Binding="{Binding Url}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </ScrollViewer>
+        <Label>Event Type</Label>
         <ComboBox x:Name="cmbEventType" SelectedIndex="0" Margin="5">
             <ComboBoxItem Content="-select type-"/>
             <ComboBoxItem Content="Near Miss"/>
@@ -15,7 +26,7 @@
             <ComboBoxItem Content="Worker Injured"/>
             <ComboBoxItem Content="Pedestrian Injured"/>
         </ComboBox>
-        <Label>Notes:</Label>
+        <Label>Notes</Label>
         <TextBox x:Name="entEventNotes" TextWrapping="Wrap" AcceptsReturn="True" Margin="5" Height="70"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Content="Cancel" Padding="5" Margin="5" Click="Cancel_Click"/>
