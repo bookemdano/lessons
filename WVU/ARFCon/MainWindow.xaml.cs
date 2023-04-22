@@ -20,8 +20,8 @@ namespace ARFCon {
         public MainWindow()
         {
             InitializeComponent();
-            _signs.Add(new SignView(this, pnlArf1, staArf1, staSound1, staComm1, imgMask1, staArf1Status, 0));
-            _signs.Add(new SignView(this, pnlArf2, staArf2, staSound2, staComm2, imgMask2, staArf2Status, 1));
+            _signs.Add(new SignView(this, pnlArf1, staArf1, staSound1, staComm1, null, imgMask1, staArf1Status, 0));
+            _signs.Add(new SignView(this, pnlArf2, staArf2, staSound2, staComm2, null, imgMask2, staArf2Status, 1));
 
             meInb1.Play();
             meInb2.Play();
@@ -58,7 +58,7 @@ namespace ARFCon {
                 var index = kvp.Key.Item1;
                 var dt = kvp.Key.Item2;
                 var resultState = kvp.Value.Result;
-                _signs[index].UpdateAfterHeartbeat(dt, resultState);
+                _signs[index].UpdateAfterHeartbeatSend(dt, resultState);
                 tasks.Remove(kvp.Key);
             }
             UpdateButtons();
@@ -247,6 +247,7 @@ namespace ARFCon {
                 Log("Alarm stopped.");
                 await Switch(ArfState.AllStop);
             }
+            _alarming = !_alarming;
         }
 
         private void MediaElement_MediaEnded(object sender, RoutedEventArgs e) {

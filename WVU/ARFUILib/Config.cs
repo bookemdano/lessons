@@ -1,14 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.IO;
-using System.Net.Http.Headers;
-using System.Reflection.Metadata;
-using System.Security.Cryptography;
-using System.Text.Json;
+﻿using System.IO;
 
 namespace ARFUILib {
     static public class Config {
         static public string FullCameraName(int index) {
-            var address = $"localhost:{Config.GetCameraAddress(index)}";
+            var address = Config.GetCameraAddress(index);
             if (Config.LocalTesting)
                 address = "testing";
             return $"Camera #{index + 1}- {Config.GetCameraName(index)} ({address})";
@@ -102,7 +97,7 @@ namespace ARFUILib {
         }
         static public TimeSpan HeartbeatTimeout {
             get {
-                return TimeSpan.Parse(ConfigCore.Get("Heartbeat(s)", "0:0:10"));
+                return TimeSpan.FromSeconds(5);// TimeSpan.Parse(ConfigCore.Get("Heartbeat(s)", "0:0:10"));
             }
             set {
                 ConfigCore.Set("Heartbeat(s)", value.ToString());

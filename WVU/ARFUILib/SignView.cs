@@ -8,8 +8,9 @@ namespace ARFUILib {
         private ISignListener _ui;
         private Panel _pnl;
         private TextBlock _staArf;
-        private TextBlock _staSound;
-        private TextBlock _staComm;
+        private TextBlock _icoSound;
+        private TextBlock _icoComm;
+        private MediaElement _meSiren;
         private Image _imgMask;
         private TextBlock _staStatus;
         private int _index;
@@ -25,12 +26,13 @@ namespace ARFUILib {
         }
 
         //pnl, staArf, staSound, staComm, imgMask
-        public SignView(ISignListener ui, Panel pnl, TextBlock staArf, TextBlock staSound, TextBlock staComm, Image imgMask, TextBlock staStatus, int index) {
+       public SignView(ISignListener ui, Panel pnl, TextBlock staArf, TextBlock staSound, TextBlock staComm, MediaElement siren, Image imgMask, TextBlock staStatus, int index) {
             _ui = ui;
             _pnl = pnl;
             _staArf = staArf;
-            _staSound = staSound;
-            _staComm = staComm;
+            _icoSound = staSound;
+            _icoComm = staComm;
+            _meSiren = siren;
             _imgMask = imgMask;
             _staStatus = staStatus;
             _index = index;
@@ -52,7 +54,12 @@ namespace ARFUILib {
         }
 
         public void PlaySound(bool b) {
-            _staSound.Visibility = b ? Visibility.Visible : Visibility.Collapsed;
+            _icoSound.Visibility = UIUtils.IsVis(b);
+            if (_meSiren != null) {
+                _meSiren.Visibility = UIUtils.IsVis(b);
+                if (b)
+                    _meSiren.Play();
+            }
             if (b) {
                 if (_soundPlayer != null)
                     return;
@@ -67,9 +74,9 @@ namespace ARFUILib {
             }
         }
         public async Task<SignState> Send(SignState signState) {
-            _staComm.Visibility = Visibility.Visible;
+            _icoComm.Visibility = Visibility.Visible;
             if (Config.LocalTesting) {
-                await Task.Delay(1000);
+                await Task.Delay(500);
                 if (signState.State == SignEnum.Heartbeat)
                     return MySignState;
                 else
@@ -82,31 +89,34 @@ namespace ARFUILib {
                 return await _sockSender.Send(signState);
             }
         }
+        static public bool TimedOut(DateTime lastConnection) {
+            return (DateTime.Now - lastConnection) > Config.HeartbeatTimeout * 1.5; 
+        }
 
-
-        public bool DoneHeartbeat(DateTime lastConnection) {
+        public bool DoneListeningTimer(DateTime lastConnection, bool manual) {
             var delta = DateTime.Now - lastConnection;
             _staStatus.Text = $"Last conn. {delta.TotalSeconds.ToString("0")} secs ago";
-            _staComm.Visibility = Visibility.Hidden;
-            if (delta > Config.HeartbeatTimeout * 1.5) {
+            _icoComm.Visibility = Visibility.Hidden;
+            if (TimedOut(lastConnection) && !manual) {
                 SetSignState(new SignState(SignEnum.Error, null, "Console Disconnected"));
                 return false;
             }
             return true;
         }
 
-        public void UpdateAfterHeartbeat(DateTime dt, SignState resultState) {
+        public void UpdateAfterHeartbeatSend(DateTime dt, SignState resultState) {
             var delta = DateTime.Now - dt;
-            if (resultState.State == SignEnum.Error && MySignState.State != SignEnum.Error) {
+            if (resultState.State == SignEnum.Error) {
                 _staStatus.Text = $"Conn: FAILED!({delta.TotalMilliseconds.ToString("0")}ms)";
-                _ui.Log($"Camera #{_index + 1} {resultState}");
+                if (MySignState.State != SignEnum.Error)    // is this new
+                    _ui.Log($"Camera #{_index + 1} {resultState}");
             }
-            else {
+            else 
                 _staStatus.Text = $"Conn: good!({delta.TotalMilliseconds.ToString("0")}ms)";
-            }
+            
             if (!MySignState.Same(resultState))
                 SetSignState(resultState);
-            _staComm.Visibility = Visibility.Hidden;
+            _icoComm.Visibility = Visibility.Hidden;
         }
         public void UpdateAfterSend(SignState resultState, SignState requestedState) {
             if (resultState?.Same(requestedState) == true)
@@ -116,13 +126,13 @@ namespace ARFUILib {
                 _ui.Log($"Camera #{_index + 1} {resultState}");
             }
             SetSignState(resultState);
-            _staComm.Visibility = Visibility.Hidden;
+            _icoComm.Visibility = Visibility.Hidden;
         }
 
 
         public void StartComm() {
             _staStatus.Text = "comm...";
-            _staComm.Visibility = Visibility.Visible;
+            _icoComm.Visibility = Visibility.Visible;
         }
 
         public void KillSend() {

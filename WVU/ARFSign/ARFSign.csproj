@@ -14,6 +14,7 @@
     <None Remove="media\ears.png" />
     <None Remove="media\hollow.png" />
     <None Remove="media\mask.png" />
+    <None Remove="media\siren.mp4" />
     <None Remove="media\slow.png" />
     <None Remove="media\stop.png" />
     <None Remove="media\white.bmp" />
@@ -39,6 +40,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="media\hollow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="media\siren.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

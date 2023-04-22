@@ -1,10 +1,8 @@
 ﻿using ARFUILib;
 using System;
-using System.Collections.Generic;
-using System.Media;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Media;
+using System.Windows.Controls;
 using System.Windows.Threading;
 
 namespace ARFSign {
@@ -18,12 +16,11 @@ namespace ARFSign {
         }
 
         private void Timer_Tick(object? sender, EventArgs e) {
+            _sign.DoneListeningTimer(_lastConnection, chkManual.IsChecked == true);
             if (chkManual.IsChecked == true)
                 return;
-
-            _sign.DoneHeartbeat(_lastConnection);
-
-            SetManual(_sign.MySignState.State == SignEnum.Error);
+            if (SignView.TimedOut(_lastConnection))
+                SetManual(_sign.MySignState.State == SignEnum.Error);
         }
 
         public void Log(object o) {
@@ -33,6 +30,8 @@ namespace ARFSign {
         public async Task<SignState> StateChange(SignState signState) {
             _sign.StartComm();
             _lastConnection = DateTime.Now;
+            if (chkManual.IsChecked == true)
+                return _sign.MySignState;
             if (signState.State == SignEnum.Heartbeat) {
                 Log("HB " + signState);
                 return _sign.MySignState;
@@ -66,7 +65,7 @@ namespace ARFSign {
             if (!await sock.Test(Config.GetCameraAddress(_iCam)))
                 _iCam = 1;
 
-            _sign = new SignView(this, pnl, staArf, staSound, staComm, imgMask, sta, _iCam);
+            _sign = new SignView(this, pnl, staArf, staSound, staComm, meSiren, imgMask, sta, _iCam);
 
             entAddress.Text = Config.GetCameraAddress(_iCam);
             Title = Config.FullCameraName(_iCam);
@@ -85,6 +84,7 @@ namespace ARFSign {
             chkManual.IsChecked = b;
             btnStop.IsEnabled = b;
             btnSlow.IsEnabled = b;
+            btnCustom.IsEnabled = b;
         }
         private void Stop_Click(object sender, RoutedEventArgs e) {
             _sign.SetSignState(new SignState(SignEnum.Stop, Config.StopColor, Config.StopText));
@@ -96,6 +96,18 @@ namespace ARFSign {
 
         private void chkManual_Click(object sender, RoutedEventArgs e) {
             SetManual(chkManual.IsChecked == true);
+        }
+
+        private void MediaElement_MediaEnded(object sender, RoutedEventArgs e) {
+            var me = sender as MediaElement;
+            if (me == null || me.Visibility == Visibility.Hidden)
+                return;
+            me.Position = TimeSpan.Zero;
+            me.Play();
+        }
+
+        private void Custom_Click(object sender, RoutedEventArgs e) {
+            _sign.SetSignState(new SignState(SignEnum.Custom, Config.CustomColor, Config.CustomText));
         }
     }
 }
