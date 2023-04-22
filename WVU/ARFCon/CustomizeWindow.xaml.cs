@@ -1,4 +1,4 @@
-﻿using ARFLib;
+﻿using ARFUILib;
 using System.Windows;
 using System.Windows.Controls;
 using System.Drawing;
@@ -21,10 +21,10 @@ namespace ARFCon {
             entCustomColor.Text = Config.CustomColor;
             entErrorColor.Text = Config.ErrorColor;
             chkTesting.IsChecked = Config.LocalTesting;
-            pnlStop.Background = UILib.GetBrush(SignState.CalcColor(SignEnum.Stop));
-            pnlSlow.Background = UILib.GetBrush(SignState.CalcColor(SignEnum.Slow));
-            pnlCustom.Background = UILib.GetBrush(SignState.CalcColor(SignEnum.Custom));
-            pnlError.Background = UILib.GetBrush(SignState.CalcColor(SignEnum.Error));
+            pnlStop.Background = UIUtils.GetBrush(SignState.CalcColor(SignEnum.Stop));
+            pnlSlow.Background = UIUtils.GetBrush(SignState.CalcColor(SignEnum.Slow));
+            pnlCustom.Background = UIUtils.GetBrush(SignState.CalcColor(SignEnum.Custom));
+            pnlError.Background = UIUtils.GetBrush(SignState.CalcColor(SignEnum.Error));
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e) {
@@ -77,7 +77,7 @@ namespace ARFCon {
         void UpdateColorMaybe(TextBox ent, Panel pnl) {
             var color = System.Drawing.Color.FromName(ent.Text);
             if (color.IsKnownColor)
-                pnl.Background = UILib.GetBrush(color);
+                pnl.Background = UIUtils.GetBrush(color);
         }
 
         private void entErrorColor_TextChanged(object sender, TextChangedEventArgs e) {

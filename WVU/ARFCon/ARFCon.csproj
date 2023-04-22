@@ -58,7 +58,10 @@
     <Content Include="media\alarm.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <ProjectReference Include="..\ARFLib\ARFLib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ARFUILib\ARFUILib.csproj" />
   </ItemGroup>
 
 </Project>

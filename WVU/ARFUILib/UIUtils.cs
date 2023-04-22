@@ -1,13 +1,22 @@
 ﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Media;
 
-namespace ARFCon {
-    static internal class UILib {
+namespace ARFUILib {
+    static public class UIUtils {
         static Dictionary<System.Drawing.Color, Brush> _brushes = new Dictionary<System.Drawing.Color, Brush>();
-        static internal Brush GetBrush(System.Drawing.Color color) {
+        public static Brush GetBrush(System.Drawing.Color color) {
             if (!_brushes.ContainsKey(color))
                 _brushes[color] = new SolidColorBrush(Color.FromArgb(color.A, color.R, color.G, color.B));
             return _brushes[color];
         }
+        public static Visibility IsVis(bool b) {
+            if (b)
+                return Visibility.Visible;
+            else
+                return Visibility.Hidden;
+        }
+
+
     }
 }

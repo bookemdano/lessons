@@ -1,47 +1,27 @@
-﻿using ARFLib;
+﻿using ARFUILib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Media;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace ARFCon {
-    public partial class MainWindow : Window, IUi
+    public partial class MainWindow : Window, ISignListener
     {
         const string _left = "👈";
         const string _right = "👉";
         
-        SoundPlayer? _soundPlayer;
-        List<SockSender> _socks;
-
-        List<SignState> _signStates;
-        List<TextBlock> _lstCommStatus;
-        List<TextBlock> _lstArfSoundIcon;
-        List<Panel> _lstArfPanel;
-        List<TextBlock> _lstArfText;
-        List<TextBlock> _lstArfStatus;
-        List<System.Windows.Controls.Image> _lstArfMask;
         ArfState _currentState = ArfState.NA;
-
+        List<SignView> _signs = new ();
         public MainWindow()
         {
             InitializeComponent();
-            _signStates = new();
-            _socks = new();
-            for (var i = 0; i < 2; i++) {
-                _signStates.Add(new SignState());
-                _socks.Add(new SockSender(this, Config.GetCameraAddress(i)));
-            }
-            _lstCommStatus = new() { staComm1, staComm2 };
-            _lstArfPanel = new() { pnlArf1, pnlArf2 };
-            _lstArfSoundIcon = new() { staSound1, staSound2 };
-            _lstArfText = new() { staArf1, staArf2 };
-            _lstArfStatus = new() { staArf1Status, staArf2Status };
-            _lstArfMask = new() { imgMask1, imgMask2 };
+            _signs.Add(new SignView(this, pnlArf1, staArf1, staSound1, staComm1, imgMask1, staArf1Status, 0));
+            _signs.Add(new SignView(this, pnlArf2, staArf2, staSound2, staComm2, imgMask2, staArf2Status, 1));
 
             meInb1.Play();
             meInb2.Play();
@@ -67,7 +47,7 @@ namespace ARFCon {
             var tasks = new Dictionary<Tuple<int, DateTime>, Task<SignState>>();
             
             for (int i = 0; i < 2; i++)
-                tasks.Add(Tuple.Create(i, DateTime.Now), Send(reqSignStates[i], i)); ;
+                tasks.Add(Tuple.Create(i, DateTime.Now), _signs[i].Send(reqSignStates[i])); ;
 
             while (tasks.Any()) {
                 var kvp = tasks.FirstOrDefault(t => t.Value.IsCompleted);
@@ -78,18 +58,7 @@ namespace ARFCon {
                 var index = kvp.Key.Item1;
                 var dt = kvp.Key.Item2;
                 var resultState = kvp.Value.Result;
-                var delta = DateTime.Now - dt;
-                if (resultState.State == SignEnum.Error && _signStates[index].State != SignEnum.Error) {
-                    _lstArfStatus[index].Text = $"Conn: FAILED!({delta.TotalMilliseconds.ToString("0")}ms)";
-                    Log($"Camera #{index + 1} {resultState}");
-                }
-                else {
-                    _lstArfStatus[index].Text = $"Conn: good!({delta.TotalMilliseconds.ToString("0")}ms)";
-                }
-                if (!_signStates[index].Same(resultState))
-                    UpdateLocalSignState(resultState, index);
-                _lstCommStatus[index].Visibility = Visibility.Hidden;
-
+                _signs[index].UpdateAfterHeartbeat(dt, resultState);
                 tasks.Remove(kvp.Key);
             }
             UpdateButtons();
@@ -99,19 +68,6 @@ namespace ARFCon {
         void UpdateCameraName() {
             staCamera1.Content = Config.FullCameraName(0);
             staCamera2.Content = Config.FullCameraName(1);
-        }
-        public async Task<SignState> Send(SignState signState, int index) {
-            _lstCommStatus[index].Visibility = Visibility.Visible;
-            if (Config.LocalTesting) {
-                await Task.Delay(1000);
-                if (signState.State == SignEnum.Heartbeat)
-                    return _signStates[index];
-                else
-                    return signState;
-            }
-            else
-                return await _socks[index].Send(signState);
-
         }
 
         int _switching = 0;
@@ -123,18 +79,13 @@ namespace ARFCon {
 
             Buttonability(false);
 
-            staArf1Status.Text = "comm...";
-            staArf2Status.Text = "comm...";
-            var reqSignStates = new List<SignState>();
-            reqSignStates.Add(ArfStateToSignState(state, 0));
-            reqSignStates.Add(ArfStateToSignState(state, 1));
+            _signs[0].StartComm();
+            _signs[1].StartComm();
 
             var tasks = new Dictionary<int, Task<SignState>>();
-            int i = 0;
-            foreach (var signState in reqSignStates) {
-                tasks.Add(i, Send(signState, i));
-                i++;
-            }
+            tasks.Add(0, _signs[0].Send(ArfStateToSignState(state, 0)));
+            tasks.Add(1, _signs[1].Send(ArfStateToSignState(state, 1)));
+
             while(tasks.Any()) {
                 var kvp = tasks.FirstOrDefault(t => t.Value.IsCompleted);
                 if (kvp.Value == null) {
@@ -142,15 +93,7 @@ namespace ARFCon {
                     continue;
                 }
                 var index = kvp.Key;
-                var resultState = kvp.Value.Result;
-                if (resultState?.Same(reqSignStates[index]) == true)
-                    _lstArfStatus[index].Text = "Conn: good!";
-                else {
-                    _lstArfStatus[index].Text = "Conn: FAILED!";
-                    Log($"Camera #{index + 1} {resultState}");
-                }
-                UpdateLocalSignState(resultState, index);
-                _lstCommStatus[index].Visibility = Visibility.Hidden;
+                _signs[kvp.Key].UpdateAfterSend(kvp.Value.Result, ArfStateToSignState(state, index));
                 tasks.Remove(index);
             }
             UpdateButtons();
@@ -159,6 +102,7 @@ namespace ARFCon {
             _switching--;
             return;
         }
+
         private void Buttonability(bool enable) {
             btnLogEvent.IsEnabled = enable;
             btnCustomize.IsEnabled = enable;
@@ -166,11 +110,11 @@ namespace ARFCon {
             btnSwitch1.IsEnabled = enable;
             btnSwitch2.IsEnabled = enable;
             if (enable) {
-                if (_signStates[0].State == SignEnum.Error) {
+                if (_signs[0].MySignState.State == SignEnum.Error) {
                     btnSwitch.IsEnabled = false;
                     btnSwitch1.IsEnabled = false;
                 }
-                if (_signStates[1].State == SignEnum.Error) {
+                if (_signs[1].MySignState.State == SignEnum.Error) {
                     btnSwitch.IsEnabled = false;
                     btnSwitch2.IsEnabled = false;
                 }
@@ -201,45 +145,22 @@ namespace ARFCon {
                 rv.State = SignEnum.Alarm;
             return rv;
         }
-        Visibility IsVis(bool b) {
-            if (b)
-                return Visibility.Visible;
-            else 
-                return Visibility.Hidden;
-        }
-        void UpdateLocalSignState(SignState state, int index) {
-            var fontSize = 48;
-            var text = state.Text;
-            if (text.Length > 5) {
-                fontSize = 18;
-                text = text.Substring(0, 15);
-            }
-            _lstArfText[index].Text = text;
-            _lstArfText[index].FontSize = fontSize;
-            _lstArfMask[index].Visibility = IsVis(!SignState.IsStopState(state.State));
-            _lstArfPanel[index].Background = UILib.GetBrush(state.CalcColor());
-            _lstArfSoundIcon[index].Visibility = IsVis(state.State == SignEnum.Alarm);
-
-            PlaySound(state.State == SignEnum.Alarm, index);
-            _signStates[index] = state;
-        }
-
 
         void UpdateButtons() {
-            var state1 = _signStates[0];
-            var state2 = _signStates[1];
+            var state1 = _signs[0].MySignState;
+            var state2 = _signs[1].MySignState;
             if (state1.State == SignEnum.Slow && state2.State == SignEnum.Stop) {
-                btnSwitch.Visibility = IsVis(true);
+                btnSwitch.Visibility = UIUtils.IsVis(true);
                 btnSwitch1.Content = _left + " " + Config.StopText;
                 btnSwitch2.Content = Config.SlowText + " " + _right;
             }
             else if (state1.State == SignEnum.Stop && state2.State == SignEnum.Slow) {
-                btnSwitch.Visibility = IsVis(true);
+                btnSwitch.Visibility = UIUtils.IsVis(true);
                 btnSwitch1.Content = _left + " " + Config.SlowText;
                 btnSwitch2.Content = Config.StopText + " " + _right;
             }
             else { 
-                btnSwitch.Visibility = IsVis(false);
+                btnSwitch.Visibility = UIUtils.IsVis(false);
                 btnSwitch1.Content = _left + " " + Config.SlowText;
                 btnSwitch2.Content = Config.SlowText + " " + _right;
             }
@@ -313,25 +234,10 @@ namespace ARFCon {
             }
         }
 
-        void PlaySound(bool b, int index) {
-            _lstArfSoundIcon[index].Visibility = b ? Visibility.Visible : Visibility.Collapsed;
-            if (b) {
-                if (_soundPlayer != null)
-                    return;
-                //_soundPlayer = new SoundPlayer(@"media\alarm.wav");
-                //_soundPlayer.PlayLooping();
-            }
-            else {
-                if (_soundPlayer == null)
-                    return;
-                _soundPlayer.Stop();
-                _soundPlayer = null;
-            }
-        }
-
+        bool _alarming = false;
         private async void SoundAlarm_Click(object sender, RoutedEventArgs e)
         {
-            if (_soundPlayer == null)
+            if (!_alarming)
             {
                 Log("Alarm triggered.");
                 await Switch(ArfState.Alarm);
@@ -357,6 +263,11 @@ namespace ARFCon {
 
         private async void Window_Loaded(object sender, RoutedEventArgs e) {
             await Switch(ArfState.AllStop);
+        }
+
+        public Task<SignState> StateChange(SignState signState) {
+            // used only for listener
+            throw new NotImplementedException();
         }
     }
 }

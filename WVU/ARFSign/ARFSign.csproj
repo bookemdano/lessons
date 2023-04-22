@@ -44,7 +44,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ARFLib\ARFLib.csproj" />
+    <ProjectReference Include="..\ARFUILib\ARFUILib.csproj" />
   </ItemGroup>
 
 </Project>
