@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ARFSign"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1000" Width="396" Loaded="Window_Loaded">
+        Title="MainWindow" Height="876" Width="396" Loaded="Window_Loaded">
     <StackPanel>
         <Grid>
         <Image Source="media/ears.png"/>
@@ -15,23 +15,29 @@
             <Image Source="media/hollow.png"/>
             <Image x:Name="imgMask" Source="media/mask.png" Visibility="Hidden"/>
 
-            <TextBlock x:Name="staSound" VerticalAlignment="Bottom" HorizontalAlignment="Left" FontWeight="Bold" FontSize="36" Visibility="Hidden">🔊</TextBlock>
-            <TextBlock x:Name="staComm" VerticalAlignment="Top" HorizontalAlignment="Right" FontWeight="Bold" FontSize="36" Visibility="Hidden">📡</TextBlock>
+            <TextBlock x:Name="staSound" VerticalAlignment="Bottom" HorizontalAlignment="Left" FontWeight="Bold" FontSize="36" Foreground="LightGray">🔊</TextBlock>
+            <TextBlock x:Name="staComm" VerticalAlignment="Top" HorizontalAlignment="Right" FontWeight="Bold" FontSize="36" Foreground="LightGray">📡</TextBlock>
             <TextBlock x:Name="staArf" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="72"/>
         </Grid>
-        <Image Source="media/base.png"/>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Visible">
-            <CheckBox x:Name="chkManual" Margin="10" Padding="5" VerticalContentAlignment="Center" Click="chkManual_Click">Manual</CheckBox>
-            <Button x:Name="btnStop" Margin="10" Padding="5" Click="Stop_Click" IsEnabled="False">Stop</Button>
-            <Button x:Name="btnSlow" Margin="10" Padding="5" Click="Slow_Click" IsEnabled="False">Slow</Button>
-            <Button x:Name="btnCustom" Margin="10" Padding="5" Click="Custom_Click" IsEnabled="False">Custom</Button>
-        </StackPanel>
+        <Grid>
+            <Image Source="media/base.png"/>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" >
+                <TextBlock x:Name="sta" Padding="3" Margin="5" VerticalAlignment="Bottom" HorizontalAlignment="Center" Background="LightGray">Initializing</TextBlock>
+                <StackPanel Orientation="Horizontal" Background="LightGray">
+                    <CheckBox x:Name="chkManual" Margin="10" Padding="5" VerticalContentAlignment="Center" Click="chkManual_Click">Manual</CheckBox>
+                    <Button x:Name="btnStop" Margin="10" Padding="5" Click="Stop_Click" IsEnabled="False">Stop</Button>
+                    <Button x:Name="btnSlow" Margin="10" Padding="5" Click="Slow_Click" IsEnabled="False">Slow</Button>
+                    <Button x:Name="btnCustom" Margin="10" Padding="5" Click="Custom_Click" IsEnabled="False">Custom</Button>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
         <StackPanel Orientation="Horizontal">
             <Label VerticalAlignment="Center">Address:</Label>
             <TextBox x:Name="entAddress" Width="100" VerticalAlignment="Center"/>
-            <Button Click="Reset_Click" Margin="10" Padding="5">Reset</Button>
-            <TextBlock x:Name="sta" Margin="5"/>
+            <Button Click="Reset_Click" Margin="10,3,0,3" Padding="5">Reset</Button>
         </StackPanel>
-        <ListView x:Name="lst"/>
+        <ScrollViewer>
+            <ListView x:Name="lst" Height="100"/>
+        </ScrollViewer>
     </StackPanel>
 </Window>

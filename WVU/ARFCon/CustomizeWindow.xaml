@@ -90,8 +90,8 @@
         </Grid>
         <CheckBox x:Name="chkTesting" Margin="5,10,0,10" Grid.Row="4" Grid.ColumnSpan="2" >Local Testing Only</CheckBox>
         <StackPanel Orientation="Horizontal">
-            <Label>Switch Delay</Label>
-            <TextBox x:Name="entSwitchDelay" Width="30" HorizontalContentAlignment="Right"/>
+            <Label>Swap Delay</Label>
+            <TextBox x:Name="entSwapDelay" Width="30" HorizontalContentAlignment="Right"/>
             <TextBlock>seconds</TextBlock>
         </StackPanel>
         <StackPanel x:Name="pnlButton" Orientation="Horizontal"  Margin="3"  Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Center">

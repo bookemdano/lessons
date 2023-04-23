@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Media;
 using System.Windows;
 using System.Windows.Controls;
@@ -54,7 +55,7 @@ namespace ARFUILib {
         }
 
         public void PlaySound(bool b) {
-            _icoSound.Visibility = UIUtils.IsVis(b);
+            SetIcon(_icoSound, b);
             if (_meSiren != null) {
                 _meSiren.Visibility = UIUtils.IsVis(b);
                 if (b)
@@ -74,7 +75,7 @@ namespace ARFUILib {
             }
         }
         public async Task<SignState> Send(SignState signState) {
-            _icoComm.Visibility = Visibility.Visible;
+            SetIcon(_icoComm, true);
             if (Config.LocalTesting) {
                 await Task.Delay(500);
                 if (signState.State == SignEnum.Heartbeat)
@@ -96,7 +97,7 @@ namespace ARFUILib {
         public bool DoneListeningTimer(DateTime lastConnection, bool manual) {
             var delta = DateTime.Now - lastConnection;
             _staStatus.Text = $"Last conn. {delta.TotalSeconds.ToString("0")} secs ago";
-            _icoComm.Visibility = Visibility.Hidden;
+            SetIcon(_icoComm, false);
             if (TimedOut(lastConnection) && !manual) {
                 SetSignState(new SignState(SignEnum.Error, null, "Console Disconnected"));
                 return false;
@@ -116,7 +117,7 @@ namespace ARFUILib {
             
             if (!MySignState.Same(resultState))
                 SetSignState(resultState);
-            _icoComm.Visibility = Visibility.Hidden;
+            SetIcon(_icoComm, false);
         }
         public void UpdateAfterSend(SignState resultState, SignState requestedState) {
             if (resultState?.Same(requestedState) == true)
@@ -126,13 +127,13 @@ namespace ARFUILib {
                 _ui.Log($"Camera #{_index + 1} {resultState}");
             }
             SetSignState(resultState);
-            _icoComm.Visibility = Visibility.Hidden;
+            SetIcon(_icoComm, false);
         }
 
 
         public void StartComm() {
             _staStatus.Text = "comm...";
-            _icoComm.Visibility = Visibility.Visible;
+            SetIcon(_icoComm, true);
         }
 
         public void KillSend() {
@@ -143,6 +144,13 @@ namespace ARFUILib {
             if (_sockListener == null)
                 _sockListener = new SockListener(_ui);
             return await _sockListener.ListenOnce(text);
+        }
+
+        public void SetIcon(TextBlock ico, bool b) {
+            if (b)
+                ico.Foreground = UIUtils.GetBrush(Color.Black);
+            else
+                ico.Foreground = UIUtils.GetBrush(Color.LightGray);
         }
     }
 }

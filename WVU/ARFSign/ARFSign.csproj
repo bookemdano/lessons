@@ -10,7 +10,6 @@
   <ItemGroup>
     <None Remove="media\alarm.wav" />
     <None Remove="media\base.png" />
-    <None Remove="media\comm.png" />
     <None Remove="media\ears.png" />
     <None Remove="media\hollow.png" />
     <None Remove="media\mask.png" />
@@ -31,9 +30,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="media\base.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="media\comm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="media\ears.png">

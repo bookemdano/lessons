@@ -31,7 +31,7 @@ namespace ARFCon {
             pnlSlow.Background = UIUtils.GetBrush(SignState.CalcColor(SignEnum.Slow));
             pnlCustom.Background = UIUtils.GetBrush(SignState.CalcColor(SignEnum.Custom));
             pnlError.Background = UIUtils.GetBrush(SignState.CalcColor(SignEnum.Error));
-            entSwitchDelay.Text = Config.SwapDelay.TotalSeconds.ToString();
+            entSwapDelay.Text = Config.SwapDelay.TotalSeconds.ToString();
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e) {
@@ -56,7 +56,7 @@ namespace ARFCon {
             if (Color.FromName(entErrorColor.Text).IsKnownColor)
                 Config.ErrorColor = entErrorColor.Text;
             Config.LocalTesting = chkTesting.IsChecked == true;
-            Config.SwapDelay = TimeSpan.FromSeconds(int.Parse(entSwitchDelay.Text));
+            Config.SwapDelay = TimeSpan.FromSeconds(int.Parse(entSwapDelay.Text));
         }
         private void Update_Click(object sender, RoutedEventArgs e) {
             SaveAll();

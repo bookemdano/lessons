@@ -34,8 +34,8 @@
         <Grid x:Name="pnlArf1" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Image x:Name="imgMask1" Source="media/mask.png" Margin="0" Visibility="Hidden"/>
             <Image Source="media/hollow.png" Margin="0"/>
-            <TextBlock x:Name="staSound1" VerticalAlignment="Bottom" HorizontalAlignment="Left" FontWeight="Bold" FontSize="28" Visibility="Hidden">🔊</TextBlock>
-            <TextBlock x:Name="staComm1" VerticalAlignment="Top" HorizontalAlignment="Right" FontWeight="Bold" FontSize="28" Visibility="Hidden">📡</TextBlock>
+            <TextBlock x:Name="staSound1" VerticalAlignment="Bottom" HorizontalAlignment="Left" FontWeight="Bold" FontSize="28" Foreground="LightGray">🔊</TextBlock>
+            <TextBlock x:Name="staComm1" VerticalAlignment="Top" HorizontalAlignment="Right" FontWeight="Bold" FontSize="28" Foreground="LightGray">📡</TextBlock>
             <TextBlock x:Name="staArf1" FontWeight="Bold"  FontSize="48" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
         <TextBlock x:Name="staArf1Status" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Background="LightGray" Padding="3">Initializing</TextBlock>
@@ -52,8 +52,8 @@
         <Grid x:Name="pnlArf2" Grid.Column="3" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Image Source="media/hollow.png" Margin="0"/>
             <Image x:Name="imgMask2" Source="media/mask.png" Margin="0" Visibility="Hidden"/>
-            <TextBlock x:Name="staSound2" VerticalAlignment="Bottom" HorizontalAlignment="Left" FontWeight="Bold" FontSize="28" Visibility="Hidden">🔊</TextBlock>
-            <TextBlock x:Name="staComm2" VerticalAlignment="Top" HorizontalAlignment="Right" FontWeight="Bold" FontSize="28" Visibility="Hidden">📡</TextBlock>
+            <TextBlock x:Name="staSound2" VerticalAlignment="Bottom" HorizontalAlignment="Left" FontWeight="Bold" FontSize="28" Foreground="LightGray">🔊</TextBlock>
+            <TextBlock x:Name="staComm2" VerticalAlignment="Top" HorizontalAlignment="Right" FontWeight="Bold" FontSize="28" Foreground="LightGray">📡</TextBlock>
             <TextBlock x:Name="staArf2" FontWeight="Bold" FontSize="48" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
         <TextBlock x:Name="staArf2Status" Grid.Column="3" Grid.Row="3" HorizontalAlignment="Center" Background="LightGray" Padding="3">Initializing</TextBlock>
