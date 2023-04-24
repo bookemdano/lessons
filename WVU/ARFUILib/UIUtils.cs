@@ -10,11 +10,18 @@ namespace ARFUILib {
                 _brushes[color] = new SolidColorBrush(Color.FromArgb(color.A, color.R, color.G, color.B));
             return _brushes[color];
         }
-        public static Visibility IsVis(bool b) {
+        
+        public static Visibility IsVisOrHidden(bool b) {
             if (b)
                 return Visibility.Visible;
             else
                 return Visibility.Hidden;
+        }
+        public static Visibility IsVisOrCollapsed(bool b) {
+            if (b)
+                return Visibility.Visible;
+            else
+                return Visibility.Collapsed;
         }
 
 

@@ -46,18 +46,19 @@ namespace ARFUILib {
                 fontSize = 18;
                 text = text.Substring(0, 15);
             }
-            _imgMask.Visibility = UIUtils.IsVis(!SignState.IsStopState(signState.State));
-            _pnl.Background = UIUtils.GetBrush(System.Drawing.Color.FromName(signState.ColorName));
+            _imgMask.Visibility = UIUtils.IsVisOrHidden(!SignState.IsStopState(signState.State));
+            _pnl.Background = UIUtils.GetBrush(Color.FromName(signState.ColorName));
             _staArf.FontSize = fontSize;
             _staArf.Text = text;
             PlaySound(signState.State == SignEnum.Alarm);
             _signState = signState;
+            Logger.Log($"{this} {_signState}");
         }
 
         public void PlaySound(bool b) {
             SetIcon(_icoSound, b);
             if (_meSiren != null) {
-                _meSiren.Visibility = UIUtils.IsVis(b);
+                _meSiren.Visibility = UIUtils.IsVisOrHidden(b);
                 if (b)
                     _meSiren.Play();
             }
@@ -94,9 +95,14 @@ namespace ARFUILib {
             return (DateTime.Now - lastConnection) > Config.HeartbeatTimeout * 1.5; 
         }
 
+        void SetStatus(string str) {
+            Logger.Log($"{this} {str}");
+            _staStatus.Text = str;
+        }
+
         public bool DoneListeningTimer(DateTime lastConnection, bool manual) {
             var delta = DateTime.Now - lastConnection;
-            _staStatus.Text = $"Last conn. {delta.TotalSeconds.ToString("0")} secs ago";
+            SetStatus($"Last conn. {delta.TotalSeconds.ToString("0")} secs ago");
             SetIcon(_icoComm, false);
             if (TimedOut(lastConnection) && !manual) {
                 SetSignState(new SignState(SignEnum.Error, null, "Console Disconnected"));
@@ -108,12 +114,12 @@ namespace ARFUILib {
         public void UpdateAfterHeartbeatSend(DateTime dt, SignState resultState) {
             var delta = DateTime.Now - dt;
             if (resultState.State == SignEnum.Error) {
-                _staStatus.Text = $"Conn: FAILED!({delta.TotalMilliseconds.ToString("0")}ms)";
+                SetStatus($"Conn: FAILED!({delta.TotalMilliseconds.ToString("0")}ms)");
                 if (MySignState.State != SignEnum.Error)    // is this new
                     _ui.Log($"Camera #{_index + 1} {resultState}");
             }
-            else 
-                _staStatus.Text = $"Conn: good!({delta.TotalMilliseconds.ToString("0")}ms)";
+            else
+                SetStatus($"Conn: good!({delta.TotalMilliseconds.ToString("0")}ms)");
             
             if (!MySignState.Same(resultState))
                 SetSignState(resultState);
@@ -121,9 +127,9 @@ namespace ARFUILib {
         }
         public void UpdateAfterSend(SignState resultState, SignState requestedState) {
             if (resultState?.Same(requestedState) == true)
-                _staStatus.Text = "Conn: good!";
+                SetStatus("Conn: good!");
             else {
-                _staStatus.Text = "Conn: FAILED!";
+                SetStatus("Conn: FAILED!");
                 _ui.Log($"Camera #{_index + 1} {resultState}");
             }
             SetSignState(resultState);
@@ -132,7 +138,7 @@ namespace ARFUILib {
 
 
         public void StartComm() {
-            _staStatus.Text = "comm...";
+            SetStatus("comm...");
             SetIcon(_icoComm, true);
         }
 
@@ -151,6 +157,9 @@ namespace ARFUILib {
                 ico.Foreground = UIUtils.GetBrush(Color.Black);
             else
                 ico.Foreground = UIUtils.GetBrush(Color.LightGray);
+        }
+        public override string ToString() {
+            return Config.ShortCameraName(_index);
         }
     }
 }

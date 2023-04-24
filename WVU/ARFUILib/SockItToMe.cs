@@ -35,22 +35,23 @@ namespace ARFUILib {
         }
         public async Task<bool> ListenOnce(string address) {
             var rv = false;
+            Logger.Log($"SOCK ListenOnce({address})");
             var local = new IPEndPoint(IPAddress.Any, int.Parse(address));
             _listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             try {
                 _listener.Blocking = false;
                 _listener.Bind(local);
                 _listener.Listen(100);
-                _ui.Log("Listening on " + address);
                 var handler = await _listener.AcceptAsync();
                 var buffer = new byte[256];
                 var received = await handler.ReceiveAsync(buffer, SocketFlags.None);
                 var response = Encoding.UTF8.GetString(buffer, 0, received);
-                //_ui.Log(response);
+                Logger.Log($"SOCK ListenOnce({address}) {response}");
 
                 var newState = await _ui.StateChange(JsonSerializer.Deserialize<SignState>(response));
 
                 var ackBytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(newState));
+                Logger.Log($"SOCK ListenOnce({address}) send ack");
                 await handler.SendAsync(ackBytes, SocketFlags.None);
                 rv = true;
             }
@@ -61,7 +62,7 @@ namespace ARFUILib {
             finally {
                 _listener?.Close();
             }
-            _ui.Log("Done listening for " + address);
+            Logger.Log($"SOCK ListenOnce({address}) done");
             return rv;
         }
     }
@@ -77,21 +78,23 @@ namespace ARFUILib {
         }
 
         public async Task<SignState> Send(SignState signState) {
+            Logger.Log($"SOCK Send:{_address} {signState}");
             var endpoint = new IPEndPoint(IPAddress.Loopback, _address);
             Socket client = null;
             try {
                 client = new Socket(endpoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                 await client.ConnectAsync(endpoint);
-
                 
                 var msg = JsonSerializer.Serialize(signState);
                 var bytes = Encoding.UTF8.GetBytes(msg);
                 _ = await client.SendAsync(bytes, SocketFlags.None);
                 //_ui.Log("Wrote " + msg);
 
+                Logger.Log($"SOCK Send:{_address} wait for ack.");
                 var buffer = new byte[256];
                 var received = await client.ReceiveAsync(buffer, SocketFlags.None);
                 var response = Encoding.UTF8.GetString(buffer, 0, received);
+                Logger.Log($"SOCK Send:{_address} acked.");
 
                 var result =
                     JsonSerializer.Deserialize<SignState>(response);

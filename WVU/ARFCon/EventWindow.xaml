@@ -29,6 +29,7 @@
         <Label>Notes</Label>
         <TextBox x:Name="entEventNotes" TextWrapping="Wrap" AcceptsReturn="True" Margin="5" Height="70"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="View Log" Padding="5" Margin="5" Click="ViewLog_Click" />
             <Button Content="Cancel" Padding="5" Margin="5" Click="Cancel_Click"/>
             <Button Content="Create" Padding="5" Margin="5" Click="Create_Click" />
         </StackPanel>

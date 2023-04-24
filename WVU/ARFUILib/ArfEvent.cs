@@ -27,12 +27,14 @@ namespace ARFUILib {
         }
         static public void Add(string type, string notes) {
             var events = GetArfEvents();
-            events.Add(new ArfEvent(DateTime.UtcNow, type, notes));
+            var evt = new ArfEvent(DateTime.Now, type, notes);
+            events.Add(evt);
             var str = JsonSerializer.Serialize(events);
+            Logger.Log("New event " + evt);
             File.WriteAllText(Filename, str);
         }
         public override string ToString() {
-            return $"{Timestamp} {EventType} {Notes}";
+            return $"{Timestamp} {EventType} {Notes} {Url}";
         }
         static string Filename {
             get {

@@ -43,7 +43,7 @@ namespace ARFUILib {
         public string Text { get; set; }
         public string ColorName { get; set; }
         public override string ToString() {
-            return $"{State} with {Text}";
+            return $"{State} with {Text} at {ColorName}";
         }
 
         public bool Same(SignState signState) {

@@ -152,17 +152,17 @@ namespace ARFCon {
             var state1 = _signs[0].MySignState;
             var state2 = _signs[1].MySignState;
             if (state1.State == SignEnum.Slow && state2.State == SignEnum.Stop) {
-                btnSwap.Visibility = UIUtils.IsVis(true);
+                btnSwap.Visibility = UIUtils.IsVisOrHidden(true);
                 btnSetArf1.Content = _left + " " + Config.StopText;
                 btnSetArf2.Content = Config.SlowText + " " + _right;
             }
             else if (state1.State == SignEnum.Stop && state2.State == SignEnum.Slow) {
-                btnSwap.Visibility = UIUtils.IsVis(true);
+                btnSwap.Visibility = UIUtils.IsVisOrHidden(true);
                 btnSetArf1.Content = _left + " " + Config.SlowText;
                 btnSetArf2.Content = Config.StopText + " " + _right;
             }
             else { 
-                btnSwap.Visibility = UIUtils.IsVis(false);
+                btnSwap.Visibility = UIUtils.IsVisOrHidden(false);
                 btnSetArf1.Content = _left + " " + Config.SlowText;
                 btnSetArf2.Content = Config.SlowText + " " + _right;
             }
@@ -265,6 +265,7 @@ namespace ARFCon {
             if (!_alarming)
             {
                 Log("USER Alarm triggered.");
+                ArfEvent.Add("Alarm", "Alarm triggered.");
                 await Change(ArfState.Alarm);
             }
             else

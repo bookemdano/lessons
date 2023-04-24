@@ -8,6 +8,12 @@ namespace ARFUILib {
                 address = "testing";
             return $"Camera #{index + 1}- {Config.GetCameraName(index)} ({address})";
         }
+        static public string ShortCameraName(int index) {
+            var address = Config.GetCameraAddress(index);
+            if (Config.LocalTesting)
+                address = "testing";
+            return $"Cam#{index + 1}({address})";
+        }
 
         static public string GetCameraName(int index) {
             var def = "North";

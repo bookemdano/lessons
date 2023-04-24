@@ -82,16 +82,25 @@ namespace ARFSign {
         }
         void SetManual(bool b) {
             chkManual.IsChecked = b;
-            btnStop.IsEnabled = b;
-            btnSlow.IsEnabled = b;
-            btnCustom.IsEnabled = b;
+            btnStop.Visibility = UIUtils.IsVisOrCollapsed(b);
+            btnSlow.Visibility = UIUtils.IsVisOrCollapsed(b);
+            btnCustom.Visibility = UIUtils.IsVisOrCollapsed(b);
         }
         private void Stop_Click(object sender, RoutedEventArgs e) {
             _sign.SetSignState(new SignState(SignEnum.Stop, Config.StopColor, Config.StopText));
+            btnSlow.IsChecked = false;
+            btnCustom.IsChecked = false;
         }
 
         private void Slow_Click(object sender, RoutedEventArgs e) {
             _sign.SetSignState(new SignState(SignEnum.Slow, Config.SlowColor, Config.SlowText));
+            btnStop.IsChecked = false;
+            btnCustom.IsChecked = false;
+        }
+        private void Custom_Click(object sender, RoutedEventArgs e) {
+            _sign.SetSignState(new SignState(SignEnum.Custom, Config.CustomColor, Config.CustomText));
+            btnStop.IsChecked = false;
+            btnSlow.IsChecked = false;
         }
 
         private void chkManual_Click(object sender, RoutedEventArgs e) {
@@ -104,10 +113,6 @@ namespace ARFSign {
                 return;
             me.Position = TimeSpan.Zero;
             me.Play();
-        }
-
-        private void Custom_Click(object sender, RoutedEventArgs e) {
-            _sign.SetSignState(new SignState(SignEnum.Custom, Config.CustomColor, Config.CustomText));
         }
     }
 }
