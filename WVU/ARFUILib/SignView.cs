@@ -44,7 +44,8 @@ namespace ARFUILib {
             var text = signState.Text;
             if (text.Length > 5) {
                 fontSize = 18;
-                text = text.Substring(0, 15);
+                if (text.Length > 15) 
+                    text = text.Substring(0, 15);
             }
             _imgMask.Visibility = UIUtils.IsVisOrHidden(!SignState.IsStopState(signState.State));
             _pnl.Background = UIUtils.GetBrush(Color.FromName(signState.ColorName));

@@ -3,7 +3,7 @@
 namespace ARFUILib {
     static public class Config {
         static public string FullCameraName(int index) {
-            var address = Config.GetCameraAddress(index);
+            var address = $"https://localhost:{Config.GetCameraAddress(index)}";
             if (Config.LocalTesting)
                 address = "testing";
             return $"Camera #{index + 1}- {Config.GetCameraName(index)} ({address})";
